@@ -76,7 +76,7 @@ sequenceDiagram
     C-->>A: Course facts and note
     A->>R: Enrollment proposal and context
     R->>C: Inspect catalog
-    R->>D: Read student; attempt enrollment or reject
+    R->>D: Read student and attempt enrollment or rejection
     D-->>R: Actual tool result
     R-->>A: Reply and tool outcomes
     A-->>S: Final enrollment summary
