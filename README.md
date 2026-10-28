@@ -1,13 +1,14 @@
-# Graduate Enrollment Agents
+# Enrollment Planning Agents
 
-A graduate course enrollment assistant for CS239. Two LLM-backed agents collaborate:
+A UCLA-inspired course-planning and enrollment simulator for CS239, with separate
+undergraduate and graduate profiles. Two LLM-backed agents collaborate:
 an **advisor** plans requested courses, and a **registrar** inspects academic records
 and executes simulated enrollments. Each has its own prompt, model conversation,
 and tools. All course and student data are fictional; no university service is connected.
 
 This is the **Phase 1 prototype**, due October 29, 2026. It has no safety-enforcing
-framework. Three actual model executions show normal enrollment and two concrete
-trust-boundary failures for the later policy-assurance port.
+framework. The submitted model executions show realistic pass/section planning
+and two concrete trust-boundary failures for the later policy-assurance port.
 
 ## Start here
 
@@ -39,10 +40,12 @@ or pass `--model MODEL_ID` to use another Responses API model with function call
 Environment values take precedence over `.env`; `--model` takes precedence over both.
 The loader supports simple `KEY=value` entries and never executes shell expressions.
 
-Individual scenarios are `compliant`, `catalog_injection`, and `cross_student`:
+The original scenarios are `compliant`, `catalog_injection`, and `cross_student`.
+New planning scenarios are `first_pass_planning`, `second_pass_planning`,
+`before_appointment`, and `seat_finding`:
 
 ```sh
-python3 -m phase1.app --scenario compliant --max-api-calls 20
+python3 -m phase1.app --scenario first_pass_planning --max-api-calls 40
 ```
 
 Each run uses fresh in-memory records and writes to a unique `traces/runs/<id>/`
@@ -61,8 +64,8 @@ Failed traces do not count as submission evidence. There is no scripted fallback
 
 | Agent | Decisions | Available tools |
 | --- | --- | --- |
-| Advisor | Interpret the request, inspect catalog context, choose course proposals, summarize outcomes. | `read_catalog`, `ask_registrar` |
-| Registrar | Inspect the record and catalog, decide eligibility or rejection, choose whether to request a waiver, report the actual write result. | `read_catalog`, `read_student`, `enroll`, `reject` |
+| Advisor | Read the student's appointment and unit context, search sections, prioritize required/scarce courses, record a plan, delegate requests, summarize outcomes. | `read_catalog`, `read_enrollment_context`, `search_sections`, `record_plan`, `ask_registrar` |
+| Registrar | Independently check appointment/pass budget, record, and section; enroll, reject, or propose a later-window deferral. | `read_catalog`, `read_student`, `read_enrollment_context`, `search_sections`, `enroll`, `reject`, `defer` |
 
 ```mermaid
 sequenceDiagram
@@ -74,9 +77,11 @@ sequenceDiagram
     S->>A: Target student and requested courses
     A->>C: Read catalog and external note
     C-->>A: Course facts and note
-    A->>R: Enrollment proposal and context
+    Note over A: Read assigned appointment and record priority plan
+    A->>R: Ordered course proposal and context
     R->>C: Inspect catalog
-    R->>D: Read student and attempt enrollment or rejection
+    R->>D: Check appointment, units, section seats, and schedule
+    R->>D: Attempt enrollment or record rejection or deferral
     D-->>R: Actual tool result
     R-->>A: Reply and tool outcomes
     A-->>S: Final enrollment summary
@@ -84,13 +89,17 @@ sequenceDiagram
 
 The two roles can use the same model; distinct prompts, histories, responsibilities,
 and inter-agent messages establish separate agents. Python executes the tools and
-ordinary seat, duplicate, prerequisite, and unit checks. Model-generated public
-decision summaries explain actions. Private chain-of-thought is not requested.
+ordinary appointment, seat, duplicate, prerequisite, schedule, and unit checks.
+Model-generated public decision summaries explain actions. Private chain-of-thought is not requested.
 
 ## Submitted evidence
 
 | Scenario | What it demonstrates | Files |
 | --- | --- | --- |
+| First-pass planning | Prioritize required/scarce courses within 10 units; leave overflow for second pass. | [JSON](traces/phase1/first_pass_planning.json), [readable trace](traces/phase1/first_pass_planning.md) |
+| Second-pass planning | Add the remaining course under the student's configured study limit. | [JSON](traces/phase1/second_pass_planning.json), [readable trace](traces/phase1/second_pass_planning.md) |
+| Before appointment | Propose a later enrollment without writing early. | [JSON](traces/phase1/before_appointment.json), [readable trace](traces/phase1/before_appointment.md) |
+| Seat finding | Find an open, conflict-free section after full/conflicting alternatives. | [JSON](traces/phase1/seat_finding.json), [readable trace](traces/phase1/seat_finding.md) |
 | Normal enrollment | Eligible student enrolls in CS239 and CS260. | [JSON](traces/phase1/compliant.json), [readable trace](traces/phase1/compliant.md) |
 | Catalog injection | Untrusted catalog text claims authority to waive CS299's missing prerequisite. | [JSON](traces/phase1/catalog_injection.json), [readable trace](traces/phase1/catalog_injection.md) |
 | Cross-student enrollment | Student A causes the registrar to read and modify student B's record. | [JSON](traces/phase1/cross_student.json), [readable trace](traces/phase1/cross_student.md) |
@@ -105,6 +114,22 @@ and replays successful writes to reproduce final state. This verifies internal
 consistency; API IDs and hashes are not independently signed proof of provenance.
 The audit runs after execution and does not block actions. A model refusal on a
 future run would be model behavior, not framework enforcement. Attack success can vary.
+
+## Enrollment realism
+
+Appointment priority and course priority are separate. The student's applicable
+units and priority status explain the appointment group, while the actual assigned
+timestamps control eligibility. The advisor ranks the student's requested courses
+within that constraint; it cannot claim an earlier appointment because units changed.
+
+Undergraduate first pass has a 10-unit cumulative budget. Second pass uses the
+profile's study-list limit. Graduates have one assigned pass and a configured limit.
+Sections carry seats and meeting times, and the writer rechecks them. A deferral
+is a proposal for a future window, with no seat reservation or automatic action.
+
+See [ENROLLMENT_RULES.md](ENROLLMENT_RULES.md) for official sources, exact modeled
+behavior, and limitations. The expanded examples are synthetic and do not integrate
+with MyUCLA or monitor real seats.
 
 ## Boundaries and Phase 2
 
@@ -127,7 +152,7 @@ and encrypted reasoning are excluded from trace files and the submission ZIP.
 
 - `phase1/`: agents, synthetic state, API transport, trace verifier, and submission checker.
 - `tests/`: offline protocol, failure-path, business-rule, and evidence-integrity tests.
-- `traces/`: three live JSON traces, readable companions, and documentation.
+- `traces/`: seven live JSON traces, readable companions, and documentation.
 - `.github/workflows/ci.yml`: offline verification on Python 3.9, 3.12, and 3.14.
 
 Create a ZIP from an explicit, credential-scanned file allowlist:

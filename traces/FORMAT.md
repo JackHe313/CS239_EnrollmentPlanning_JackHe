@@ -1,14 +1,15 @@
-# Observable trace format (schema version 2)
+# Observable trace format (schema version 3)
 
 ## Top-level fields
 
 | Field | Meaning |
 | --- | --- |
-| `schema_version`, `phase`, `scenario` | Format version, assignment phase, scenario identity. |
+| `schema_version`, `phase`, `scenario` | Format version (3 for the expanded model), assignment phase, scenario identity. |
 | `run_id`, `started_at`, `finished_at` | Unique local execution ID and UTC timestamps. |
 | `execution_mode`, `provider`, `requested_model` | `llm`/`openai` for submitted executions; test fixtures are explicitly labeled. |
-| `authenticated_actor`, `input` | Trusted actor plus untrusted request and catalog-note fixtures. |
-| `initial_students`, `initial_catalog` | State before any agent action. |
+| `authenticated_actor`, `input` | Trusted actor and scenario fixture bundle: request/notes are untrusted; profile/clock are trusted simulator inputs. |
+| `simulation_time`, `priority_plan` | Fixed timezone-aware simulator clock and the advisor's recorded course order. |
+| `initial_students`, `initial_catalog` | State before any agent action, including trusted profiles, assigned windows, current section assignments, and section seats/meetings. |
 | `events` | Contiguous one-based ordered event sequence. |
 | `outcomes`, `final_response` | Actual registrar tool outcomes and the advisor's final text. |
 | `status`, optional `error` | Completion or failure; failed runs are not submission traces. |
@@ -48,7 +49,10 @@ and finals; JSON retains the full prompt/API metadata as well.
 contiguous events, both roles' model responses and finals, unique response IDs,
 model/tool/action links, matched observations, message links, unchanged read
 snapshots, successful write effects, course coverage, and reproduced final state
-and audit. `python3 -m phase1.submission` also requires current producer hashes,
+and audit. Version 3 also checks context/search snapshots, appointment and unit
+eligibility, section seats/conflicts, priority-plan/delegation order, and valid
+future-window deferrals. Version 2 remains readable for historical inspection.
+`python3 -m phase1.submission` also requires current producer hashes,
 matching readable views, required documentation, and the credential scan.
 
 The checks establish internal consistency, not an external cryptographic proof of

@@ -6,7 +6,8 @@ import sys
 from pathlib import Path
 
 from phase1.app import audit, source_hashes
-from phase1.domain import World
+from phase1.domain import SCENARIOS, World
+from phase1.registration import enrollment_context, search_sections, section_conflict, moment
 
 
 class TraceError(ValueError):
@@ -22,12 +23,12 @@ def verify_trace(trace, require_live=True, current_source=False):
     """Validate transcript links and independently replay tool effects against final state."""
     try:
         return _verify(trace, require_live, current_source)
-    except (KeyError, TypeError, IndexError, AttributeError, json.JSONDecodeError) as error:
+    except (KeyError, TypeError, IndexError, AttributeError, StopIteration, json.JSONDecodeError) as error:
         raise TraceError(f"Malformed trace: {type(error).__name__}.") from None
 
 
 def _verify(trace, require_live, current_source):
-    require(trace["schema_version"] == 2, "Unsupported trace schema.")
+    require(trace["schema_version"] in {2, 3}, "Unsupported trace schema.")
     require(trace["status"] == "completed", "Only completed runs count as submission traces.")
     if require_live:
         require(trace["execution_mode"] == "llm" and trace["provider"] == "openai",
@@ -42,6 +43,7 @@ def _verify(trace, require_live, current_source):
     requesting, model_agents = set(), set()
     proposals, replies = [], []
     declarations, last_text, summaries = {}, {}, {"advisor": 0, "registrar": 0}
+    plan = None
     for step, event in enumerate(trace["events"], 1):
         require(event["step"] == step, "Event steps must be contiguous.")
         agent, kind, payload = event["agent"], event["kind"], event["payload"]
@@ -99,24 +101,58 @@ def _verify(trace, require_live, current_source):
                         "Catalog observation does not match state at the read.")
             elif name == "read_student":
                 require(result == students[args["student_id"]], "Student observation differs from current state.")
+            elif name == "read_enrollment_context":
+                require(result == enrollment_context(students, catalog, trace["simulation_time"], args["student_id"]),
+                        "Enrollment context differs from assigned windows or current unit state.")
+            elif name == "search_sections":
+                require(result == search_sections(students, catalog, trace["simulation_time"],
+                                                  args["student_id"], args["course"]),
+                        "Section-search observation differs from seats or schedule at read time.")
+            elif name == "record_plan":
+                plan = {"student_id": args["student_id"], "ordered_courses": args["ordered_courses"]}
+                require(result == {"status": "planned", **plan}, "Recorded priority plan differs from model arguments.")
+                require(sorted(plan["ordered_courses"]) == sorted(trace["input"]["request"]["courses"]),
+                        "Priority plan must cover all requested courses.")
             elif name == "ask_registrar":
                 require(replies and result == replies.pop(0), "Delegation result differs from registrar reply.")
-            elif name in {"enroll", "reject"}:
+            elif name in {"enroll", "reject", "defer"}:
                 require((result["student_id"], result["course"]) == (args["student_id"], args["course"]),
                         "Tool outcome changed its requested student or course.")
-                require(result["status"] in {"enrolled", "rejected"}, "Invalid enrollment outcome.")
+                require(result["status"] in {"enrolled", "rejected", "deferred"}, "Invalid enrollment outcome.")
                 if result["status"] == "enrolled":
                     require(name == "enroll", "A reject tool cannot enroll.")
                     student, entry = students[args["student_id"]], catalog[args["course"]]
                     require(args["course"] not in student["enrolled"] and entry["seats"] > 0,
                             "Successful enrollment violates duplicate or seat checks.")
-                    require(sum(catalog[c]["units"] for c in student["enrolled"]) + entry["units"] <= 8,
+                    limit = 8
+                    if trace["schema_version"] >= 3:
+                        context = enrollment_context(students, catalog, trace["simulation_time"], args["student_id"])
+                        require(context["active_appointment"], "Enrollment occurred outside its assigned appointment.")
+                        limit = context["current_unit_limit"]
+                        section = next(s for s in entry["sections"] if s["id"] == result["section_id"])
+                        require(args["section_id"] in {"auto", section["id"]}, "Tool wrote a different section than requested.")
+                        require(section["seats"] > 0 and not section_conflict(student, catalog, section),
+                                "Enrollment used a full or conflicting section.")
+                        section["seats"] -= 1
+                        student["enrolled_sections"][args["course"]] = section["id"]
+                    require(sum(catalog[c]["units"] for c in student["enrolled"]) + entry["units"] <= limit,
                             "Successful enrollment violates the unit cap.")
                     missing = set(entry["requires"]) - set(student["completed"])
                     require(not missing or args["waive_prerequisites"],
                             "Prerequisites were bypassed without even the baseline waiver flag.")
                     student["enrolled"].append(args["course"])
                     entry["seats"] -= 1
+                elif result["status"] == "deferred":
+                    require(name == "defer" and result["automatic_enrollment"] is False,
+                            "Deferral cannot imply automatic enrollment.")
+                    context = enrollment_context(students, catalog, trace["simulation_time"], args["student_id"])
+                    require(result["next_appointment"] in context["future_appointments"],
+                            "Deferral must use an assigned future window.")
+                    require(moment(result["next_appointment"]["start"]) > moment(trace["simulation_time"]),
+                            "Deferral time is not in the future.")
+                    require(context["current_units"] + catalog[args["course"]]["units"] <=
+                            min(context["study_limit"], result["next_appointment"]["unit_limit"]),
+                            "Deferred window cannot accommodate the course's units.")
                 else:
                     require(result["reason"].strip(), "A rejection needs a reason.")
                 outcomes.append(result)
@@ -149,6 +185,13 @@ def _verify(trace, require_live, current_source):
             "Replayed writes do not reproduce final state.")
     require(outcomes == trace["outcomes"], "Recorded outcomes differ from actual tool observations.")
     require(trace["final_response"] == last_text["advisor"], "Final response differs from advisor output.")
+    if trace["schema_version"] >= 3:
+        require(trace["priority_plan"] == plan, "Final priority plan differs from recorded observations.")
+        require(not trace["input"].get("require_plan") or plan is not None, "Scenario needs a priority plan.")
+        if plan:
+            order = list(dict.fromkeys(e["payload"]["content"]["course"] for e in trace["events"]
+                                      if e["kind"] == "message" and e["agent"] == "advisor"))
+            require(order == plan["ordered_courses"], "Delegation order differs from the recorded priority plan.")
     require(all(any(o["student_id"] == trace["input"]["request"]["student_id"] and o["course"] == course
                     for o in outcomes) for course in trace["input"]["request"]["courses"]),
             "A requested course has no registrar outcome.")
@@ -175,7 +218,9 @@ def render_markdown(trace):
         lines.extend([f"### Step {event['step']} — {event['agent']} / {event['kind']}", "",
                       "```json", json.dumps(event["payload"], indent=2), "```", ""])
     lines.extend(["## Outcomes and post-run findings", "", "```json",
-                  json.dumps({"outcomes": trace["outcomes"], "audit": trace["post_run_policy_violations"]}, indent=2),
+                  json.dumps({"simulation_time": trace.get("simulation_time"),
+                              "priority_plan": trace.get("priority_plan"),
+                              "outcomes": trace["outcomes"], "audit": trace["post_run_policy_violations"]}, indent=2),
                   "```", "", "The audit observes violations after execution; it does not intercept them.", ""])
     return "\n".join(lines)
 
@@ -185,7 +230,7 @@ def main():
     parser.add_argument("--trace-dir", type=Path, default=Path("traces/phase1"))
     parser.add_argument("--render", action="store_true", help="Write readable Markdown companions.")
     parser.add_argument("--current-source", action="store_true", help="Require current producer source hashes.")
-    parser.add_argument("--replay", choices=["compliant", "catalog_injection", "cross_student"],
+    parser.add_argument("--replay", choices=list(SCENARIOS),
                         help="Print a recorded trace; makes no API requests and no new decisions.")
     args = parser.parse_args()
     paths = [args.trace_dir / f"{args.replay}.json"] if args.replay else sorted(args.trace_dir.glob("*.json"))

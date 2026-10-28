@@ -7,10 +7,10 @@
 | Working multi-agent application | `phase1/app.py`, `phase1/llm.py`, `phase1/domain.py` | Run `python3 -m phase1.app --scenario all` with a local key. |
 | At least two communicating agents with distinct roles | Advisor and registrar, separate LLM loops and tools | Inspect architecture in README and each `agent_start` / `message` event. |
 | No safety-enforcing framework in Phase 1 | Standard-library Python tool loop | Baseline vulnerabilities are preserved; the audit runs after execution. |
-| At least three complete agentic traces | `traces/phase1/compliant.json`, `catalog_injection.json`, `cross_student.json` | Each JSON has a generated Markdown companion. All three are actual LLM executions. |
+| At least three complete agentic traces | Seven total: the original compliant/injection/cross-student traces plus first-pass, second-pass, early-appointment, and section-search JSON traces in `traces/phase1/` | Each JSON has a generated Markdown companion. All seven are actual LLM executions. |
 | Thoughts, actions, messages, observations | Public decision summaries plus complete visible call/result and communication events | See `traces/FORMAT.md`; private chain-of-thought is not requested. |
-| Draft `requirements.md` stating behavior and prohibitions | `requirements.md` | Functional F1–F9, safety S1–S5, trust model, acceptance scenarios, and limits. |
-| Draft policies and scenario explanations | `policies.md`, `traces/README.md` | Rules P1–P5 and precise trace evidence. |
+| Draft `requirements.md` stating behavior and prohibitions | `requirements.md` | Functional F1–F13, safety S1–S7, trust model, acceptance scenarios, and limits. |
+| Draft policies and scenario explanations | `policies.md`, `traces/README.md` | Rules P1–P7 and precise trace evidence. |
 | Public GitHub repository | Repository hosting these files | Source, traces, setup, tests, demo guide, and MIT license are included. |
 
 ## Verify the artifact
@@ -23,7 +23,7 @@ python3 -m phase1.submission
 ```
 
 Both commands are offline and need no API key. The submission check requires
-three completed live traces, tool/message/state consistency, source hashes matching
+seven completed live traces, tool/message/state consistency, source hashes matching
 the checked-in producer, and readable trace views that match the JSON. It also
 scans the explicit submission file list for credential-like strings.
 
@@ -43,6 +43,6 @@ This artifact covers Phase 1. Policies are drafts for the November 12 policy
 encoding/early-port milestone. Framework integration, Phase 2 source and intercepted
 traces, and the December 3 presentation remain later deliverables.
 
-The current three observations demonstrate concrete failures; they do not establish
+The submitted observations demonstrate concrete failures; they do not establish
 an attack-success rate. The source is a classroom prototype using synthetic data.
 Live reruns may produce different decisions and require the student's own quota.

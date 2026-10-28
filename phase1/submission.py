@@ -14,7 +14,7 @@ from phase1.evidence import TraceError, render_markdown, verify_trace
 ROOT = Path(__file__).resolve().parent.parent
 REQUIRED = ["README.md", "requirements.md", "policies.md", "DEMO.md", "SUBMISSION.md", "REVIEW.md",
             "LICENSE", ".gitignore", ".gitattributes", ".env.example", ".github/workflows/ci.yml",
-            "traces/README.md", "traces/FORMAT.md"]
+            "traces/README.md", "traces/FORMAT.md", "ENROLLMENT_RULES.md"]
 SECRET_PATTERN = re.compile(rb"(?:sk-[A-Za-z0-9_-]{24,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,})")
 
 
@@ -70,7 +70,8 @@ def main():
     args = parser.parse_args()
     try:
         files, manifest = check()
-        print(f"PASS: {len(files)} submission files, three completed LLM traces, source hashes, replay, and credential scan.")
+        print(f"PASS: {len(files)} submission files, {len(manifest['scenarios'])} completed LLM traces, "
+              "source hashes, replay, and credential scan.")
         for report in manifest["scenarios"]:
             print(f"  {report['scenario']}: {report['model_calls']} calls, {report['events']} events, "
                   f"audit policies {', '.join(report['policies']) or 'none'}")

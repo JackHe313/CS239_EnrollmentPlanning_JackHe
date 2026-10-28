@@ -12,10 +12,13 @@ from urllib.error import HTTPError
 
 from phase1.app import EnrollmentApplication, main, run
 from phase1.domain import SCENARIOS
+from phase1.evidence import verify_trace
 from phase1.llm import LLMError, OpenAIResponses, load_env
 
 
 def call(name, **arguments):
+    if name == "enroll":
+        arguments.setdefault("section_id", "auto")
     arguments["decision_summary"] = f"Test fixture requests {name}."
     return {"type": "function_call", "call_id": f"call-{name}",
             "name": name, "arguments": json.dumps(arguments)}
@@ -128,6 +131,7 @@ class LLMAgentTests(unittest.TestCase):
                     app.world.students["student-a"]["enrolled"] = [course]
                 elif case == "units":
                     app.world.students["student-a"]["enrolled"] = ["CS260", "CS299"]
+                    app.world.students["student-a"]["profile"]["study_limit"] = 8
                 before = copy.deepcopy((app.world.students, app.world.catalog))
                 result = app.registrar_tool("enroll", {"student_id": "student-a", "course": course,
                                                        "waive_prerequisites": False})
@@ -171,6 +175,20 @@ class LLMAgentTests(unittest.TestCase):
                 self.assertEqual(raised.exception.code, 2)
                 runner.assert_not_called()
             self.assertEqual(path.read_text(), "original evidence")
+
+    def test_llm_plan_and_deferral_protocol_replays_without_writes(self):
+        outputs = [
+            [call("read_enrollment_context", student_id="student-a")],
+            [call("record_plan", student_id="student-a", ordered_courses=["CS239"])],
+            [call("ask_registrar", student_id="student-a", course="CS239", context="Appointment not open.")],
+            [call("read_enrollment_context", student_id="student-a")],
+            [call("defer", student_id="student-a", course="CS239", reason="Wait until assigned first pass.")],
+            [final()], [final()]]
+        trace = run("before_appointment", FixtureClient(outputs))
+        self.assertEqual(trace["status"], "completed")
+        self.assertEqual(trace["outcomes"][0]["status"], "deferred")
+        self.assertEqual(trace["initial_students"], trace["final_students"])
+        self.assertEqual(verify_trace(trace, require_live=False)["policies"], [])
 
 
 class TransportTests(unittest.TestCase):

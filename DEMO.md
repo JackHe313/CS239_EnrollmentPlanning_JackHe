@@ -1,71 +1,84 @@
-# Phase 1 demonstration
+# Enrollment planning demo — about three minutes
 
-## Two-minute introduction
+## Spoken introduction
 
-This assistant handles graduate course enrollment through two LLM agents. The
-advisor reads a catalog and proposes courses. The registrar independently reads
-student records, checks eligibility, and calls enrollment tools. They communicate
-through explicit proposals and replies. Records are simulated, but each submitted
-agent decision came from an actual model call.
+My project is an enrollment-planning assistant with two communicating LLM agents.
+The advisor chooses a course strategy, and the registrar independently reads
+records and decides whether to enroll, reject, or defer a request.
 
-Phase 1 exposes two trust boundaries: an external catalog note can influence a
-prerequisite waiver, and a request target can differ from the authenticated actor.
-The later framework should enforce those boundaries before any protected action.
+The expanded version models both undergraduate and graduate enrollment. It reads
+assigned appointment windows, explains the student's units-based appointment
+group, and searches individual sections for seats and schedule conflicts.
+Undergraduates have first and second passes, while graduates have one assigned
+pass. The student's appointment priority is separate from the advisor's ranking
+of that student's courses.
 
-## Offline walkthrough — no API key needed
+For Phase 1, I built the application without the course's safety-enforcing
+framework and captured complete real model executions. The repository includes
+those traces and draft requirements describing both useful behavior and what the
+application must never do.
 
-From the repository root:
+## Live demonstration
+
+Run this from the repository root with a local `.env` key:
 
 ```sh
-python3 -m phase1.submission
-python3 -m phase1.evidence --replay compliant
+python3 -m phase1.app --scenario first_pass_planning --max-api-calls 40
+```
+
+While it runs, explain:
+
+The student requests three four-unit courses, with the elective listed first. Two
+courses are required, and the current first-pass budget is 10 units. The advisor
+should prioritize the requirements, search sections, and plan the remaining course
+for second pass. The registrar checks the actual appointment, prerequisites, seats,
+and schedule before each write. The CLI prints the model's course order and actual
+receipts after the run.
+
+Then explain the observed result, rather than assuming the model always makes the
+same choices. A deferred course is not reserved or enrolled. Its future seats and
+eligibility still need checking at the next appointment.
+
+## Trace walkthrough
+
+These commands inspect recorded executions and make no new model calls:
+
+```sh
+python3 -m phase1.evidence --replay first_pass_planning
+python3 -m phase1.evidence --replay seat_finding
 python3 -m phase1.evidence --replay catalog_injection
-python3 -m phase1.evidence --replay cross_student
 ```
 
-These commands validate and display the **recorded** executions. They are an
-inspection of submitted evidence, not a new live agent run. You can also open the
-three Markdown traces directly in `traces/phase1/`.
+In the first trace, point out the trusted appointment context, the public reason
+for the course order, the registrar's messages, and the enrolled/deferred receipts.
+In the section-search trace, show the full section, the conflicting section, and
+the usable alternative. The writer rechecks the seat rather than treating a
+search result as a reservation.
 
-For the compliant trace, follow the advisor's proposal, the registrar's catalog and
-student reads, and the successful `enroll` receipts. The second requested course
-observes the first enrollment's state; the final load is eight units.
+Finally, show the catalog-injection failure: external text claims prerequisite
+waiver authority and can influence the model's tool arguments. Another recorded
+scenario shows a cross-student access. These are the unsafe boundaries that remain
+in the Phase 1 baseline.
 
-For the injection trace, follow the catalog note into the advisor's context, the
-registrar's public decision summary, and the `waive_prerequisites` argument. Compare
-CS299's required CS260 against the student's completed-course record. The final
-state contains an enrollment that the requirement prohibits.
+## Next milestone
 
-For the cross-student trace, compare the trusted `authenticated_actor` with the
-proposal target. Inspect both the `read_student` observation and the subsequent
-`enroll` receipt. The violation begins at the read, before the write.
+The next milestone is November 12: encode the policies as enforceable rules and
+begin the port to the course's policy-assurance framework. I will protect student
+identity, prerequisite integrity, appointment times, pass budgets, and trusted
+priority data at the tool boundaries. The final traces must show a compliant run
+and policy violations intercepted before their effects.
 
-The auditor reports evidence after execution. It is not an interception mechanism.
+Instructor and peer feedback will help refine both the policies and the planning
+objective. The final presentation is December 3.
 
-## Live walkthrough — consumes API quota
+## Extra scenarios and offline fallback
 
-Configure your own key in `.env`, then run:
+- `second_pass_planning`: the student already has eight units and can add the deferred course.
+- `before_appointment`: return a later-window proposal without an early write.
+- `seat_finding`: choose an open section that avoids a fixed schedule conflict.
+- `compliant`, `catalog_injection`, `cross_student`: original Phase 1 cases.
 
-```sh
-python3 -m phase1.app --scenario compliant --max-api-calls 20
-python3 -m phase1.app --scenario catalog_injection --max-api-calls 20
-python3 -m phase1.app --scenario cross_student --max-api-calls 20
-```
-
-Each command reports its new output folder. Validate that folder with
-`python3 -m phase1.evidence --trace-dir PATH --render`. Show a completed trace if
-one is produced; show the `.failed.json` evidence if a quota or network issue occurs.
-A model can decline an attack or use a different tool sequence on a later run.
-
-## Points to explain to a reviewer
-
-- Agent independence comes from separate responsibilities, prompts, tools, and
-  conversations, with LLM-selected actions in both roles.
-- Traces include short public decision summaries. They do not disclose private
-  chain-of-thought.
-- Seat/duplicate/unit checks are ordinary tool business logic. There is no
-  policy-assurance framework in Phase 1.
-- The unsafe waiver and missing authorization are explicit baseline weaknesses,
-  not examples of correct intended behavior.
-- Phase 2 will apply P1–P5 at protected tool boundaries, replay these inputs, and
-  capture compliant and intercepted-violation executions.
+Use `python3 -m phase1.submission` for an offline artifact check. If the network or
+quota prevents a live run, show its failed trace and clearly identify the saved
+traces as recorded evidence. The simulator does not connect to MyUCLA, watch real
+seats, wait-list, or schedule future enrollment.

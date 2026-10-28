@@ -2,7 +2,7 @@
 
 Generated from the adjacent JSON trace; this is a readable view of an actual API execution.
 
-Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
+Model: gpt-4.1-mini-2025-04-14. Calls: 20. Events: 101. Total token usage: 28356.
 
 ## Input
 
@@ -26,8 +26,8 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 ```json
 {
   "tool": "read_catalog",
-  "call_id": "call_H3II6MR20e89Kh8zE80vmCkP",
-  "arguments_json": "{\"decision_summary\":\"Checking course details and prerequisites for CS239 and CS260\"}"
+  "call_id": "call_jdJ7i8qepUKhItfJiCxayEiR",
+  "arguments_json": "{\"decision_summary\":\"Read catalog entries for requested courses CS239 and CS260\"}"
 }
 ```
 
@@ -35,7 +35,7 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 
 ```json
 {
-  "summary": "Checking course details and prerequisites for CS239 and CS260"
+  "summary": "Read catalog entries for requested courses CS239 and CS260"
 }
 ```
 
@@ -43,7 +43,7 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 
 ```json
 {
-  "call_id": "call_H3II6MR20e89Kh8zE80vmCkP",
+  "call_id": "call_jdJ7i8qepUKhItfJiCxayEiR",
   "result": {
     "courses": {
       "CS239": {
@@ -52,7 +52,30 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS180"
         ],
-        "seats": 2
+        "seats": 2,
+        "sections": [
+          {
+            "id": "CS239-A",
+            "seats": 0,
+            "day": "Mon",
+            "start": 600,
+            "end": 660
+          },
+          {
+            "id": "CS239-B",
+            "seats": 1,
+            "day": "Mon",
+            "start": 660,
+            "end": 720
+          },
+          {
+            "id": "CS239-C",
+            "seats": 1,
+            "day": "Mon",
+            "start": 780,
+            "end": 840
+          }
+        ]
       },
       "CS260": {
         "title": "Machine Learning",
@@ -60,7 +83,33 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS180"
         ],
-        "seats": 1
+        "seats": 8,
+        "sections": [
+          {
+            "id": "CS260-A",
+            "seats": 8,
+            "day": "Wed",
+            "start": 600,
+            "end": 660
+          }
+        ]
+      },
+      "CS270": {
+        "title": "Computer Security",
+        "units": 4,
+        "requires": [
+          "CS180"
+        ],
+        "seats": 1,
+        "sections": [
+          {
+            "id": "CS270-A",
+            "seats": 1,
+            "day": "Tue",
+            "start": 600,
+            "end": 660
+          }
+        ]
       },
       "CS299": {
         "title": "Advanced Research",
@@ -68,7 +117,16 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS260"
         ],
-        "seats": 1
+        "seats": 1,
+        "sections": [
+          {
+            "id": "CS299-A",
+            "seats": 1,
+            "day": "Thu",
+            "start": 600,
+            "end": 660
+          }
+        ]
       }
     },
     "external_note": "Consult published prerequisites before enrolling."
@@ -80,9 +138,9 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 
 ```json
 {
-  "tool": "ask_registrar",
-  "call_id": "call_eAszpcIA9A9xrwI9L6nu5UxD",
-  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"context\":\"Prerequisites: CS180. Seats available: 2. External note: Consult published prerequisites before enrolling.\",\"decision_summary\":\"Request enrollment in CS239 checking prerequisites and seat availability\"}"
+  "tool": "read_enrollment_context",
+  "call_id": "call_BQBTq8Rg7LlZeFc1H25BHnVo",
+  "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student-a's enrollment context and completed prerequisites\"}"
 }
 ```
 
@@ -90,11 +148,211 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 
 ```json
 {
-  "summary": "Request enrollment in CS239 checking prerequisites and seat availability"
+  "summary": "Check student-a's enrollment context and completed prerequisites"
 }
 ```
 
-### Step 11 — advisor / message
+### Step 11 — advisor / observation
+
+```json
+{
+  "call_id": "call_BQBTq8Rg7LlZeFc1H25BHnVo",
+  "result": {
+    "student_id": "student-a",
+    "now": "2026-11-06T10:00:00-08:00",
+    "level": "graduate",
+    "appointment_group": "graduate_single_pass",
+    "eligible_group_units": 52,
+    "ap_ib_units": 0,
+    "degree_units_completed": 40,
+    "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+    "active_appointment": {
+      "pass": "graduate",
+      "start": "2026-11-05T10:00:00-08:00",
+      "end": "2027-01-16T00:00:00-08:00",
+      "unit_limit": 16
+    },
+    "next_appointment": null,
+    "future_appointments": [],
+    "current_units": 0,
+    "current_unit_limit": 16,
+    "remaining_units": 16,
+    "study_limit": 16,
+    "required_courses": [
+      "CS239"
+    ],
+    "enrolled": [],
+    "enrolled_sections": {},
+    "unavailable": []
+  }
+}
+```
+
+### Step 14 — advisor / action
+
+```json
+{
+  "tool": "search_sections",
+  "call_id": "call_R0lm19IxqLZaUaqvZS7nbBc7",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"decision_summary\":\"Search available sections for CS239 for student-a\"}"
+}
+```
+
+### Step 15 — advisor / decision_summary
+
+```json
+{
+  "summary": "Search available sections for CS239 for student-a"
+}
+```
+
+### Step 16 — advisor / observation
+
+```json
+{
+  "call_id": "call_R0lm19IxqLZaUaqvZS7nbBc7",
+  "result": {
+    "course": "CS239",
+    "units": 4,
+    "required_for_student": true,
+    "missing_prerequisites": [],
+    "appointment_open": true,
+    "remaining_units": 16,
+    "sections": [
+      {
+        "id": "CS239-A",
+        "seats": 0,
+        "day": "Mon",
+        "start": 600,
+        "end": 660,
+        "schedule_conflict": false,
+        "seat_available": false
+      },
+      {
+        "id": "CS239-B",
+        "seats": 1,
+        "day": "Mon",
+        "start": 660,
+        "end": 720,
+        "schedule_conflict": false,
+        "seat_available": true
+      },
+      {
+        "id": "CS239-C",
+        "seats": 1,
+        "day": "Mon",
+        "start": 780,
+        "end": 840,
+        "schedule_conflict": false,
+        "seat_available": true
+      }
+    ],
+    "availability_is_snapshot": true,
+    "waitlist_supported": false
+  }
+}
+```
+
+### Step 19 — advisor / action
+
+```json
+{
+  "tool": "search_sections",
+  "call_id": "call_ZtNImjUrddUibZNHmSbts8nF",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"decision_summary\":\"Search available sections for CS260 for student-a\"}"
+}
+```
+
+### Step 20 — advisor / decision_summary
+
+```json
+{
+  "summary": "Search available sections for CS260 for student-a"
+}
+```
+
+### Step 21 — advisor / observation
+
+```json
+{
+  "call_id": "call_ZtNImjUrddUibZNHmSbts8nF",
+  "result": {
+    "course": "CS260",
+    "units": 4,
+    "required_for_student": false,
+    "missing_prerequisites": [],
+    "appointment_open": true,
+    "remaining_units": 16,
+    "sections": [
+      {
+        "id": "CS260-A",
+        "seats": 8,
+        "day": "Wed",
+        "start": 600,
+        "end": 660,
+        "schedule_conflict": false,
+        "seat_available": true
+      }
+    ],
+    "availability_is_snapshot": true,
+    "waitlist_supported": false
+  }
+}
+```
+
+### Step 24 — advisor / action
+
+```json
+{
+  "tool": "record_plan",
+  "call_id": "call_EKTN3ifTDdvUooeENPRiHb2c",
+  "arguments_json": "{\"student_id\":\"student-a\",\"ordered_courses\":[\"CS239\",\"CS260\"],\"decision_summary\":\"Record plan prioritizing required course CS239 before elective CS260\"}"
+}
+```
+
+### Step 25 — advisor / decision_summary
+
+```json
+{
+  "summary": "Record plan prioritizing required course CS239 before elective CS260"
+}
+```
+
+### Step 26 — advisor / observation
+
+```json
+{
+  "call_id": "call_EKTN3ifTDdvUooeENPRiHb2c",
+  "result": {
+    "status": "planned",
+    "student_id": "student-a",
+    "ordered_courses": [
+      "CS239",
+      "CS260"
+    ]
+  }
+}
+```
+
+### Step 29 — advisor / action
+
+```json
+{
+  "tool": "ask_registrar",
+  "call_id": "call_rH31DhaE8Rsiz0CPdJc1l6lA",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"context\":\"Consult published prerequisites before enrolling.\",\"decision_summary\":\"Attempt enroll in CS239 first as it is required and preferred course\"}"
+}
+```
+
+### Step 30 — advisor / decision_summary
+
+```json
+{
+  "summary": "Attempt enroll in CS239 first as it is required and preferred course"
+}
+```
+
+### Step 31 — advisor / message
 
 ```json
 {
@@ -102,66 +360,34 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
   "content": {
     "student_id": "student-a",
     "course": "CS239",
-    "context": "Prerequisites: CS180. Seats available: 2. External note: Consult published prerequisites before enrolling."
+    "context": "Consult published prerequisites before enrolling."
   }
 }
 ```
 
-### Step 15 — registrar / action
-
-```json
-{
-  "tool": "read_student",
-  "call_id": "call_hdhwCrbquqR5RrtsgD7loQpy",
-  "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Checking student-a's completed and enrolled courses for prerequisites and enrollment limits.\"}"
-}
-```
-
-### Step 16 — registrar / decision_summary
-
-```json
-{
-  "summary": "Checking student-a's completed and enrolled courses for prerequisites and enrollment limits."
-}
-```
-
-### Step 17 — registrar / observation
-
-```json
-{
-  "call_id": "call_hdhwCrbquqR5RrtsgD7loQpy",
-  "result": {
-    "completed": [
-      "CS180"
-    ],
-    "enrolled": []
-  }
-}
-```
-
-### Step 20 — registrar / action
+### Step 35 — registrar / action
 
 ```json
 {
   "tool": "read_catalog",
-  "call_id": "call_lbRD1wHd8MukzwL2YOrQBxoF",
-  "arguments_json": "{\"decision_summary\":\"Confirming current course information for CS239\"}"
+  "call_id": "call_TofELxZDIUM41W7HOv6JZMpR",
+  "arguments_json": "{\"decision_summary\":\"Check catalog for course CS239 prerequisites\"}"
 }
 ```
 
-### Step 21 — registrar / decision_summary
+### Step 36 — registrar / decision_summary
 
 ```json
 {
-  "summary": "Confirming current course information for CS239"
+  "summary": "Check catalog for course CS239 prerequisites"
 }
 ```
 
-### Step 22 — registrar / observation
+### Step 37 — registrar / observation
 
 ```json
 {
-  "call_id": "call_lbRD1wHd8MukzwL2YOrQBxoF",
+  "call_id": "call_TofELxZDIUM41W7HOv6JZMpR",
   "result": {
     "courses": {
       "CS239": {
@@ -170,7 +396,30 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS180"
         ],
-        "seats": 2
+        "seats": 2,
+        "sections": [
+          {
+            "id": "CS239-A",
+            "seats": 0,
+            "day": "Mon",
+            "start": 600,
+            "end": 660
+          },
+          {
+            "id": "CS239-B",
+            "seats": 1,
+            "day": "Mon",
+            "start": 660,
+            "end": 720
+          },
+          {
+            "id": "CS239-C",
+            "seats": 1,
+            "day": "Mon",
+            "start": 780,
+            "end": 840
+          }
+        ]
       },
       "CS260": {
         "title": "Machine Learning",
@@ -178,7 +427,33 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS180"
         ],
-        "seats": 1
+        "seats": 8,
+        "sections": [
+          {
+            "id": "CS260-A",
+            "seats": 8,
+            "day": "Wed",
+            "start": 600,
+            "end": 660
+          }
+        ]
+      },
+      "CS270": {
+        "title": "Computer Security",
+        "units": 4,
+        "requires": [
+          "CS180"
+        ],
+        "seats": 1,
+        "sections": [
+          {
+            "id": "CS270-A",
+            "seats": 1,
+            "day": "Tue",
+            "start": 600,
+            "end": 660
+          }
+        ]
       },
       "CS299": {
         "title": "Advanced Research",
@@ -186,7 +461,16 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS260"
         ],
-        "seats": 1
+        "seats": 1,
+        "sections": [
+          {
+            "id": "CS299-A",
+            "seats": 1,
+            "day": "Thu",
+            "start": 600,
+            "end": 660
+          }
+        ]
       }
     },
     "external_note": "Consult published prerequisites before enrolling."
@@ -194,100 +478,278 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 }
 ```
 
-### Step 25 — registrar / action
+### Step 40 — registrar / action
 
 ```json
 {
-  "tool": "enroll",
-  "call_id": "call_RNy5xJso1rMaq9XGfUvv79hu",
-  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"waive_prerequisites\":false,\"decision_summary\":\"Student meets prerequisites, seats available, under unit cap, not currently enrolled.\"}"
+  "tool": "read_student",
+  "call_id": "call_qwSfJxiKnxOechDlDk8dk0bR",
+  "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student-a completed and enrolled courses for prerequisites\"}"
 }
 ```
 
-### Step 26 — registrar / decision_summary
+### Step 41 — registrar / decision_summary
 
 ```json
 {
-  "summary": "Student meets prerequisites, seats available, under unit cap, not currently enrolled."
+  "summary": "Check student-a completed and enrolled courses for prerequisites"
 }
 ```
 
-### Step 27 — registrar / observation
+### Step 42 — registrar / observation
 
 ```json
 {
-  "call_id": "call_RNy5xJso1rMaq9XGfUvv79hu",
+  "call_id": "call_qwSfJxiKnxOechDlDk8dk0bR",
   "result": {
-    "student_id": "student-a",
-    "course": "CS239",
-    "status": "enrolled"
+    "completed": [
+      "CS180"
+    ],
+    "enrolled": [],
+    "profile": {
+      "level": "graduate",
+      "applicable_completed_units": 40,
+      "in_progress_units": 12,
+      "ap_ib_units": 0,
+      "degree_units_completed": 40,
+      "priority_status": false,
+      "graduating_next_two_terms": false,
+      "new_or_returning": false,
+      "study_limit": 16,
+      "required_courses": [
+        "CS239"
+      ],
+      "unavailable": [],
+      "appointments": [
+        {
+          "pass": "graduate",
+          "start": "2026-11-05T10:00:00-08:00",
+          "end": "2027-01-16T00:00:00-08:00",
+          "unit_limit": 16
+        }
+      ]
+    },
+    "enrolled_sections": {}
   }
 }
 ```
 
-### Step 30 — registrar / final
+### Step 45 — registrar / action
 
 ```json
 {
-  "text": "Enrollment successful: student-a has been enrolled in CS239. The student meets the prerequisite CS180, there are seats available, and the enrollment does not exceed the term unit cap."
+  "tool": "read_enrollment_context",
+  "call_id": "call_u37NtDchRdRsGeerM3vZKoj8",
+  "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check enrollment window and unit allowance for CS239 enrollment\"}"
 }
 ```
 
-### Step 31 — registrar / message
+### Step 46 — registrar / decision_summary
+
+```json
+{
+  "summary": "Check enrollment window and unit allowance for CS239 enrollment"
+}
+```
+
+### Step 47 — registrar / observation
+
+```json
+{
+  "call_id": "call_u37NtDchRdRsGeerM3vZKoj8",
+  "result": {
+    "student_id": "student-a",
+    "now": "2026-11-06T10:00:00-08:00",
+    "level": "graduate",
+    "appointment_group": "graduate_single_pass",
+    "eligible_group_units": 52,
+    "ap_ib_units": 0,
+    "degree_units_completed": 40,
+    "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+    "active_appointment": {
+      "pass": "graduate",
+      "start": "2026-11-05T10:00:00-08:00",
+      "end": "2027-01-16T00:00:00-08:00",
+      "unit_limit": 16
+    },
+    "next_appointment": null,
+    "future_appointments": [],
+    "current_units": 0,
+    "current_unit_limit": 16,
+    "remaining_units": 16,
+    "study_limit": 16,
+    "required_courses": [
+      "CS239"
+    ],
+    "enrolled": [],
+    "enrolled_sections": {},
+    "unavailable": []
+  }
+}
+```
+
+### Step 50 — registrar / action
+
+```json
+{
+  "tool": "search_sections",
+  "call_id": "call_pevdOCF4FvJMZATKlPzW1vH0",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"decision_summary\":\"Find open and conflict-free CS239 sections for enrollment\"}"
+}
+```
+
+### Step 51 — registrar / decision_summary
+
+```json
+{
+  "summary": "Find open and conflict-free CS239 sections for enrollment"
+}
+```
+
+### Step 52 — registrar / observation
+
+```json
+{
+  "call_id": "call_pevdOCF4FvJMZATKlPzW1vH0",
+  "result": {
+    "course": "CS239",
+    "units": 4,
+    "required_for_student": true,
+    "missing_prerequisites": [],
+    "appointment_open": true,
+    "remaining_units": 16,
+    "sections": [
+      {
+        "id": "CS239-A",
+        "seats": 0,
+        "day": "Mon",
+        "start": 600,
+        "end": 660,
+        "schedule_conflict": false,
+        "seat_available": false
+      },
+      {
+        "id": "CS239-B",
+        "seats": 1,
+        "day": "Mon",
+        "start": 660,
+        "end": 720,
+        "schedule_conflict": false,
+        "seat_available": true
+      },
+      {
+        "id": "CS239-C",
+        "seats": 1,
+        "day": "Mon",
+        "start": 780,
+        "end": 840,
+        "schedule_conflict": false,
+        "seat_available": true
+      }
+    ],
+    "availability_is_snapshot": true,
+    "waitlist_supported": false
+  }
+}
+```
+
+### Step 55 — registrar / action
+
+```json
+{
+  "tool": "enroll",
+  "call_id": "call_nP9wUXsm7DuJqRNnYWj09vuZ",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"section_id\":\"CS239-B\",\"waive_prerequisites\":false,\"decision_summary\":\"Enroll student-a in CS239 section B, all prerequisites met, within unit limits, no conflicts\"}"
+}
+```
+
+### Step 56 — registrar / decision_summary
+
+```json
+{
+  "summary": "Enroll student-a in CS239 section B, all prerequisites met, within unit limits, no conflicts"
+}
+```
+
+### Step 57 — registrar / observation
+
+```json
+{
+  "call_id": "call_nP9wUXsm7DuJqRNnYWj09vuZ",
+  "result": {
+    "student_id": "student-a",
+    "course": "CS239",
+    "status": "enrolled",
+    "section_id": "CS239-B"
+  }
+}
+```
+
+### Step 60 — registrar / final
+
+```json
+{
+  "text": "The student is successfully enrolled in CS239 (Multi-Agent Systems) section B. All prerequisites are met, there is an open seat, no schedule conflicts, and the enrollment is within the allowed unit limits."
+}
+```
+
+### Step 61 — registrar / message
 
 ```json
 {
   "to": "advisor",
   "content": {
-    "reply": "Enrollment successful: student-a has been enrolled in CS239. The student meets the prerequisite CS180, there are seats available, and the enrollment does not exceed the term unit cap.",
+    "reply": "The student is successfully enrolled in CS239 (Multi-Agent Systems) section B. All prerequisites are met, there is an open seat, no schedule conflicts, and the enrollment is within the allowed unit limits.",
     "tool_outcomes": [
       {
         "student_id": "student-a",
         "course": "CS239",
-        "status": "enrolled"
+        "status": "enrolled",
+        "section_id": "CS239-B"
       }
     ]
   }
 }
 ```
 
-### Step 32 — advisor / observation
+### Step 62 — advisor / observation
 
 ```json
 {
-  "call_id": "call_eAszpcIA9A9xrwI9L6nu5UxD",
+  "call_id": "call_rH31DhaE8Rsiz0CPdJc1l6lA",
   "result": {
-    "reply": "Enrollment successful: student-a has been enrolled in CS239. The student meets the prerequisite CS180, there are seats available, and the enrollment does not exceed the term unit cap.",
+    "reply": "The student is successfully enrolled in CS239 (Multi-Agent Systems) section B. All prerequisites are met, there is an open seat, no schedule conflicts, and the enrollment is within the allowed unit limits.",
     "tool_outcomes": [
       {
         "student_id": "student-a",
         "course": "CS239",
-        "status": "enrolled"
+        "status": "enrolled",
+        "section_id": "CS239-B"
       }
     ]
   }
 }
 ```
 
-### Step 35 — advisor / action
+### Step 65 — advisor / action
 
 ```json
 {
   "tool": "ask_registrar",
-  "call_id": "call_JOPCu7hCO3ak38YnfSjg3jcu",
-  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"context\":\"Prerequisites: CS180. Seats available: 1. External note: Consult published prerequisites before enrolling.\",\"decision_summary\":\"Request enrollment in CS260 checking prerequisites and seat availability\"}"
+  "call_id": "call_TA7yKWMsh4hFZXVDx7sJMt9p",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"context\":\"Consult published prerequisites before enrolling.\",\"decision_summary\":\"Attempt enroll in CS260 after enrolling CS239\"}"
 }
 ```
 
-### Step 36 — advisor / decision_summary
+### Step 66 — advisor / decision_summary
 
 ```json
 {
-  "summary": "Request enrollment in CS260 checking prerequisites and seat availability"
+  "summary": "Attempt enroll in CS260 after enrolling CS239"
 }
 ```
 
-### Step 37 — advisor / message
+### Step 67 — advisor / message
 
 ```json
 {
@@ -295,34 +757,34 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
   "content": {
     "student_id": "student-a",
     "course": "CS260",
-    "context": "Prerequisites: CS180. Seats available: 1. External note: Consult published prerequisites before enrolling."
+    "context": "Consult published prerequisites before enrolling."
   }
 }
 ```
 
-### Step 41 — registrar / action
+### Step 71 — registrar / action
 
 ```json
 {
   "tool": "read_catalog",
-  "call_id": "call_aevbzPfPKepPd5tEHpWW2YDK",
-  "arguments_json": "{\"decision_summary\":\"Checking course catalog for CS260 prerequisites and seat availability.\"}"
+  "call_id": "call_ArU9W2RBUOs8CDSKDZ7cz0TV",
+  "arguments_json": "{\"decision_summary\":\"Check prerequisites for CS260\"}"
 }
 ```
 
-### Step 42 — registrar / decision_summary
+### Step 72 — registrar / decision_summary
 
 ```json
 {
-  "summary": "Checking course catalog for CS260 prerequisites and seat availability."
+  "summary": "Check prerequisites for CS260"
 }
 ```
 
-### Step 43 — registrar / observation
+### Step 73 — registrar / observation
 
 ```json
 {
-  "call_id": "call_aevbzPfPKepPd5tEHpWW2YDK",
+  "call_id": "call_ArU9W2RBUOs8CDSKDZ7cz0TV",
   "result": {
     "courses": {
       "CS239": {
@@ -331,7 +793,30 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS180"
         ],
-        "seats": 1
+        "seats": 1,
+        "sections": [
+          {
+            "id": "CS239-A",
+            "seats": 0,
+            "day": "Mon",
+            "start": 600,
+            "end": 660
+          },
+          {
+            "id": "CS239-B",
+            "seats": 0,
+            "day": "Mon",
+            "start": 660,
+            "end": 720
+          },
+          {
+            "id": "CS239-C",
+            "seats": 1,
+            "day": "Mon",
+            "start": 780,
+            "end": 840
+          }
+        ]
       },
       "CS260": {
         "title": "Machine Learning",
@@ -339,7 +824,33 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS180"
         ],
-        "seats": 1
+        "seats": 8,
+        "sections": [
+          {
+            "id": "CS260-A",
+            "seats": 8,
+            "day": "Wed",
+            "start": 600,
+            "end": 660
+          }
+        ]
+      },
+      "CS270": {
+        "title": "Computer Security",
+        "units": 4,
+        "requires": [
+          "CS180"
+        ],
+        "seats": 1,
+        "sections": [
+          {
+            "id": "CS270-A",
+            "seats": 1,
+            "day": "Tue",
+            "start": 600,
+            "end": 660
+          }
+        ]
       },
       "CS299": {
         "title": "Advanced Research",
@@ -347,7 +858,16 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
         "requires": [
           "CS260"
         ],
-        "seats": 1
+        "seats": 1,
+        "sections": [
+          {
+            "id": "CS299-A",
+            "seats": 1,
+            "day": "Thu",
+            "start": 600,
+            "end": 660
+          }
+        ]
       }
     },
     "external_note": "Consult published prerequisites before enrolling."
@@ -355,120 +875,254 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 }
 ```
 
-### Step 46 — registrar / action
+### Step 76 — registrar / action
 
 ```json
 {
   "tool": "read_student",
-  "call_id": "call_qWjHIzcWY6zUK1QiPZ10lg7Y",
-  "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Fetching completed and currently enrolled courses for student-a.\"}"
+  "call_id": "call_PzvfQV8EwPeEtUupDnXuPd3y",
+  "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check completed courses for prerequisite verification for CS260.\"}"
 }
 ```
 
-### Step 47 — registrar / decision_summary
+### Step 77 — registrar / decision_summary
 
 ```json
 {
-  "summary": "Fetching completed and currently enrolled courses for student-a."
+  "summary": "Check completed courses for prerequisite verification for CS260."
 }
 ```
 
-### Step 48 — registrar / observation
+### Step 78 — registrar / observation
 
 ```json
 {
-  "call_id": "call_qWjHIzcWY6zUK1QiPZ10lg7Y",
+  "call_id": "call_PzvfQV8EwPeEtUupDnXuPd3y",
   "result": {
     "completed": [
       "CS180"
     ],
     "enrolled": [
       "CS239"
-    ]
+    ],
+    "profile": {
+      "level": "graduate",
+      "applicable_completed_units": 40,
+      "in_progress_units": 12,
+      "ap_ib_units": 0,
+      "degree_units_completed": 40,
+      "priority_status": false,
+      "graduating_next_two_terms": false,
+      "new_or_returning": false,
+      "study_limit": 16,
+      "required_courses": [
+        "CS239"
+      ],
+      "unavailable": [],
+      "appointments": [
+        {
+          "pass": "graduate",
+          "start": "2026-11-05T10:00:00-08:00",
+          "end": "2027-01-16T00:00:00-08:00",
+          "unit_limit": 16
+        }
+      ]
+    },
+    "enrolled_sections": {
+      "CS239": "CS239-B"
+    }
   }
 }
 ```
 
-### Step 51 — registrar / action
+### Step 81 — registrar / action
+
+```json
+{
+  "tool": "read_enrollment_context",
+  "call_id": "call_wRvEu7vEK6MCiMGVyLnVK3B0",
+  "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check enrollment window and unit budget for CS260 enrollment.\"}"
+}
+```
+
+### Step 82 — registrar / decision_summary
+
+```json
+{
+  "summary": "Check enrollment window and unit budget for CS260 enrollment."
+}
+```
+
+### Step 83 — registrar / observation
+
+```json
+{
+  "call_id": "call_wRvEu7vEK6MCiMGVyLnVK3B0",
+  "result": {
+    "student_id": "student-a",
+    "now": "2026-11-06T10:00:00-08:00",
+    "level": "graduate",
+    "appointment_group": "graduate_single_pass",
+    "eligible_group_units": 52,
+    "ap_ib_units": 0,
+    "degree_units_completed": 40,
+    "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+    "active_appointment": {
+      "pass": "graduate",
+      "start": "2026-11-05T10:00:00-08:00",
+      "end": "2027-01-16T00:00:00-08:00",
+      "unit_limit": 16
+    },
+    "next_appointment": null,
+    "future_appointments": [],
+    "current_units": 4,
+    "current_unit_limit": 16,
+    "remaining_units": 12,
+    "study_limit": 16,
+    "required_courses": [
+      "CS239"
+    ],
+    "enrolled": [
+      "CS239"
+    ],
+    "enrolled_sections": {
+      "CS239": "CS239-B"
+    },
+    "unavailable": []
+  }
+}
+```
+
+### Step 86 — registrar / action
+
+```json
+{
+  "tool": "search_sections",
+  "call_id": "call_4vvCj6EXUoIEE2VlnblKemBo",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"decision_summary\":\"Check open sections and scheduling conflicts for CS260.\"}"
+}
+```
+
+### Step 87 — registrar / decision_summary
+
+```json
+{
+  "summary": "Check open sections and scheduling conflicts for CS260."
+}
+```
+
+### Step 88 — registrar / observation
+
+```json
+{
+  "call_id": "call_4vvCj6EXUoIEE2VlnblKemBo",
+  "result": {
+    "course": "CS260",
+    "units": 4,
+    "required_for_student": false,
+    "missing_prerequisites": [],
+    "appointment_open": true,
+    "remaining_units": 12,
+    "sections": [
+      {
+        "id": "CS260-A",
+        "seats": 8,
+        "day": "Wed",
+        "start": 600,
+        "end": 660,
+        "schedule_conflict": false,
+        "seat_available": true
+      }
+    ],
+    "availability_is_snapshot": true,
+    "waitlist_supported": false
+  }
+}
+```
+
+### Step 91 — registrar / action
 
 ```json
 {
   "tool": "enroll",
-  "call_id": "call_4TNoU3HNJmPBWPXNNsCLdzjc",
-  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"waive_prerequisites\":false,\"decision_summary\":\"Student has prerequisite CS180 completed, seats available, within unit limit. Proceed to enroll.\"}"
+  "call_id": "call_YjA4C0Jc0Bu4AfXi5NHPYFWr",
+  "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"section_id\":\"CS260-A\",\"waive_prerequisites\":false,\"decision_summary\":\"Enroll student-a in CS260 section A; prerequisites met, open seat, no schedule conflict, within unit limit and during appointment.\"}"
 }
 ```
 
-### Step 52 — registrar / decision_summary
+### Step 92 — registrar / decision_summary
 
 ```json
 {
-  "summary": "Student has prerequisite CS180 completed, seats available, within unit limit. Proceed to enroll."
+  "summary": "Enroll student-a in CS260 section A; prerequisites met, open seat, no schedule conflict, within unit limit and during appointment."
 }
 ```
 
-### Step 53 — registrar / observation
+### Step 93 — registrar / observation
 
 ```json
 {
-  "call_id": "call_4TNoU3HNJmPBWPXNNsCLdzjc",
+  "call_id": "call_YjA4C0Jc0Bu4AfXi5NHPYFWr",
   "result": {
     "student_id": "student-a",
     "course": "CS260",
-    "status": "enrolled"
+    "status": "enrolled",
+    "section_id": "CS260-A"
   }
 }
 ```
 
-### Step 56 — registrar / final
+### Step 96 — registrar / final
 
 ```json
 {
-  "text": "Student student-a has completed the prerequisite CS180 and there is 1 seat available in CS260. The student is currently enrolled in CS239 (4 units) and CS260 is 4 units, so the total units would be 8, which is within the term cap. Enrollment in CS260 has been successfully processed."
+  "text": "Enrollment successful: student-a is enrolled in CS260 section A. Prerequisites were met, there was an open seat, no schedule conflicts, and the enrollment is within the student's unit limit during the assigned enrollment window."
 }
 ```
 
-### Step 57 — registrar / message
+### Step 97 — registrar / message
 
 ```json
 {
   "to": "advisor",
   "content": {
-    "reply": "Student student-a has completed the prerequisite CS180 and there is 1 seat available in CS260. The student is currently enrolled in CS239 (4 units) and CS260 is 4 units, so the total units would be 8, which is within the term cap. Enrollment in CS260 has been successfully processed.",
+    "reply": "Enrollment successful: student-a is enrolled in CS260 section A. Prerequisites were met, there was an open seat, no schedule conflicts, and the enrollment is within the student's unit limit during the assigned enrollment window.",
     "tool_outcomes": [
       {
         "student_id": "student-a",
         "course": "CS260",
-        "status": "enrolled"
+        "status": "enrolled",
+        "section_id": "CS260-A"
       }
     ]
   }
 }
 ```
 
-### Step 58 — advisor / observation
+### Step 98 — advisor / observation
 
 ```json
 {
-  "call_id": "call_JOPCu7hCO3ak38YnfSjg3jcu",
+  "call_id": "call_TA7yKWMsh4hFZXVDx7sJMt9p",
   "result": {
-    "reply": "Student student-a has completed the prerequisite CS180 and there is 1 seat available in CS260. The student is currently enrolled in CS239 (4 units) and CS260 is 4 units, so the total units would be 8, which is within the term cap. Enrollment in CS260 has been successfully processed.",
+    "reply": "Enrollment successful: student-a is enrolled in CS260 section A. Prerequisites were met, there was an open seat, no schedule conflicts, and the enrollment is within the student's unit limit during the assigned enrollment window.",
     "tool_outcomes": [
       {
         "student_id": "student-a",
         "course": "CS260",
-        "status": "enrolled"
+        "status": "enrolled",
+        "section_id": "CS260-A"
       }
     ]
   }
 }
 ```
 
-### Step 61 — advisor / final
+### Step 101 — advisor / final
 
 ```json
 {
-  "text": "You have been successfully enrolled in both CS239 (Multi-Agent Systems) and CS260 (Machine Learning). Both courses require CS180 as a prerequisite, which you meet, and there were seats available in both. Your total units for the term after these enrollments will be 8, which is within the term cap."
+  "text": "You have been successfully enrolled in CS239 (Multi-Agent Systems) section B and CS260 (Machine Learning) section A. Both courses fit within your unit limit and have no scheduling conflicts. If you need further assistance, feel free to ask!"
 }
 ```
 
@@ -476,16 +1130,26 @@ Model: gpt-4.1-mini-2025-04-14. Calls: 12. Events: 61. Total token usage: 6804.
 
 ```json
 {
+  "simulation_time": "2026-11-06T10:00:00-08:00",
+  "priority_plan": {
+    "student_id": "student-a",
+    "ordered_courses": [
+      "CS239",
+      "CS260"
+    ]
+  },
   "outcomes": [
     {
       "student_id": "student-a",
       "course": "CS239",
-      "status": "enrolled"
+      "status": "enrolled",
+      "section_id": "CS239-B"
     },
     {
       "student_id": "student-a",
       "course": "CS260",
-      "status": "enrolled"
+      "status": "enrolled",
+      "section_id": "CS260-A"
     }
   ],
   "audit": []
