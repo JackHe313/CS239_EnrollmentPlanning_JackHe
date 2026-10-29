@@ -22,6 +22,7 @@ python3 -m phase1.evidence --replay catalog_injection
 
 The last command displays recorded evidence; it makes no model calls or new decisions.
 See [DEMO.md](DEMO.md) for a walkthrough and [SUBMISSION.md](SUBMISSION.md) for the rubric map.
+Use [DEMO_VIDEO_SCRIPT.md](DEMO_VIDEO_SCRIPT.md) for the timed five-minute recording.
 
 ## Run the live application
 
@@ -146,24 +147,41 @@ API requests are bounded to 60 per scenario, 18 advisor turns, 10 turns per regi
 conversation, and 1,400 output tokens per response. `--max-api-calls` can lower the
 request limit. Calls time out after 60 seconds with no automatic retries. These
 execution limits do not guarantee a specific dollar cost. API keys, HTTP headers,
-and encrypted reasoning are excluded from trace files and the submission ZIP.
+and encrypted reasoning are excluded from trace files and submission archives.
 
 ## Files and packaging
 
 - `phase1/`: agents, synthetic state, API transport, trace verifier, and submission checker.
 - `tests/`: offline protocol, failure-path, business-rule, and evidence-integrity tests.
 - `traces/`: seven live JSON traces, readable companions, and documentation.
+- `app.md`, `policy.md`, `tools.md`, `agents/`, and `episodes/`: the course's
+  required application description, numbered policies, actual prompts, tool I/O,
+  and recorded example episodes. `policies.md` adds the per-agent boundary matrix.
+- `scripts/course_submission.py` and `submission_tests/`: description validation
+  and the two required, credential-scanned tar archives.
 - `.github/workflows/ci.yml`: offline verification on Python 3.9, 3.12, and 3.14.
 
-Create a ZIP from an explicit, credential-scanned file allowlist:
+The [October 27 submission guidelines](https://docs.google.com/document/d/1-hvS3KpJmbCQphmH4AAWofD073yIP6CCE4MTXoS8joQ/edit)
+require separate description and whole-source archives. From the repository root:
 
 ```sh
-python3 -m phase1.submission --package artifacts/phase1-submission.zip
+python3 -m unittest discover -s submission_tests -v
+python3 scripts/course_submission.py --check
+python3 scripts/course_submission.py --name JackHe --app-name EnrollmentPlanning --uid YOUR_NINE_DIGIT_UID
 ```
 
-The package contains a SHA-256 manifest and excludes `.env`, local history, caches,
-Git metadata, and local/failed runs. Packaging refuses to replace an existing ZIP.
-Code is released under the [MIT license](LICENSE).
+This creates `artifacts/course/JackHe-EnrollmentPlanning-<uid>-requirements.tar.gz`
+and `artifacts/course/JackHe-EnrollmentPlanning-<uid>-whole.tar.gz`. Both use the
+same identity and include SHA-256 manifests. Packaging excludes `.env`, local
+history, caches, Git metadata, and local/failed runs and refuses to overwrite files.
+In the whole archive, run commands from `src/`; `src/README.md` documents setup.
+Root `tests/README.md` describes test cases; runnable tests remain in `src/tests/`
+and `src/submission_tests/`.
+
+The public repository is [CS239_EnrollmentPlanning_JackHe](https://github.com/JackHe313/CS239_EnrollmentPlanning_JackHe),
+released under the [MIT license](LICENSE). The YouTube recording is a separate
+submission step; follow the script, upload it, and add the real URL to the class
+spreadsheet. Phase 2 source and intercepted traces belong to the later milestone.
 
 Implementation references: official OpenAI [function calling](https://developers.openai.com/api/docs/guides/function-calling)
 and [stateless Responses conversations](https://developers.openai.com/api/docs/guides/migrate-to-responses).

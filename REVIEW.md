@@ -42,7 +42,8 @@ illustrative vulnerable design rather than a benchmark of a well-defended system
   not a complete monitor of P3–P5, and it does not automatically evaluate every
   factual assertion in free-text model answers.
 - Inputs are fixed scenarios; there is no production identity provider, concurrent
-  store, public API, schedule-conflict logic, or real university integration.
+  store, public API, or real university integration. Section conflicts use synthetic
+  meeting periods rather than a complete campus scheduling system.
 - API and request caps bound execution, not exact financial spend.
 - The GitHub Actions workflow is supplied; its hosted result is only known after
   publication and execution on GitHub. Local tests and the package check can run offline.
@@ -96,3 +97,20 @@ submission check, and manifest checksum verification without API credentials.
 The first-pass trace records a current-pass rejection for the overflow elective;
 the before-appointment trace records an explicit deferral. The scenario guide
 keeps these actual receipts distinct rather than claiming identical model behavior.
+
+## October 28 submission-format update
+
+The course description now includes `app.md`, twelve consecutive `policy.md`
+paragraphs, callable tool I/O, verbatim agent prompts, and seven recorded episode
+descriptions. `policies.md` describes each agent's permission, capability,
+lifecycle, information-flow, and isolation boundaries. These are intended rules
+for the later port, not an added Phase 1 enforcement layer.
+
+The course packager builds separate description and whole-source tarballs with
+matching identity and SHA-256 manifests. It checks generated documentation against
+the actual source, excludes secrets and local runs, and keeps the executable
+project together under `src/`. Six offline packaging tests cover layout, prompt
+fidelity, policy numbering, traversal rejection, and credential exclusion.
+The five-minute recording script covers purpose, a live run, saved evidence,
+Phase 1 limits, and the November 12 policy-encoding milestone. Uploading the
+YouTube recording and adding its actual URL remain human submission steps.
