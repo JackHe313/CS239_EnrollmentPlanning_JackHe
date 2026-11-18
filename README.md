@@ -6,9 +6,14 @@ an **advisor** plans requested courses, and a **registrar** inspects academic re
 and executes simulated enrollments. Each has its own prompt, model conversation,
 and tools. All course and student data are fictional; no university service is connected.
 
-This is the **Phase 1 prototype**, due October 29, 2026. It has no safety-enforcing
-framework. The submitted model executions show realistic pass/section planning
-and two concrete trust-boundary failures for the later policy-assurance port.
+The `phase2` branch compares the submitted prototype with the course PolicyWeave
+port. The experiment has ten scenarios covering enrollment, authorization,
+appointment boundaries, and section planning. The Phase 2 guide records the
+source revisions, setup, evidence available so far, and benchmark commands.
+[Phase 2 guide](phase2/README.md) · [Scenario definitions](test_cases.json)
+
+The **Phase 1 prototype** below runs without a safety-enforcing framework.
+Its submitted traces show pass and section planning and two trust-boundary failures.
 
 ## Start here
 
