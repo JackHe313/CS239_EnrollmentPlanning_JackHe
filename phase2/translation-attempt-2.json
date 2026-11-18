@@ -1,0 +1,44 @@
+{
+  "source_commit": "ec0ed9fb1d29ce82a6491384e3f14c7d3e40d3b1",
+  "framework_commit": "25a201c287a3927d821e154ed1345b47f97f0b5f",
+  "outcome": "Operator stopped after binding-plan acceptance because required physical boundary IDs cannot be recorded by the pinned worker.",
+  "accepted_stages": {
+    "inventory": {
+      "passed": true,
+      "attempt": 0,
+      "hash": "81209b88e251c87323072ed679961a5037ee9751021ae9dbaa0237973e9f665c"
+    },
+    "binding-plan": {
+      "passed": true,
+      "attempt": 0,
+      "hash": "b28e702cced1818d0cc1fd60b4d1e5657b7cd367f1a7c62a36c8347f0ba28fe3"
+    }
+  },
+  "artifact_sha256": {
+    "inventory.json": "36ae33fec82963a6943556e3aedfb6f48974c9b1faa6175a635114d94bf24a42",
+    "binding-plan.json": "286840250d2192bfce7e9d270ddb83a166f7cbbe9bd6f03e5d094634ea1c405d"
+  },
+  "unique_source_symbols": 7,
+  "inventory_entries": 8,
+  "unobservable_required_boundary_ids": [
+    "agent_context_and_model_consumption"
+  ],
+  "affected_calls": [
+    {
+      "action": "agent_execution",
+      "role": "producer",
+      "boundary": "agent_context_and_model_consumption"
+    }
+  ],
+  "shared_functions": [
+    {
+      "file": "phase1/app.py",
+      "symbol": "Agent.run",
+      "ids": [
+        "agent_context_and_model_consumption",
+        "agent_final_output"
+      ],
+      "verifier_id": "agent_final_output"
+    }
+  ]
+}

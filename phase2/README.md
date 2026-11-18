@@ -92,6 +92,12 @@ and the verifier for all seven Phase 1 traces passed on Linux. The first transla
 attempt on the Mac stopped during rule generation. A fresh native Linux attempt
 accepted the rules and ran up to 17 passing tests. Its native validator could
 attribute only one boundary identifier to the Advisor dispatcher, although the
-inventory assigned it three. It withheld publication. The clarification in P8–P10
-documents those shared call sites for a fresh run of the same course translator.
+inventory assigned it three. It withheld publication. [First native attempt](translation-attempt-1.json)
+
+With the P8–P10 clarification, a fresh official run assigned one ID to the Advisor
+dispatcher. It still assigned two IDs to `Agent.run`. The binding plan required
+the first as a producer, while the native worker could count only the second.
+The operator stopped this second run after planning to avoid paying for an
+implementation the verifier could not certify. [Second native attempt](translation-attempt-2.json)
+
 The paired benchmark, enforcement trajectories, human review and final report are pending.
