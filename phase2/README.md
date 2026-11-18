@@ -70,6 +70,7 @@ in the course Python environment. The original app's `phase1/` package is at the
 policyweave translate-harness --input run.py --output translated_harness.py --original-app . --ported-app ported-app --connection "$CONNECTION_FILE"
 python translated_harness.py --side original --output_dir runs --sample 10
 python translated_harness.py --side ported --output_dir runs --sample 10
+python phase2/check_results.py runs
 ```
 
 Each side contributes ten attempts per scenario. Retain failed attempts and their
@@ -79,7 +80,12 @@ The student supplies the sentence ratings, reflection and research-consent choic
 
 ## Evidence available
 
-The original S01 live smoke test completed. The original app's 38 offline tests
+Two live development samples completed. In S01 the Registrar enrolled the graduate
+student in CS239 and CS260. In S09 the first pass ended exactly at midnight on
+November 12. The Registrar deferred CS239 to November 13 at 09:00 Pacific and
+left all enrollments and seats unchanged. The S09 trace contains 12 model responses
+from the pinned application model. Both samples were collected outside the paired
+experiment. The original app's 38 offline tests, the 12 harness checks
 and the verifier for all seven Phase 1 traces passed on Linux. The first translation
 attempt accepted the inventory and policy bindings and stopped during rule generation.
 The paired benchmark, enforcement trajectories, human review and final report are pending.
