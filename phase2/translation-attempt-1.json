@@ -1,0 +1,90 @@
+{
+  "source_commit": "37c63fa872c92d109bf41868b191ed9011346f06",
+  "framework_commit": "25a201c287a3927d821e154ed1345b47f97f0b5f",
+  "workflow_status": "failed",
+  "stages": {
+    "inventory": {
+      "passed": true,
+      "attempt": 0,
+      "hash": "09d1f6ef86425695e5772f2f10188678a9056af1fe9a2cfe47d9ba0e2d26f7bf"
+    },
+    "binding-plan": {
+      "passed": true,
+      "attempt": 1,
+      "hash": "953813622fd0c6a5ae394d3b685522490e174055531f7cd648a672f4e7f9da10"
+    },
+    "rules": {
+      "passed": true,
+      "attempt": 0,
+      "hash": "d052bd724128d44b35ce5833389c87da4653e6a5dfec31943664f42c20f3e326"
+    },
+    "instrumentation": {
+      "passed": false,
+      "check": "checks-2.json"
+    }
+  },
+  "shared_advisor_function": {
+    "symbol": "EnrollmentApplication.advisor_tool",
+    "inventory_ids": [
+      "advisor_business_dispatch",
+      "advisor_to_registrar_delivery",
+      "registrar_to_advisor_delivery"
+    ]
+  },
+  "checks": [
+    {
+      "source": "checks-0.json",
+      "sha256": "68a43d85307d5bb046d585d88345318003f5e2ec764e1c8b28780d1d044dbcc3",
+      "passed": false,
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "nativeEngineCalls": 599,
+      "nativeBoundaryCalls": {
+        "agent_final_output": 599,
+        "registrar_business_dispatch": 499,
+        "registrar_to_advisor_delivery": 189,
+        "initial_advisor_context": 103
+      },
+      "boundaryErrors": [
+        "Native gate checks never exercised the candidate boundary: advisor_business_dispatch"
+      ]
+    },
+    {
+      "source": "checks-1.json",
+      "sha256": "2f50240cb0261aeb14cd3dd6399588a3f16bcab2f947a4ce3668a59a725a9011",
+      "passed": false,
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "nativeEngineCalls": 623,
+      "nativeBoundaryCalls": {
+        "registrar_business_dispatch": 514,
+        "agent_final_output": 623,
+        "registrar_to_advisor_delivery": 204,
+        "initial_advisor_context": 103
+      },
+      "boundaryErrors": [
+        "Native gate checks never exercised the candidate boundary: advisor_business_dispatch"
+      ]
+    },
+    {
+      "source": "checks-2.json",
+      "sha256": "6e8203781206d5e3fa6451c5368865545f78cdf7ba57afc0c2011e6556ccb039",
+      "passed": false,
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "nativeEngineCalls": 623,
+      "nativeBoundaryCalls": {
+        "agent_final_output": 623,
+        "registrar_business_dispatch": 514,
+        "registrar_to_advisor_delivery": 204,
+        "initial_advisor_context": 103
+      },
+      "boundaryErrors": [
+        "Native gate checks never exercised the candidate boundary: advisor_business_dispatch"
+      ]
+    }
+  ]
+}

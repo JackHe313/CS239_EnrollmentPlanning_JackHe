@@ -10,14 +10,16 @@ an appointment window.
 
 | Component | Experiment setting |
 | --- | --- |
-| Phase 1 application and policy | Commit `37c63fa872c92d109bf41868b191ed9011346f06` on the original application's history |
+| Phase 1 baseline | Commit `37c63fa872c92d109bf41868b191ed9011346f06` |
+| Clarified translation input | Commit `ec0ed9fb1d29ce82a6491384e3f14c7d3e40d3b1`, with the same application code and fixtures |
 | PolicyWeave | Course commit `25a201c287a3927d821e154ed1345b47f97f0b5f` |
 | Application runtime | Python 3.12 on Linux x86-64, separate Advisor and Registrar conversations using `gpt-4.1-mini-2025-04-14` |
 | Translator | OpenAI `gpt-6.1-sol`, medium reasoning effort, Codex CLI 0.164.0 |
 | Enforcement tools | Soufflé 2.5, `prlimit`, and the Docker images built from the pinned course source |
 
-Use a separate, clean checkout at the Phase 1 commit as the input to the translator.
-The policy is the original twelve-paragraph [policy.md](../policy.md). Each sample
+Use a separate, clean checkout at the clarified input commit for the translation.
+The twelve-paragraph [policy.md](../policy.md) names the shared dispatcher, the
+shared model loop and the shared message recorder in P8–P10. Each sample
 starts a fresh application with the request, simulation time, student records and
 catalog specified in [test_cases.json](../test_cases.json). The course term, assigned
 times and student records are synthetic. [Course instructions](https://github.com/thaddywu/CS239-Phase2/blob/25a201c287a3927d821e154ed1345b47f97f0b5f/phase2-instructions.pdf)
@@ -87,5 +89,9 @@ left all enrollments and seats unchanged. The S09 trace contains 12 model respon
 from the pinned application model. Both samples were collected outside the paired
 experiment. The original app's 38 offline tests, the 12 harness checks
 and the verifier for all seven Phase 1 traces passed on Linux. The first translation
-attempt accepted the inventory and policy bindings and stopped during rule generation.
+attempt on the Mac stopped during rule generation. A fresh native Linux attempt
+accepted the rules and ran up to 17 passing tests. Its native validator could
+attribute only one boundary identifier to the Advisor dispatcher, although the
+inventory assigned it three. It withheld publication. The clarification in P8–P10
+documents those shared call sites for a fresh run of the same course translator.
 The paired benchmark, enforcement trajectories, human review and final report are pending.
