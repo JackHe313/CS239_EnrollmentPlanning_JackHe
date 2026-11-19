@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import unittest
 
 import run as harness
@@ -22,7 +24,8 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual(list(self.cases),[f'S{i:02}' for i in range(1,11)])
         for case in self.cases.values():
             self.assertTrue({'task','expected_outcome','involved_policies','run_command','initial_spec','initial_state'} <= set(case))
-            self.assertTrue(case['involved_policies'])
+            self.assertTrue(all(len(row) == 2 for row in case['involved_policies']))
+            self.assertNotIn('--side', case['run_command'])
             self.assertEqual(case['initial_state']['authenticated_actor'],'student-a')
 
     def test_existing_legitimate_live_evidence_meets_task_checks(self):
@@ -31,11 +34,14 @@ class HarnessTests(unittest.TestCase):
             with self.subTest(case=case_id):
                 self.assertTrue(harness.check_result(case,self.trace(case['scenario'])))
 
-    def test_existing_unsafe_runs_fail_the_same_checks(self):
-        for case_id in ['S02','S03']:
-            case=self.cases[case_id]
+    def test_requested_functional_effect_can_match_even_when_a_policy_is_violated(self):
+        for case_id in ['S02', 'S03']:
+            case = self.cases[case_id]
+            trace = self.trace(case['scenario'])
             with self.subTest(case=case_id):
-                self.assertFalse(harness.check_result(case,self.trace(case['scenario'])))
+                self.assertTrue(harness.check_result(case, trace))
+                trace['final_students'] = trace['initial_students']
+                self.assertFalse(harness.check_result(case, trace))
 
     def test_failure_fixture_or_unconfirmed_final_never_counts(self):
         for field,value in [('status','failed'),('execution_mode','test_fixture'),('final_response','')]:
@@ -69,12 +75,10 @@ class HarnessTests(unittest.TestCase):
         self.assertEqual(self.cases['S09']['initial_spec']['now'],'2026-11-12T00:00:00-08:00')
         self.assertEqual(self.cases['S10']['initial_spec']['initial_enrolled_sections'],['CS239-B'])
 
-    def test_outcome_needs_its_own_registrar_tool_observation(self):
-        trace = self.trace('compliant')
-        enrolled = trace['outcomes'][0]
-        trace['events'] = [event for event in trace['events']
-                           if event['kind'] != 'observation' or event['payload']['result'] != enrolled]
-        self.assertFalse(harness.check_result(self.cases['S01'], trace))
+    def test_policy_audit_events_are_scored_separately(self):
+        trace = self.trace('cross_student')
+        trace['events'] = []
+        self.assertTrue(harness.check_result(self.cases['S03'], trace))
 
     def test_later_valid_window_cannot_replace_first_available_window(self):
         trace = self.trace('before_appointment')
@@ -95,20 +99,19 @@ class HarnessTests(unittest.TestCase):
         student['profile']['study_limit'] = 3
         self.assertFalse(harness.write_fits_schedule(student, sections['CS239-C'], catalog, 'CS239', now))
 
-    def test_private_read_needs_a_minimal_observation(self):
-        request = {'agent': 'advisor', 'kind': 'action', 'payload': {
-            'tool': 'read_enrollment_context', 'arguments_json': '{"student_id":"student-b"}', 'call_id': 'r'}}
-        observation = {'agent': 'advisor', 'kind': 'observation', 'payload': {
-            'call_id': 'r', 'result': {'status': 'denied', 'reason': 'unauthorized'}}}
-        trace = {'authenticated_actor': 'student-a', 'events': [request, observation]}
-        self.assertTrue(harness.private_reads_stayed_private(trace))
-        observation['payload']['result']['error'] = {'profile': {'enrolled': []}}
-        self.assertFalse(harness.private_reads_stayed_private(trace))
-        trace['events'].pop()
-        self.assertFalse(harness.private_reads_stayed_private(trace))
+    def test_original_cli_writes_one_boolean_per_sample_without_a_side_directory(self):
+        with TemporaryDirectory() as tmp:
+            argv = ['run.py', '--case', 'S01', '--output_dir', tmp, '--sample', '2']
+            with patch.object(sys, 'argv', argv), patch.object(harness, 'execute_sample', side_effect=[True, False]):
+                self.assertEqual(harness.main(), 1)
+            files = sorted(Path(tmp).rglob('result.json'))
+            self.assertEqual([str(p.relative_to(tmp)) for p in files],
+                             ['S01/sample-1/result.json', 'S01/sample-2/result.json'])
+            self.assertEqual([json.loads(p.read_text()) for p in files],
+                             [{'match_expected_outcome': True}, {'match_expected_outcome': False}])
 
     def test_cli_rejects_ported_and_invalid_repetitions_before_model_calls(self):
-        for args in [['--side','ported'],['--side','original','--sample','0']]:
+        for args in [['--side','ported'],['--side','original'],['--sample','0']]:
             result=subprocess.run([sys.executable,str(ROOT/'run.py'),*args],capture_output=True,text=True)
             self.assertEqual(result.returncode,2)
 

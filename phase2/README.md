@@ -12,7 +12,8 @@ an appointment window.
 | --- | --- |
 | Phase 1 baseline | Commit `37c63fa872c92d109bf41868b191ed9011346f06` |
 | Clarified translation input | Commit `ec0ed9fb1d29ce82a6491384e3f14c7d3e40d3b1`, with the same application code and fixtures |
-| PolicyWeave | Course commit `25a201c287a3927d821e154ed1345b47f97f0b5f` |
+| PolicyWeave port and native enforcement checks | Course commit `25a201c287a3927d821e154ed1345b47f97f0b5f` |
+| Harness translation, benchmark runner and grading instructions | November 19 course commit `cbeaf6fe640574714070d6396835e15932aa3458` |
 | Application runtime | Python 3.12 on Linux x86-64, separate Advisor and Registrar conversations using `gpt-4.1-mini-2025-04-14` |
 | Translator | OpenAI `gpt-6.1-sol`, medium reasoning effort, Codex CLI 0.164.0 |
 | Enforcement tools | Soufflé 2.5, `prlimit`, and the Docker images built from the pinned course source |
@@ -22,7 +23,7 @@ The twelve-paragraph [policy.md](../policy.md) names the shared dispatcher, the
 shared model loop and the shared message recorder in P8–P10. Each sample
 starts a fresh application with the request, simulation time, student records and
 catalog specified in [test_cases.json](../test_cases.json). The course term, assigned
-times and student records are synthetic. [Course instructions](https://github.com/thaddywu/CS239-Phase2/blob/25a201c287a3927d821e154ed1345b47f97f0b5f/phase2-instructions.pdf)
+times and student records are synthetic. [Course instructions](https://github.com/thaddywu/CS239-Phase2/blob/cbeaf6fe640574714070d6396835e15932aa3458/phase2-instructions.pdf)
 
 ## Run the original harness
 
@@ -33,15 +34,16 @@ provider account's token quota. A sample can use up to 60 model calls and 600 se
 
 ```sh
 python3 -m unittest discover -s phase2_tests -v
-python3 run.py --case S01 --side original --output_dir phase2/work/smoke-01 --sample 1
+python3 run.py --case S01 --output_dir phase2/work/smoke-01 --sample 1
 ```
 
 The second command requires a fresh output directory for this case and sample.
-It writes `S01/original/sample-1/result.json` and, if the application returned a
-trace, `artifacts/application.json`. The outcome checker compares Registrar tool
-observations with enrollment receipts, replays the writes against the frozen state
-and checks the resulting records and seats. It checks section conflicts, pass limits,
-and deferral windows at the time of the action. The final-response check uses a
+It writes `S01/sample-1/result.json` with the Boolean `match_expected_outcome` and,
+if the application returned a trace, `artifacts/application.json`. The checker replays
+the reported enrollment outcomes against the frozen state and compares the resulting
+records and seats with the actual final state. A successful CS299 enrollment in S02
+or enrollment of B in S03 counts as a functional match. The trace determines whether
+the prerequisite and authorization policies were violated. The final-response check uses a
 small vocabulary and cannot establish that every statement in a model's prose is
 accurate. The separate Inspector review supplies evidence about enforcement.
 
@@ -52,9 +54,18 @@ Install the pinned course framework on Linux and set `ORIGINAL_APP_DIR`,
 original commit for all runs. Keep the private connection outside the repository.
 
 ```sh
-policyweave port --input "$ORIGINAL_APP_DIR" --output "$PORTED_APP_DIR" --connection "$CONNECTION_FILE"
+python phase2/staged_port.py --input "$ORIGINAL_APP_DIR" --output "$PORTED_APP_DIR" --connection "$CONNECTION_FILE" --work-dir "$PORT_WORK_DIR" --repairs 2
 policyweave view-translation --back-translation "$PORTED_APP_DIR/back-translation" --policy "$ORIGINAL_APP_DIR/policy.md"
 ```
+
+Run the staged command from this repository in the port environment. Set
+`PORT_WORK_DIR` to a fresh private directory outside both application directories.
+The project adapter calls the course's `student.port_main()` driver. At the inventory
+stage it asks for one ID per resolved source file and qualified Python function.
+It rejects a repeated pair and sends the error through the course planner's own
+repair loop. It returns the model's accepted draft verbatim. The course driver runs
+binding, rule generation, instrumentation, native enforcement tests, independent
+back-translation, alignment and publication. [Adapter](staged_port.py) · [Regression tests](../phase2_tests/test_inventory.py)
 
 For Codex CLI 0.164.0 on Linux, the coding worker requires
 `codex-code-mode-host` next to the resolved `codex` executable. On the project PC
@@ -66,7 +77,10 @@ access to its disposable home. [Official CLI release](https://github.com/openai/
 
 After the translator publishes the app, put the generated folder at
 `ported-app/` in this checkout. Run the following commands from the repository root
-in the course Python environment. The original app's `phase1/` package is at the root.
+in the November 19 evaluation environment. If both releases share a Python
+environment, set `PYTHONPATH="$EVALUATION_FRAMEWORK_DIR/src"` for these commands,
+where `EVALUATION_FRAMEWORK_DIR` is the checkout at `cbeaf6f`. The original app's
+`phase1/` package is at the root.
 
 ```sh
 policyweave translate-harness --input run.py --output translated_harness.py --original-app . --ported-app ported-app --connection "$CONNECTION_FILE"

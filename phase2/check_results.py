@@ -41,12 +41,12 @@ def summarize(cases, root):
                 directory = root / case['id'] / side / f'sample-{sample}'
                 try:
                     result = json.loads((directory / 'result.json').read_text())
-                    if (not isinstance(result, dict) or set(result) != {'task_complete'}
-                            or type(result['task_complete']) is not bool):
+                    if (not isinstance(result, dict) or set(result) != {'match_expected_outcome'}
+                            or type(result['match_expected_outcome']) is not bool):
                         raise ValueError('invalid result schema')
                     if side == 'ported':
                         check_trajectory(directory, case['id'])
-                    passed += result['task_complete']
+                    passed += result['match_expected_outcome']
                 except (OSError, ValueError, KeyError, TypeError) as error:
                     raise ValueError(f'{directory}: {error}') from error
             counts[side] = passed
