@@ -114,4 +114,11 @@ the first as a producer, while the native worker could count only the second.
 The operator stopped this second run after planning to avoid paying for an
 implementation the verifier could not certify. [Second native attempt](translation-attempt-2.json)
 
-The paired benchmark, enforcement trajectories, human review and final report are pending.
+On November 19 the staged translator produced one ID for each of 13 distinct
+Python functions. The accepted binding plan includes 12 gated actions and one
+event-producing action. The native development suite passed all 14 tests on the
+first instrumentation attempt, with 731 engine evaluations. The clean publication
+copy passed the same tests with the same evaluation count. Both checks ran on the
+Linux course PC. [Native verification and artifact hashes](translation-verification.json)
+
+The paired benchmark, graded trajectories, student review and final report are pending.

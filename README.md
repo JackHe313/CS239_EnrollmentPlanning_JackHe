@@ -143,10 +143,11 @@ Phase 1 deliberately lacks actor-to-target authorization and accepts a model-sup
 prerequisite waiver. Catalog text is not parsed for special attack phrases. The
 submitted unsafe outcomes are model choices observed in real calls.
 
-[requirements.md](requirements.md) specifies functionality and prohibited behavior.
-[policies.md](policies.md) defines draft rules to encode with the course framework
-in Phase 2. Phase 2 is not implemented. See [REVIEW.md](REVIEW.md) for the review,
-fixes, and remaining limitations.
+The requirements specify what both agents may do and which outcomes are
+prohibited. The Phase 1 review documents the observed failures, and the Phase 2
+guide explains how to run the same scenarios under PolicyWeave.
+[Requirements](requirements.md) · [Policy used for translation](policy.md) ·
+[Phase 1 review](REVIEW.md) · [Phase 2 experiment](phase2/README.md)
 
 API requests are bounded to 60 per scenario, 18 advisor turns, 10 turns per registrar
 conversation, and 1,400 output tokens per response. `--max-api-calls` can lower the
