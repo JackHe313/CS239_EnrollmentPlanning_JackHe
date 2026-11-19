@@ -9,8 +9,10 @@ and tools. All course and student data are fictional; no university service is c
 The `phase2` branch compares the submitted prototype with the course PolicyWeave
 port. The experiment has ten scenarios covering enrollment, authorization,
 appointment boundaries, and section planning. The Phase 2 guide records the
-source revisions, setup, evidence available so far, and benchmark commands.
-[Phase 2 guide](phase2/README.md) · [Scenario definitions](test_cases.json)
+source revisions, setup, and benchmark commands. Run `python3 phase2/check_results.py runs`
+to verify saved results against the original scorer without making model calls.
+[Phase 2 guide](phase2/README.md) · [Generated app](ported-app/) ·
+[Scenario definitions](test_cases.json) · [Experiment report](report.md)
 
 The **Phase 1 prototype** below runs without a safety-enforcing framework.
 Its submitted traces show pass and section planning and two trust-boundary failures.

@@ -4,6 +4,34 @@ import json
 from pathlib import Path
 import sys
 
+PROJECT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT))
+from run import check_result
+
+
+def check_sample(case, side, sample, directory, matched):
+    record = json.loads((directory / 'run.json').read_text())
+    if (record['case'], record['side'], record['sample']) != (case['id'], side, sample):
+        raise ValueError('run identity differs from its directory')
+    if record['executionStatus'] not in {'completed', 'failed'}:
+        raise ValueError('unknown runner status')
+    if matched != (record['matchExpectedOutcome'] is True):
+        raise ValueError('result differs from the official runner record')
+    artifacts = directory / 'artifacts'
+    application = artifacts / 'application.json'
+    diagnostic = artifacts / 'diagnostic.json'
+    if diagnostic.exists():
+        if matched or not json.loads(diagnostic.read_text()).get('error_type'):
+            raise ValueError('inconsistent integration error')
+    elif application.exists():
+        if check_result(case, json.loads(application.read_text())) != matched:
+            raise ValueError('frozen scorer disagrees with the saved application trace')
+    elif record['executionStatus'] == 'completed' or matched:
+        raise ValueError('completed sample missing its application evidence')
+    for name in record['trajectories']:
+        if Path(name).name != name or not (directory / name).is_file():
+            raise ValueError('missing or invalid recorded trajectory path')
+
 
 def check_trajectory(directory, case_id):
     with (directory / 'trajectory.json').open() as stream:
@@ -44,6 +72,7 @@ def summarize(cases, root):
                     if (not isinstance(result, dict) or set(result) != {'match_expected_outcome'}
                             or type(result['match_expected_outcome']) is not bool):
                         raise ValueError('invalid result schema')
+                    check_sample(case, side, sample, directory, result['match_expected_outcome'])
                     if side == 'ported':
                         check_trajectory(directory, case['id'])
                     passed += result['match_expected_outcome']
@@ -59,7 +88,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('runs', type=Path, nargs='?', default=Path('runs'))
     args = parser.parse_args()
-    cases = json.loads((Path(__file__).resolve().parents[1] / 'test_cases.json').read_text())['cases']
+    cases = json.loads((PROJECT / 'test_cases.json').read_text())['cases']
     try:
         rows, totals = summarize(cases, args.runs)
     except ValueError as error:

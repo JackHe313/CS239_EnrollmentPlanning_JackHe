@@ -1,0 +1,44 @@
+[
+  {
+    "eventId": "b144e03a0de54ea3bd571314df6b17b3",
+    "gateEventId": "f3126e3f-f3ef-4249-9140-2e87441405cc",
+    "policyHash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771",
+    "templateId": "effect",
+    "interpretation": "Did this tool call execute, what result was recorded, and what state changed?",
+    "answer": "The app ran the enrollment operation, and its recorded outcome was applied. The captured result was status \"enrolled\" for student-a in course CS239, section CS239-B. The recorded before/after fact changes were exactly added: [] and removed: [], so no specific state mutation is shown by that comparison.",
+    "limitations": [],
+    "replayMatches": true,
+    "decision": {
+      "allowed": true,
+      "reasons": [],
+      "outcome": "applied",
+      "effectCalled": true
+    },
+    "scenario": "S01",
+    "sample": 1,
+    "timeline": "0e30236f36ff50bd5fdb2f4cd4f12c18fc0064f3b56bd8f311bb30c847c5bb3b"
+  },
+  {
+    "eventId": "fa05151e12cf4857a9f8c6e1b39377d3",
+    "gateEventId": "d08ff684-b266-4429-916f-1b3260af8d52",
+    "policyHash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771",
+    "templateId": "decision",
+    "interpretation": "Why was this tool call blocked?",
+    "answer": "The supporting rows show that registrar had RegistrarRole enrollment permission, student-a matched the authenticated student, and student-a and CS299 were known targets. However, the request set waive_prerequisites to \"true\", which the policy explicitly denies, and CS299 required CS260 with no recorded completion, triggering a separate prerequisite denial. Catalog, student and section inspection receipts were present, but the required enrollment-context receipt for student-a was missing, triggering another denial. The enrollment Allow rule also required that context receipt and waive_prerequisites=\"false\"; no Allow was derived, and explicit Deny rules override permission. The call was blocked, and the app did not run the enrollment operation.",
+    "limitations": [],
+    "replayMatches": true,
+    "decision": {
+      "allowed": false,
+      "reasons": [
+        "context_inspection_required",
+        "missing_prerequisites",
+        "waiver_not_authorized"
+      ],
+      "outcome": "blocked",
+      "effectCalled": false
+    },
+    "scenario": "S02",
+    "sample": 1,
+    "timeline": "23baebdc3dc80ee8cea07b18c279bcdf080afafb7b58df32db3aedbaa7314d1c"
+  }
+]

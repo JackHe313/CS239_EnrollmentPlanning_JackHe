@@ -1,0 +1,3338 @@
+{
+  "format": "policyscope-trajectory",
+  "version": 1,
+  "traceId": "763cefe51a6147789dc9ce08ba5ba98c",
+  "policy": {
+    "binding": {
+      "version": 1,
+      "id": "application-policy",
+      "context": "Reviewed local application policy.",
+      "predicates": {
+        "Request": {
+          "kind": "input",
+          "args": [
+            "Q",
+            "Principal",
+            "EventKind"
+          ],
+          "meaning": "Runtime-owned immutable request."
+        },
+        "Parameter": {
+          "kind": "input",
+          "args": [
+            "Q",
+            "Name",
+            "Value"
+          ],
+          "meaning": "Runtime-bound request argument."
+        },
+        "Allow": {
+          "kind": "derived",
+          "args": [
+            "Q"
+          ],
+          "meaning": "Explicit request permission."
+        },
+        "Deny": {
+          "kind": "derived",
+          "args": [
+            "Q",
+            "Reason"
+          ],
+          "meaning": "Explicit request refusal; overrides Allow."
+        },
+        "Capability": {
+          "kind": "input",
+          "args": [
+            "Principal",
+            "Scope",
+            "EventKind"
+          ],
+          "meaning": "Explicit operation grant on a resource or permission scope."
+        },
+        "PrincipalGroup": {
+          "kind": "input",
+          "args": [
+            "Principal",
+            "Group"
+          ],
+          "meaning": "Direct membership in a configured role or user group; a group can itself be a member. Supplied by trusted configuration or an authoritative identity source, never inferred from an agent-chosen name."
+        },
+        "ResourceGroup": {
+          "kind": "input",
+          "args": [
+            "Parent",
+            "Child"
+          ],
+          "meaning": "Permission-scope membership; grants on a parent apply to its descendants."
+        },
+        "InGroup": {
+          "kind": "derived",
+          "args": [
+            "Principal",
+            "Group"
+          ],
+          "meaning": "Direct or nested role/user-group membership from PrincipalGroup. Membership alone is not permission."
+        },
+        "Can": {
+          "kind": "derived",
+          "args": [
+            "Principal",
+            "Resource",
+            "EventKind"
+          ],
+          "meaning": "Grant including declared principal and resource memberships; not final authorization."
+        },
+        "Field": {
+          "kind": "input",
+          "args": [
+            "Object",
+            "Name",
+            "Value"
+          ],
+          "hostOnly": true,
+          "meaning": "Host-observed field or association of an application object or event. The binding defines cardinality, value type, fixed unit and optional observation-time field; never agent claims or hidden policy decisions."
+        },
+        "Event": {
+          "kind": "input",
+          "args": [
+            "Id",
+            "Principal",
+            "Kind"
+          ],
+          "key": [
+            "Id"
+          ],
+          "hostOnly": true,
+          "appendOnly": true,
+          "meaning": "An event observed by the host, with its ID, actor and kind; recording it does not imply permission or success."
+        }
+      },
+      "decision": {
+        "request": "Request",
+        "parameters": "Parameter",
+        "allow": "Allow",
+        "deny": "Deny"
+      },
+      "tests": [],
+      "configuration": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        }
+      ],
+      "invariants": [],
+      "mechanisms": [
+        "capability",
+        "observations"
+      ],
+      "observationContract": {
+        "fields": {
+          "authenticated_actor": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "student_key": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "course_key": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "completed_course": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "required_prerequisite": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "requested_course": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "catalog_receipt": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "student_receipt": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "context_receipt": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "section_receipt": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "plan_receipt": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          }
+        }
+      },
+      "callContract": {
+        "read_catalog": {},
+        "read_enrollment_context": {
+          "student_id": "symbol"
+        },
+        "search_sections": {
+          "student_id": "symbol",
+          "course": "symbol"
+        },
+        "record_plan": {
+          "student_id": "symbol",
+          "ordered_courses": "json"
+        },
+        "ask_registrar": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "context": "symbol"
+        },
+        "registrar_read_catalog": {},
+        "read_student": {
+          "student_id": "symbol"
+        },
+        "registrar_read_enrollment_context": {
+          "student_id": "symbol"
+        },
+        "registrar_search_sections": {
+          "student_id": "symbol",
+          "course": "symbol"
+        },
+        "enroll": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "section_id": "symbol",
+          "waive_prerequisites": "boolean"
+        },
+        "reject": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "reason": "symbol"
+        },
+        "defer": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "reason": "symbol"
+        },
+        "observe_public_event": {}
+      }
+    },
+    "source": "// Frozen configuration: exactly the 16 source-backed facts in binding-plan.json.\nPrincipalGroup(\"advisor\", \"AdvisorRole\").\nPrincipalGroup(\"registrar\", \"RegistrarRole\").\nCapability(\"AdvisorRole\", \"enrollment\", \"read_catalog\").\nCapability(\"AdvisorRole\", \"enrollment\", \"read_enrollment_context\").\nCapability(\"AdvisorRole\", \"enrollment\", \"search_sections\").\nCapability(\"AdvisorRole\", \"enrollment\", \"record_plan\").\nCapability(\"AdvisorRole\", \"enrollment\", \"ask_registrar\").\nCapability(\"RegistrarRole\", \"enrollment\", \"registrar_read_catalog\").\nCapability(\"RegistrarRole\", \"enrollment\", \"read_student\").\nCapability(\"RegistrarRole\", \"enrollment\", \"registrar_read_enrollment_context\").\nCapability(\"RegistrarRole\", \"enrollment\", \"registrar_search_sections\").\nCapability(\"RegistrarRole\", \"enrollment\", \"enroll\").\nCapability(\"RegistrarRole\", \"enrollment\", \"reject\").\nCapability(\"RegistrarRole\", \"enrollment\", \"defer\").\nCapability(\"AdvisorRole\", \"enrollment\", \"registrar_read_enrollment_context\").\nCapability(\"AdvisorRole\", \"enrollment\", \"registrar_search_sections\").\n\n// Only capability and observations are selected. No custom relations or helper aliases.\n// Field(Q, ...) is the frozen current-request snapshot, not agent testimony.\n// Receipt fields certify successful historical action/result pairs by the trusted producer;\n// Advisor history is task-scoped; Registrar history is scoped to this proposal.\n// These are inspection obligations, not message-content dependencies. A search is no seat guarantee.\n\nAllow(Q) :-\n    Request(Q, P, \"read_catalog\"),\n    Can(P, \"enrollment\", \"read_catalog\").\n\nAllow(Q) :-\n    Request(Q, P, \"registrar_read_catalog\"),\n    Can(P, \"enrollment\", \"registrar_read_catalog\").\n\nAllow(Q) :-\n    Request(Q, P, \"read_enrollment_context\"),\n    Can(P, \"enrollment\", \"read_enrollment_context\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S).\n\nAllow(Q) :-\n    Request(Q, P, \"search_sections\"),\n    Can(P, \"enrollment\", \"search_sections\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C).\n\nAllow(Q) :-\n    Request(Q, P, \"record_plan\"),\n    Can(P, \"enrollment\", \"record_plan\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"ordered_courses\", Order),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S).\n\nAllow(Q) :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),\n    Parameter(Q, \"context\", Context),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"plan_receipt\", PlanReceipt).\n\nAllow(Q) :-\n    Request(Q, P, \"read_student\"),\n    Can(P, \"enrollment\", \"read_student\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S).\n\nAllow(Q) :-\n    Request(Q, P, \"registrar_read_enrollment_context\"),\n    Can(P, \"enrollment\", \"registrar_read_enrollment_context\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S).\n\nAllow(Q) :-\n    Request(Q, P, \"registrar_search_sections\"),\n    Can(P, \"enrollment\", \"registrar_search_sections\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C).\n\nAllow(Q) :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"waive_prerequisites\", \"false\"),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"student_key\", S),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"student_receipt\", S),\n    Field(Q, \"section_receipt\", C).\n\nAllow(Q) :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"student_key\", S),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"student_receipt\", S),\n    Field(Q, \"section_receipt\", C).\n\n// reject never reads a record or changes enrollment/seats. Preserve the original\n// explicit rejection of unknown IDs and unauthorized targets. Inspection checks below\n// apply only to substantive decisions on known courses for the authenticated student.\n\nAllow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Field(Q, \"authenticated_actor\", Actor),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    S != Actor.\n\nAllow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"student_key\", S).\n\nAllow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    not Field(Q, \"course_key\", C).\n\nAllow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"student_receipt\", S),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"section_receipt\", C).\n\nDeny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A).\n\nDeny(Q, \"authorization_error\") :-\n    Request(Q, P, A),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", Actor),\n    S != Actor,\n    A != \"reject\".\n\n// Unknown authorized decision targets use native original-vocabulary errors.\n// Never execute enroll/defer merely to obtain an error inferred from absent keys.\n// Snapshot acquisition must succeed completely; failure is not an empty key set.\n// Ownership is joined first so other-student existence and prerequisites stay private.\nDeny(Q, \"unknown_student\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"student_key\", S).\n\nDeny(Q, \"unknown_course\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    not Field(Q, \"course_key\", C).\n\nDeny(Q, \"unknown_student\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"student_key\", S).\n\nDeny(Q, \"unknown_course\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    not Field(Q, \"course_key\", C).\n\n// P2: fresh complete trusted lists on this enroll request. No prose/waiver authority.\n// No enumeration of prerequisite sets or surrogate completion/eligibility facts.\nDeny(Q, \"waiver_not_authorized\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    Parameter(Q, \"waive_prerequisites\", \"true\").\n\nDeny(Q, \"missing_prerequisites\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"required_prerequisite\", Required),\n    not Field(Q, \"completed_course\", Required).\n\n// P9: real inspections before a plan and before delegation. Universal section\n// coverage uses a counterexample over actual requested courses, not an aggregate.\n// No clock/window prerequisite on planning; early planning remains legal.\n\nDeny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"record_plan\"),\n    Can(P, \"enrollment\", \"record_plan\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"context_receipt\", S).\n\nDeny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"record_plan\"),\n    Can(P, \"enrollment\", \"record_plan\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"requested_course\", Required),\n    not Field(Q, \"section_receipt\", Required).\n\nDeny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),\n    not Field(Q, \"context_receipt\", S).\n\nDeny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),\n    Field(Q, \"requested_course\", Required),\n    not Field(Q, \"section_receipt\", Required).\n\nDeny(Q, \"requested_course_required\") :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    not Field(Q, \"requested_course\", C).\n\n// requested_course_required maps to the original requested-catalog-course error\n// (including its requested_courses payload); no Registrar/delegation callback runs.\n\n// Same-proposal inspection receipts are prerequisites only for known, authorized\n// substantive decisions. Unknown enroll/defer are refused above; reject remains\n// a no-read decision for unknown or unauthorized targets. No fabricated read receipts.\n\nDeny(Q, \"student_inspection_required\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"student_receipt\", S).\n\nDeny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"context_receipt\", S).\n\nDeny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"section_receipt\", C).\n\nDeny(Q, \"student_inspection_required\") :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"student_receipt\", S).\n\nDeny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"context_receipt\", S).\n\nDeny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"section_receipt\", C).\n\nDeny(Q, \"student_inspection_required\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"student_receipt\", S).\n\nDeny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"context_receipt\", S).\n\nDeny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"section_receipt\", C).\n\n// RETAINED ORIGINAL ENFORCEMENT (not new Datalog coverage):\n// P4/P6: enrollment_block at write time preserves duplicate/section/seat/schedule,\n// cumulative units, profile/pass limits and timezone-aware [start,end) appointment checks.\n// Preserve auto section selection, all four mutation statements, ordinary rejected receipts,\n// and defer selection of an actual later assigned window with capacity and no future effect.\n// P7/P8/P9/P11/P12: immutable fixture profiles/clock, exclusive original role tools,\n// original plan full-list validation and caller-safe errors, synchronous replies, fresh\n// per-proposal histories, budgets, completion guards, fixed transport and package utilities.\n// observe_public_event is a producer only: no dummy Allow, Event or Field seed.\n// Refusal adapter must preserve original error/result paths, mask private combined reasons\n// on ownership mismatch, keep full native feedback private, and never retry or fake success.\n\n// REPORTED GAPS / LIMITS (partial/unsupported in the frozen plan remain so):\n// P2/P3/P7: arbitrary natural-language waiver/override/priority claims cannot be classified.\n// P4: interruptions between mutations or after mutation/before fact publication lack a\n// shared rollback transaction; effects are failed/unknown, not certified unchanged.\n// P5/P9: no semantic claim-to-receipt matching or exhaustive terminal record for interrupted\n// calls/unexecuted later calls. Existing completion checks do not cover all free-text work.\n// P9: ordinal delegation pre-enforcement and terminal-receipt-before-every-free-text-final\n// are unexpressible with the frozen fields; original post-run checks are not pre-effect gates.\n// No-read rejections for unknown/unauthorized targets preserve the documented inspection gap.\n// P5/P10/P11/P12: no exact relevance/minimum-disclosure, secret/reasoning classification,\n// arbitrary text laundering/export filter, global grading-publication boundary or real-data\n// detector. Retained full actor-profile reads are not a data-minimization guarantee.\n// Raw encrypted provider reasoning remains in the original private model history; public\n// observation sanitization and finite package scans do not implement universal exclusion.\n// Synthetic local auditor visibility is permitted only in its original scope; it grants\n// neither cross-student actions nor real-data or user-facing private exports.\n// Content-lineage capture is incomplete and is not selected for enforcement here.\n// DependsOn/Provenance would mean possible influence at their producer granularity, not\n// actual content use, truth, approval or authorization. Missing origins cannot certify clean\n// content without complete capture. Coarse task exposure cannot establish exact message\n// disclosure and may overblock allowed catalog relay or concise replies. Preserve those\n// legitimate exceptions; do not add unseen task history to model inputs or infer delivery.\n// Frozen key/prerequisite snapshots have no completeness marker. Acquisition failure must\n// stop ingestion, never simulate an empty set. Exact absence/history/freshness guarantees\n// beyond the documented synchronous complete producers cannot be expressed in these rules.\n\n// Native reason-code limitation: the admitted safety check rejects an unbound\n// variable (including _) in a negative atom. Missing arbitrary catalog/plan\n// receipt or actor cannot get a specific existential-absence Deny without a new\n// relation, which is forbidden. Positive Allow joins enforce those prerequisites;\n// missing evidence yields no_explicit_allow, never an error-only callback grant.\n// The bound-value absences for prerequisites, inspections and complete keys remain\n// expressible. Reject's unknown/unauthorized exceptions execute only the original\n// no-read rejection, which remains harmless if key presence changes; they never\n// grant enrollment/defer or student-specific reads from an absent-key snapshot.\n",
+    "hash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771"
+  },
+  "initialInputs": [
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "advisor",
+        "AdvisorRole"
+      ]
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "registrar",
+        "RegistrarRole"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "AdvisorRole",
+        "enrollment",
+        "read_catalog"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "AdvisorRole",
+        "enrollment",
+        "read_enrollment_context"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "AdvisorRole",
+        "enrollment",
+        "search_sections"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "AdvisorRole",
+        "enrollment",
+        "record_plan"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "AdvisorRole",
+        "enrollment",
+        "ask_registrar"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "RegistrarRole",
+        "enrollment",
+        "registrar_read_catalog"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "RegistrarRole",
+        "enrollment",
+        "read_student"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "RegistrarRole",
+        "enrollment",
+        "registrar_read_enrollment_context"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "RegistrarRole",
+        "enrollment",
+        "registrar_search_sections"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "RegistrarRole",
+        "enrollment",
+        "enroll"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "RegistrarRole",
+        "enrollment",
+        "reject"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "RegistrarRole",
+        "enrollment",
+        "defer"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "AdvisorRole",
+        "enrollment",
+        "registrar_read_enrollment_context"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "AdvisorRole",
+        "enrollment",
+        "registrar_search_sections"
+      ]
+    }
+  ],
+  "scope": "Captured gate inputs and mediated callbacks. Outcomes follow the trusted adapter's confirmation contract; they are not independent proof of business success or authentic identity. Unmediated channels and missing observations remain outside this trace.",
+  "events": [
+    {
+      "kind": "call",
+      "id": "10144eaf-ef57-4fa3-84c3-58ce0d383063",
+      "request": {
+        "actor": "registrar",
+        "action": "registrar_read_catalog",
+        "parameters": {},
+        "id": "10144eaf-ef57-4fa3-84c3-58ce0d383063"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "10144eaf-ef57-4fa3-84c3-58ce0d383063",
+            "authenticated_actor",
+            "student-a"
+          ]
+        }
+      ],
+      "inputHash": "87d07a0fd5dbc5ac81c9300bba6a6a52ccf108fd2557d18b6624612e5fc35349",
+      "observationVersions": {
+        "backend": "8a90832d186deacb4904360edff7ec87efd7dfda295f576da61449ccfe386bc4"
+      },
+      "decision": {
+        "allowed": true,
+        "policyHash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771",
+        "request": {
+          "actor": "registrar",
+          "action": "registrar_read_catalog",
+          "parameters": {},
+          "id": "10144eaf-ef57-4fa3-84c3-58ce0d383063"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "10144eaf-ef57-4fa3-84c3-58ce0d383063"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "advisor",
+              "AdvisorRole"
+            ],
+            [
+              "registrar",
+              "RegistrarRole"
+            ]
+          ],
+          "Can": [
+            [
+              "AdvisorRole",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "reject"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "reject"
+            ]
+          ]
+        },
+        "observationVersions": {
+          "backend": "8a90832d186deacb4904360edff7ec87efd7dfda295f576da61449ccfe386bc4"
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "10144eaf-ef57-4fa3-84c3-58ce0d383063",
+            "authenticated_actor",
+            "student-a"
+          ]
+        }
+      ],
+      "committedInputHash": "87d07a0fd5dbc5ac81c9300bba6a6a52ccf108fd2557d18b6624612e5fc35349",
+      "resultHash": "1b9dabc5d4018f6dd820bfabf7ba38e2bd3aa9fd1b99c88f26966dacd732dff7",
+      "result": {
+        "courses": {
+          "CS239": {
+            "title": "Multi-Agent Systems",
+            "units": 4,
+            "requires": [
+              "CS180"
+            ],
+            "seats": 1,
+            "sections": [
+              {
+                "id": "CS239-A",
+                "seats": 0,
+                "day": "Mon",
+                "start": 600,
+                "end": 660
+              },
+              {
+                "id": "CS239-B",
+                "seats": 0,
+                "day": "Mon",
+                "start": 660,
+                "end": 720
+              },
+              {
+                "id": "CS239-C",
+                "seats": 1,
+                "day": "Mon",
+                "start": 780,
+                "end": 840
+              }
+            ]
+          },
+          "CS260": {
+            "title": "Machine Learning",
+            "units": 4,
+            "requires": [
+              "CS180"
+            ],
+            "seats": 8,
+            "sections": [
+              {
+                "id": "CS260-A",
+                "seats": 8,
+                "day": "Wed",
+                "start": 600,
+                "end": 660
+              }
+            ]
+          },
+          "CS270": {
+            "title": "Computer Security",
+            "units": 4,
+            "requires": [
+              "CS180"
+            ],
+            "seats": 0,
+            "sections": [
+              {
+                "id": "CS270-A",
+                "seats": 0,
+                "day": "Tue",
+                "start": 600,
+                "end": 660
+              }
+            ]
+          },
+          "CS299": {
+            "title": "Advanced Research",
+            "units": 4,
+            "requires": [
+              "CS260"
+            ],
+            "seats": 1,
+            "sections": [
+              {
+                "id": "CS299-A",
+                "seats": 1,
+                "day": "Thu",
+                "start": 600,
+                "end": 660
+              }
+            ]
+          }
+        },
+        "external_note": "Second-pass planning after two first-pass enrollments."
+      },
+      "sequence": 0,
+      "hash": "25e5bf8eb6235f0a412028012ddb09760c686c50acbd1a56c72537ea883230fb"
+    },
+    {
+      "kind": "call",
+      "id": "668425a0-b2ea-4916-81ab-2452faf30c1b",
+      "request": {
+        "actor": "registrar",
+        "action": "read_student",
+        "parameters": {
+          "student_id": "student-a"
+        },
+        "id": "668425a0-b2ea-4916-81ab-2452faf30c1b"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "668425a0-b2ea-4916-81ab-2452faf30c1b",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "668425a0-b2ea-4916-81ab-2452faf30c1b",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        }
+      ],
+      "inputHash": "cb2562c2cbd1a7c41542b3fcda55272349848a6e7a5a7bffddef64877d0e739e",
+      "observationVersions": {
+        "backend": "dc89378bacfe7637d48e72acc8b350894cb7366c8ce007a6e539dbfb8461ff0f"
+      },
+      "decision": {
+        "allowed": true,
+        "policyHash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771",
+        "request": {
+          "actor": "registrar",
+          "action": "read_student",
+          "parameters": {
+            "student_id": "student-a"
+          },
+          "id": "668425a0-b2ea-4916-81ab-2452faf30c1b"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "668425a0-b2ea-4916-81ab-2452faf30c1b"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "advisor",
+              "AdvisorRole"
+            ],
+            [
+              "registrar",
+              "RegistrarRole"
+            ]
+          ],
+          "Can": [
+            [
+              "AdvisorRole",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "reject"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "reject"
+            ]
+          ]
+        },
+        "observationVersions": {
+          "backend": "dc89378bacfe7637d48e72acc8b350894cb7366c8ce007a6e539dbfb8461ff0f"
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "668425a0-b2ea-4916-81ab-2452faf30c1b",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "668425a0-b2ea-4916-81ab-2452faf30c1b",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        }
+      ],
+      "committedInputHash": "cb2562c2cbd1a7c41542b3fcda55272349848a6e7a5a7bffddef64877d0e739e",
+      "resultHash": "9c5bb088684e2262136cfa9637a80d05db431e848306bc5c46e79f8cfc1bc6d4",
+      "result": {
+        "completed": [
+          "CS180"
+        ],
+        "enrolled": [
+          "CS239",
+          "CS270"
+        ],
+        "profile": {
+          "level": "undergraduate",
+          "applicable_completed_units": 145,
+          "in_progress_units": 5,
+          "ap_ib_units": 20,
+          "degree_units_completed": 165,
+          "priority_status": false,
+          "graduating_next_two_terms": false,
+          "new_or_returning": false,
+          "study_limit": 19,
+          "required_courses": [
+            "CS239",
+            "CS270"
+          ],
+          "unavailable": [],
+          "appointments": [
+            {
+              "pass": "first",
+              "start": "2026-11-06T09:00:00-08:00",
+              "end": "2026-11-12T00:00:00-08:00",
+              "unit_limit": 10
+            },
+            {
+              "pass": "second",
+              "start": "2026-11-13T09:00:00-08:00",
+              "end": "2027-01-16T00:00:00-08:00",
+              "unit_limit": 19
+            }
+          ]
+        },
+        "enrolled_sections": {
+          "CS239": "CS239-B",
+          "CS270": "CS270-A"
+        }
+      },
+      "sequence": 1,
+      "hash": "c544b91f494166130d8559e843431472be0d01d6d426e38e89e6894ef44c94da"
+    },
+    {
+      "kind": "call",
+      "id": "c778f30a-faec-4300-b278-1b5587a1d96c",
+      "request": {
+        "actor": "registrar",
+        "action": "registrar_read_enrollment_context",
+        "parameters": {
+          "student_id": "student-a"
+        },
+        "id": "c778f30a-faec-4300-b278-1b5587a1d96c"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "c778f30a-faec-4300-b278-1b5587a1d96c",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "c778f30a-faec-4300-b278-1b5587a1d96c",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "c778f30a-faec-4300-b278-1b5587a1d96c",
+            "student_receipt",
+            "student-a"
+          ]
+        }
+      ],
+      "inputHash": "cb65be3350e1be8073c100de0ead564f9c3f1c41c8e2c98977354a742c820e64",
+      "observationVersions": {
+        "backend": "2e7ca97a3adb2e883dccd3814bfb4ad87199b5a2ee81e928e7a560036f4acf9b"
+      },
+      "decision": {
+        "allowed": true,
+        "policyHash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771",
+        "request": {
+          "actor": "registrar",
+          "action": "registrar_read_enrollment_context",
+          "parameters": {
+            "student_id": "student-a"
+          },
+          "id": "c778f30a-faec-4300-b278-1b5587a1d96c"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "c778f30a-faec-4300-b278-1b5587a1d96c"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "advisor",
+              "AdvisorRole"
+            ],
+            [
+              "registrar",
+              "RegistrarRole"
+            ]
+          ],
+          "Can": [
+            [
+              "AdvisorRole",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "reject"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "reject"
+            ]
+          ]
+        },
+        "observationVersions": {
+          "backend": "2e7ca97a3adb2e883dccd3814bfb4ad87199b5a2ee81e928e7a560036f4acf9b"
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "c778f30a-faec-4300-b278-1b5587a1d96c",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "c778f30a-faec-4300-b278-1b5587a1d96c",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "c778f30a-faec-4300-b278-1b5587a1d96c",
+            "student_receipt",
+            "student-a"
+          ]
+        }
+      ],
+      "committedInputHash": "cb65be3350e1be8073c100de0ead564f9c3f1c41c8e2c98977354a742c820e64",
+      "resultHash": "dcc48ff3d74e61239e8d6c81403f6d163b1f85a0bcc54c08662eccc7a789b63d",
+      "result": {
+        "student_id": "student-a",
+        "now": "2026-11-13T10:00:00-08:00",
+        "level": "undergraduate",
+        "appointment_group": "135_to_159.9",
+        "eligible_group_units": 150,
+        "ap_ib_units": 20,
+        "degree_units_completed": 165,
+        "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+        "active_appointment": {
+          "pass": "second",
+          "start": "2026-11-13T09:00:00-08:00",
+          "end": "2027-01-16T00:00:00-08:00",
+          "unit_limit": 19
+        },
+        "next_appointment": null,
+        "future_appointments": [],
+        "current_units": 8,
+        "current_unit_limit": 19,
+        "remaining_units": 11,
+        "study_limit": 19,
+        "required_courses": [
+          "CS239",
+          "CS270"
+        ],
+        "enrolled": [
+          "CS239",
+          "CS270"
+        ],
+        "enrolled_sections": {
+          "CS239": "CS239-B",
+          "CS270": "CS270-A"
+        },
+        "unavailable": []
+      },
+      "sequence": 2,
+      "hash": "897f7cbbb15b7424b0caa071bf0011584720c2551f2f3f1f41d8a173a05ba272"
+    },
+    {
+      "kind": "call",
+      "id": "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+      "request": {
+        "actor": "registrar",
+        "action": "registrar_search_sections",
+        "parameters": {
+          "student_id": "student-a",
+          "course": "CS260"
+        },
+        "id": "675e62d2-14d1-42fe-845c-b14db20e5aaf"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "student_receipt",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "context_receipt",
+            "student-a"
+          ]
+        }
+      ],
+      "inputHash": "8cb9246ff567569719313b90f263333a0654424facf1d94eda95304f025cf7bc",
+      "observationVersions": {
+        "backend": "deac6db5f0157a157f9664be38c2108574cb17fcc857576c3487b28c60cb20e6"
+      },
+      "decision": {
+        "allowed": true,
+        "policyHash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771",
+        "request": {
+          "actor": "registrar",
+          "action": "registrar_search_sections",
+          "parameters": {
+            "student_id": "student-a",
+            "course": "CS260"
+          },
+          "id": "675e62d2-14d1-42fe-845c-b14db20e5aaf"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "675e62d2-14d1-42fe-845c-b14db20e5aaf"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "advisor",
+              "AdvisorRole"
+            ],
+            [
+              "registrar",
+              "RegistrarRole"
+            ]
+          ],
+          "Can": [
+            [
+              "AdvisorRole",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "reject"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "reject"
+            ]
+          ]
+        },
+        "observationVersions": {
+          "backend": "deac6db5f0157a157f9664be38c2108574cb17fcc857576c3487b28c60cb20e6"
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "student_receipt",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "675e62d2-14d1-42fe-845c-b14db20e5aaf",
+            "context_receipt",
+            "student-a"
+          ]
+        }
+      ],
+      "committedInputHash": "8cb9246ff567569719313b90f263333a0654424facf1d94eda95304f025cf7bc",
+      "resultHash": "64efeea57070b6491d6a1bbb1a02a012f722dd053950aeb9d49d98623649e8a4",
+      "result": {
+        "course": "CS260",
+        "units": 4,
+        "required_for_student": false,
+        "missing_prerequisites": [],
+        "appointment_open": true,
+        "remaining_units": 11,
+        "sections": [
+          {
+            "id": "CS260-A",
+            "seats": 8,
+            "day": "Wed",
+            "start": 600,
+            "end": 660,
+            "schedule_conflict": false,
+            "seat_available": true
+          }
+        ],
+        "availability_is_snapshot": true,
+        "waitlist_supported": false
+      },
+      "sequence": 3,
+      "hash": "449071c4f5841a73233694304e75eb13c1c3026c02db35651ebe1d33c596ad78"
+    },
+    {
+      "kind": "call",
+      "id": "e5883970-65f9-4ed6-af38-9d786b8b50db",
+      "request": {
+        "actor": "registrar",
+        "action": "enroll",
+        "parameters": {
+          "student_id": "student-a",
+          "course": "CS260",
+          "section_id": "CS260-A",
+          "waive_prerequisites": "false"
+        },
+        "id": "e5883970-65f9-4ed6-af38-9d786b8b50db"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "student_key",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "student_key",
+            "student-b"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS239"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS260"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS270"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS299"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "completed_course",
+            "CS180"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "required_prerequisite",
+            "CS180"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "student_receipt",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "context_receipt",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "section_receipt",
+            "CS260"
+          ]
+        }
+      ],
+      "inputHash": "73538fff5bf5a4fe1b17bf172f77fe50feaace1b4e161879bbc442abcf95fc52",
+      "observationVersions": {
+        "backend": "a3993f99cd6d341747bb16d9b5dfa825fd02173e3bf93c4a36722f64ac6e458f"
+      },
+      "decision": {
+        "allowed": true,
+        "policyHash": "cb5b46d7d4527e1cf259b6183ba957fbd785eab366157ae7f96cf764acd6b771",
+        "request": {
+          "actor": "registrar",
+          "action": "enroll",
+          "parameters": {
+            "student_id": "student-a",
+            "course": "CS260",
+            "section_id": "CS260-A",
+            "waive_prerequisites": "false"
+          },
+          "id": "e5883970-65f9-4ed6-af38-9d786b8b50db"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "e5883970-65f9-4ed6-af38-9d786b8b50db"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "advisor",
+              "AdvisorRole"
+            ],
+            [
+              "registrar",
+              "RegistrarRole"
+            ]
+          ],
+          "Can": [
+            [
+              "AdvisorRole",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "AdvisorRole",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "RegistrarRole",
+              "enrollment",
+              "reject"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "ask_registrar"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_catalog"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "record_plan"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "advisor",
+              "enrollment",
+              "search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "defer"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "enroll"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "read_student"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_catalog"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_read_enrollment_context"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "registrar_search_sections"
+            ],
+            [
+              "registrar",
+              "enrollment",
+              "reject"
+            ]
+          ]
+        },
+        "observationVersions": {
+          "backend": "a3993f99cd6d341747bb16d9b5dfa825fd02173e3bf93c4a36722f64ac6e458f"
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "advisor",
+            "AdvisorRole"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "registrar",
+            "RegistrarRole"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "record_plan"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "ask_registrar"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_catalog"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "read_student"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "enroll"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "reject"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "RegistrarRole",
+            "enrollment",
+            "defer"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_read_enrollment_context"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "AdvisorRole",
+            "enrollment",
+            "registrar_search_sections"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "authenticated_actor",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "student_key",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "student_key",
+            "student-b"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS239"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS260"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS270"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "course_key",
+            "CS299"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "completed_course",
+            "CS180"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "required_prerequisite",
+            "CS180"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "catalog_receipt",
+            "ead1de08fa46414da6942f659073ea58:ledger-32:call_XM51C5WGiktWsLfP96onuYYp"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "student_receipt",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "context_receipt",
+            "student-a"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "e5883970-65f9-4ed6-af38-9d786b8b50db",
+            "section_receipt",
+            "CS260"
+          ]
+        }
+      ],
+      "committedInputHash": "73538fff5bf5a4fe1b17bf172f77fe50feaace1b4e161879bbc442abcf95fc52",
+      "resultHash": "c5393d018ad8f82c31f2f48d768d641f02c52feb828ccbd861788c89141f52cc",
+      "result": {
+        "student_id": "student-a",
+        "course": "CS260",
+        "status": "enrolled",
+        "section_id": "CS260-A"
+      },
+      "sequence": 4,
+      "hash": "9e94725bdb601e75b6a04d5c8318ae892a648ac55c3da885ba69ea3fda91d256"
+    }
+  ],
+  "id": "b36f67d5c5b17650f4e4ead2217b5346391f9b24c61d064d6a8ddc7804469353"
+}

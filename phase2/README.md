@@ -136,4 +136,22 @@ policyweave view-translation --back-translation ported-app/back-translation --po
 ```
 
 Save each judgment in the review panel. Its default output is
-`ported-app/review.json`. The paired benchmark and final report are in progress.
+`ported-app/review.json`.
+
+## Benchmark results
+
+The four-worker experiment completed all 200 samples in about 14 minutes. The
+original matched 93/100 requests and the port matched 33/100. The port blocked
+all ten unauthorized waiver attempts and all ten cross-student context reads.
+It also blocked eligible operations when a rule demanded a dedicated tool
+receipt for facts already present in another trusted response.
+[Report and scenario table](../report.md) · [Every denied event](blocked-calls.md) ·
+[Three example traces](../traces/README.md)
+
+To reproduce the outcome counts without an API key, run
+`python3 phase2/check_results.py runs` from the repository root. This compares
+the official results with the frozen scorer and saved application evidence,
+checks each run's identity and linked files, and verifies that the two timeline
+formats agree. All 100 ported timelines also passed the course Inspector loader.
+The remaining manual work is the student's translation review, consent choice
+and reflection in the report.

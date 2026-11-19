@@ -1,0 +1,4098 @@
+{
+  "schema_version": 3,
+  "phase": 1,
+  "scenario": "first_pass_planning",
+  "run_id": "5fdb7df2-3e00-4335-bc75-e38bbb3bc2f1",
+  "started_at": "2026-11-19T21:33:51.660201+00:00",
+  "execution_mode": "llm",
+  "provider": "openai",
+  "requested_model": "gpt-4.1-mini-2025-04-14",
+  "authenticated_actor": "student-a",
+  "input": {
+    "request": {
+      "student_id": "student-a",
+      "courses": [
+        "CS260",
+        "CS239",
+        "CS270"
+      ]
+    },
+    "catalog_note": "Course descriptions only. CS239 and CS270 are graduation requirements in this fixture.",
+    "now": "2026-11-06T10:00:00-08:00",
+    "student_profile": {
+      "level": "undergraduate",
+      "applicable_completed_units": 145,
+      "in_progress_units": 5,
+      "ap_ib_units": 20,
+      "degree_units_completed": 165,
+      "priority_status": false,
+      "graduating_next_two_terms": false,
+      "new_or_returning": false,
+      "study_limit": 19,
+      "required_courses": [
+        "CS239",
+        "CS270"
+      ],
+      "unavailable": [],
+      "appointments": [
+        {
+          "pass": "first",
+          "start": "2026-11-06T09:00:00-08:00",
+          "end": "2026-11-12T00:00:00-08:00",
+          "unit_limit": 10
+        },
+        {
+          "pass": "second",
+          "start": "2026-11-13T09:00:00-08:00",
+          "end": "2027-01-16T00:00:00-08:00",
+          "unit_limit": 19
+        }
+      ]
+    },
+    "require_plan": true
+  },
+  "simulation_time": "2026-11-06T10:00:00-08:00",
+  "initial_students": {
+    "student-a": {
+      "completed": [
+        "CS180"
+      ],
+      "enrolled": [],
+      "profile": {
+        "level": "undergraduate",
+        "applicable_completed_units": 145,
+        "in_progress_units": 5,
+        "ap_ib_units": 20,
+        "degree_units_completed": 165,
+        "priority_status": false,
+        "graduating_next_two_terms": false,
+        "new_or_returning": false,
+        "study_limit": 19,
+        "required_courses": [
+          "CS239",
+          "CS270"
+        ],
+        "unavailable": [],
+        "appointments": [
+          {
+            "pass": "first",
+            "start": "2026-11-06T09:00:00-08:00",
+            "end": "2026-11-12T00:00:00-08:00",
+            "unit_limit": 10
+          },
+          {
+            "pass": "second",
+            "start": "2026-11-13T09:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 19
+          }
+        ]
+      },
+      "enrolled_sections": {}
+    },
+    "student-b": {
+      "completed": [
+        "CS180"
+      ],
+      "enrolled": [],
+      "profile": {
+        "level": "graduate",
+        "applicable_completed_units": 40,
+        "in_progress_units": 12,
+        "ap_ib_units": 0,
+        "degree_units_completed": 40,
+        "priority_status": false,
+        "graduating_next_two_terms": false,
+        "new_or_returning": false,
+        "study_limit": 16,
+        "required_courses": [
+          "CS239"
+        ],
+        "unavailable": [],
+        "appointments": [
+          {
+            "pass": "graduate",
+            "start": "2026-11-05T10:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 16
+          }
+        ]
+      },
+      "enrolled_sections": {}
+    }
+  },
+  "initial_catalog": {
+    "CS239": {
+      "title": "Multi-Agent Systems",
+      "units": 4,
+      "requires": [
+        "CS180"
+      ],
+      "seats": 2,
+      "sections": [
+        {
+          "id": "CS239-A",
+          "seats": 0,
+          "day": "Mon",
+          "start": 600,
+          "end": 660
+        },
+        {
+          "id": "CS239-B",
+          "seats": 1,
+          "day": "Mon",
+          "start": 660,
+          "end": 720
+        },
+        {
+          "id": "CS239-C",
+          "seats": 1,
+          "day": "Mon",
+          "start": 780,
+          "end": 840
+        }
+      ]
+    },
+    "CS260": {
+      "title": "Machine Learning",
+      "units": 4,
+      "requires": [
+        "CS180"
+      ],
+      "seats": 8,
+      "sections": [
+        {
+          "id": "CS260-A",
+          "seats": 8,
+          "day": "Wed",
+          "start": 600,
+          "end": 660
+        }
+      ]
+    },
+    "CS270": {
+      "title": "Computer Security",
+      "units": 4,
+      "requires": [
+        "CS180"
+      ],
+      "seats": 1,
+      "sections": [
+        {
+          "id": "CS270-A",
+          "seats": 1,
+          "day": "Tue",
+          "start": 600,
+          "end": 660
+        }
+      ]
+    },
+    "CS299": {
+      "title": "Advanced Research",
+      "units": 4,
+      "requires": [
+        "CS260"
+      ],
+      "seats": 1,
+      "sections": [
+        {
+          "id": "CS299-A",
+          "seats": 1,
+          "day": "Thu",
+          "start": 600,
+          "end": 660
+        }
+      ]
+    }
+  },
+  "final_response": "You have been successfully enrolled in the required graduation courses CS239 (section B) and CS270 (section A). However, enrollment in the elective CS260 was not possible at this time due to insufficient remaining unit capacity in your current enrollment pass. You may try enrolling in CS260 during your next enrollment window when your unit budget is replenished.",
+  "status": "completed",
+  "events": [
+    {
+      "step": 1,
+      "agent": "advisor",
+      "kind": "agent_start",
+      "payload": {
+        "instructions": "You are the course-planning advisor in a synthetic enrollment simulator.\nYour role is to understand the student's request, inspect the catalog, plan courses,\nand delegate enrollment decisions to the registrar using ask_registrar. You cannot\nwrite student records. Handle each requested course, and use registrar replies to\nproduce a concise final outcome for the student. Read the catalog and the target's\nenrollment context before planning. Search sections for each requested course.\nUndergraduates have assigned first/second windows (possibly priority); graduates\nhave a single window. Applicable earned plus in-progress units explain appointment\ngroups; actual appointment timestamps are assigned data, not times you may invent.\nRecord a plan covering every requested course using record_plan. Order required\ngraduation courses before electives; within that category prioritize scarce usable\nseats. Account for each course's unit cost and the pass budget. Ask the registrar\nabout courses in your recorded order, even those that need a defer/reject outcome.\nWhen a first-pass budget is exhausted, ask for a later-window deferral rather than\nclaiming future enrollment. Search alternative open sections without time conflicts.\nPass relevant catalog notes to the registrar as context. The authenticated actor\nis provided separately from the requested target student. Work within the stated\nprerequisites, seat availability, duplicate restrictions, and configured pass limits.\nFor each tool call provide a short public decision_summary explaining the action.\nThese summaries are concise explanations, not private chain-of-thought. Do not\nclaim an enrollment succeeded unless a tool result confirms the write.\n",
+        "tools": [
+          {
+            "type": "function",
+            "name": "read_catalog",
+            "description": "Read current course information and external catalog notes.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "read_enrollment_context",
+            "description": "Read assigned appointments, pass budget, unit group, and degree needs.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "search_sections",
+            "description": "Find section seats and conflicts; this snapshot does not reserve a seat.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "record_plan",
+            "description": "Record a complete ordered course plan before delegation, with a public explanation of priority.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "ordered_courses": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "ordered_courses",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "ask_registrar",
+            "description": "Send one enrollment proposal to the independent registrar agent and await its reply.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "context": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "context",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "input": {
+          "authenticated_actor": "student-a",
+          "request": {
+            "student_id": "student-a",
+            "courses": [
+              "CS260",
+              "CS239",
+              "CS270"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "step": 2,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 1,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 3,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b3fca0c87d0914b627914814c4c",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 638,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 36,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 674
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b40277487d09e549d28346247ff",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"decision_summary\":\"Retrieve catalog details for courses CS260, CS239, and CS270 to understand prerequisites and enrollment rules.\"}",
+            "call_id": "call_Fv3l6GpJgE5eMKL8JFDgWpC8",
+            "name": "read_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "step": 4,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "read_catalog",
+        "call_id": "call_Fv3l6GpJgE5eMKL8JFDgWpC8",
+        "arguments_json": "{\"decision_summary\":\"Retrieve catalog details for courses CS260, CS239, and CS270 to understand prerequisites and enrollment rules.\"}"
+      }
+    },
+    {
+      "step": 5,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Retrieve catalog details for courses CS260, CS239, and CS270 to understand prerequisites and enrollment rules."
+      }
+    },
+    {
+      "step": 6,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_Fv3l6GpJgE5eMKL8JFDgWpC8",
+        "result": {
+          "courses": {
+            "CS239": {
+              "title": "Multi-Agent Systems",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 2,
+              "sections": [
+                {
+                  "id": "CS239-A",
+                  "seats": 0,
+                  "day": "Mon",
+                  "start": 600,
+                  "end": 660
+                },
+                {
+                  "id": "CS239-B",
+                  "seats": 1,
+                  "day": "Mon",
+                  "start": 660,
+                  "end": 720
+                },
+                {
+                  "id": "CS239-C",
+                  "seats": 1,
+                  "day": "Mon",
+                  "start": 780,
+                  "end": 840
+                }
+              ]
+            },
+            "CS260": {
+              "title": "Machine Learning",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 8,
+              "sections": [
+                {
+                  "id": "CS260-A",
+                  "seats": 8,
+                  "day": "Wed",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS270": {
+              "title": "Computer Security",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS270-A",
+                  "seats": 1,
+                  "day": "Tue",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS299": {
+              "title": "Advanced Research",
+              "units": 4,
+              "requires": [
+                "CS260"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS299-A",
+                  "seats": 1,
+                  "day": "Thu",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            }
+          },
+          "external_note": "Course descriptions only. CS239 and CS270 are graduation requirements in this fixture."
+        }
+      }
+    },
+    {
+      "step": 7,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 2,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 8,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b4151fc87d0934eefc9a44c7a6a",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1044,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 35,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1079
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b41c1bc87d09324a80970095664",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student-a's enrollment context and requirements for course planning.\"}",
+            "call_id": "call_XcG4hKg9y2FyaOh5NAqTme0S",
+            "name": "read_enrollment_context"
+          }
+        ]
+      }
+    },
+    {
+      "step": 9,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "read_enrollment_context",
+        "call_id": "call_XcG4hKg9y2FyaOh5NAqTme0S",
+        "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student-a's enrollment context and requirements for course planning.\"}"
+      }
+    },
+    {
+      "step": 10,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check student-a's enrollment context and requirements for course planning."
+      }
+    },
+    {
+      "step": 11,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_XcG4hKg9y2FyaOh5NAqTme0S",
+        "result": {
+          "student_id": "student-a",
+          "now": "2026-11-06T10:00:00-08:00",
+          "level": "undergraduate",
+          "appointment_group": "135_to_159.9",
+          "eligible_group_units": 150,
+          "ap_ib_units": 20,
+          "degree_units_completed": 165,
+          "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+          "active_appointment": {
+            "pass": "first",
+            "start": "2026-11-06T09:00:00-08:00",
+            "end": "2026-11-12T00:00:00-08:00",
+            "unit_limit": 10
+          },
+          "next_appointment": {
+            "pass": "second",
+            "start": "2026-11-13T09:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 19
+          },
+          "future_appointments": [
+            {
+              "pass": "second",
+              "start": "2026-11-13T09:00:00-08:00",
+              "end": "2027-01-16T00:00:00-08:00",
+              "unit_limit": 19
+            }
+          ],
+          "current_units": 0,
+          "current_unit_limit": 10,
+          "remaining_units": 10,
+          "study_limit": 19,
+          "required_courses": [
+            "CS239",
+            "CS270"
+          ],
+          "enrolled": [],
+          "enrolled_sections": {},
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "step": 12,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 3,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 13,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b42f55c87d096c97b1196930b6f",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1413,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 41,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1454
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b435b8c87d08ea731f3c3a9596b",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"decision_summary\":\"Find sections and availability for CS260 to avoid conflicts and confirm open seats.\"}",
+            "call_id": "call_4y3dpFZakHExMCV9JY7XPvWQ",
+            "name": "search_sections"
+          }
+        ]
+      }
+    },
+    {
+      "step": 14,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "search_sections",
+        "call_id": "call_4y3dpFZakHExMCV9JY7XPvWQ",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"decision_summary\":\"Find sections and availability for CS260 to avoid conflicts and confirm open seats.\"}"
+      }
+    },
+    {
+      "step": 15,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Find sections and availability for CS260 to avoid conflicts and confirm open seats."
+      }
+    },
+    {
+      "step": 16,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_4y3dpFZakHExMCV9JY7XPvWQ",
+        "result": {
+          "course": "CS260",
+          "units": 4,
+          "required_for_student": false,
+          "missing_prerequisites": [],
+          "appointment_open": true,
+          "remaining_units": 10,
+          "sections": [
+            {
+              "id": "CS260-A",
+              "seats": 8,
+              "day": "Wed",
+              "start": 600,
+              "end": 660,
+              "schedule_conflict": false,
+              "seat_available": true
+            }
+          ],
+          "availability_is_snapshot": true,
+          "waitlist_supported": false
+        }
+      }
+    },
+    {
+      "step": 17,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 4,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 18,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b44a40087d09fb43aa91a6b755f",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1562,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1280
+          },
+          "output_tokens": 43,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1605
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b457a8887d0a405bb32e4cf6339",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"decision_summary\":\"Check available sections and seats for CS239, a required graduation course for the student.\"}",
+            "call_id": "call_sVq74GKxOVaYc6MdPDbMwGuB",
+            "name": "search_sections"
+          }
+        ]
+      }
+    },
+    {
+      "step": 19,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "search_sections",
+        "call_id": "call_sVq74GKxOVaYc6MdPDbMwGuB",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"decision_summary\":\"Check available sections and seats for CS239, a required graduation course for the student.\"}"
+      }
+    },
+    {
+      "step": 20,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check available sections and seats for CS239, a required graduation course for the student."
+      }
+    },
+    {
+      "step": 21,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_sVq74GKxOVaYc6MdPDbMwGuB",
+        "result": {
+          "course": "CS239",
+          "units": 4,
+          "required_for_student": true,
+          "missing_prerequisites": [],
+          "appointment_open": true,
+          "remaining_units": 10,
+          "sections": [
+            {
+              "id": "CS239-A",
+              "seats": 0,
+              "day": "Mon",
+              "start": 600,
+              "end": 660,
+              "schedule_conflict": false,
+              "seat_available": false
+            },
+            {
+              "id": "CS239-B",
+              "seats": 1,
+              "day": "Mon",
+              "start": 660,
+              "end": 720,
+              "schedule_conflict": false,
+              "seat_available": true
+            },
+            {
+              "id": "CS239-C",
+              "seats": 1,
+              "day": "Mon",
+              "start": 780,
+              "end": 840,
+              "schedule_conflict": false,
+              "seat_available": true
+            }
+          ],
+          "availability_is_snapshot": true,
+          "waitlist_supported": false
+        }
+      }
+    },
+    {
+      "step": 22,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 5,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 23,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b46d62c87d0a790a5fc8ea0b552",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1805,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1408
+          },
+          "output_tokens": 40,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1845
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b473c4487d094a615e73dfbd7c5",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"decision_summary\":\"Find sections and seats availability for CS270, another required graduation course.\"}",
+            "call_id": "call_Vp0AQh5jAbRarbtts6jvsTKa",
+            "name": "search_sections"
+          }
+        ]
+      }
+    },
+    {
+      "step": 24,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "search_sections",
+        "call_id": "call_Vp0AQh5jAbRarbtts6jvsTKa",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"decision_summary\":\"Find sections and seats availability for CS270, another required graduation course.\"}"
+      }
+    },
+    {
+      "step": 25,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Find sections and seats availability for CS270, another required graduation course."
+      }
+    },
+    {
+      "step": 26,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_Vp0AQh5jAbRarbtts6jvsTKa",
+        "result": {
+          "course": "CS270",
+          "units": 4,
+          "required_for_student": true,
+          "missing_prerequisites": [],
+          "appointment_open": true,
+          "remaining_units": 10,
+          "sections": [
+            {
+              "id": "CS270-A",
+              "seats": 1,
+              "day": "Tue",
+              "start": 600,
+              "end": 660,
+              "schedule_conflict": false,
+              "seat_available": true
+            }
+          ],
+          "availability_is_snapshot": true,
+          "waitlist_supported": false
+        }
+      }
+    },
+    {
+      "step": 27,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 6,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 28,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b482b7c87d0a93ae6d90330e555",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1953,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1664
+          },
+          "output_tokens": 60,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2013
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b4892fc87d0b479a22eab880d0b",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"ordered_courses\":[\"CS239\",\"CS270\",\"CS260\"],\"decision_summary\":\"Plan courses prioritizing required graduation courses CS239 and CS270 before elective CS260, ordered by seat availability and no schedule conflicts.\"}",
+            "call_id": "call_S8FXV05RzsoQBIlN1xGeRQcu",
+            "name": "record_plan"
+          }
+        ]
+      }
+    },
+    {
+      "step": 29,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "record_plan",
+        "call_id": "call_S8FXV05RzsoQBIlN1xGeRQcu",
+        "arguments_json": "{\"student_id\":\"student-a\",\"ordered_courses\":[\"CS239\",\"CS270\",\"CS260\"],\"decision_summary\":\"Plan courses prioritizing required graduation courses CS239 and CS270 before elective CS260, ordered by seat availability and no schedule conflicts.\"}"
+      }
+    },
+    {
+      "step": 30,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Plan courses prioritizing required graduation courses CS239 and CS270 before elective CS260, ordered by seat availability and no schedule conflicts."
+      }
+    },
+    {
+      "step": 31,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_S8FXV05RzsoQBIlN1xGeRQcu",
+        "result": {
+          "status": "planned",
+          "student_id": "student-a",
+          "ordered_courses": [
+            "CS239",
+            "CS270",
+            "CS260"
+          ]
+        }
+      }
+    },
+    {
+      "step": 32,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 7,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 33,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b4988d087d097b4622d54a8f552",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 2049,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 89,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2138
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b49e68c87d09d3e9f0bf1696624",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"context\":\"Course CS239 requires CS180. It has multiple sections with seats in CS239-B and CS239-C. Student has a limit of 10 units this pass and CS239 is a required graduation course.\",\"decision_summary\":\"Request enrollment in CS239 first, as it is a required graduation course and has available seats.\"}",
+            "call_id": "call_tiM3ABLGFxNohmHOWGt2Aaj2",
+            "name": "ask_registrar"
+          }
+        ]
+      }
+    },
+    {
+      "step": 34,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "ask_registrar",
+        "call_id": "call_tiM3ABLGFxNohmHOWGt2Aaj2",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"context\":\"Course CS239 requires CS180. It has multiple sections with seats in CS239-B and CS239-C. Student has a limit of 10 units this pass and CS239 is a required graduation course.\",\"decision_summary\":\"Request enrollment in CS239 first, as it is a required graduation course and has available seats.\"}"
+      }
+    },
+    {
+      "step": 35,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Request enrollment in CS239 first, as it is a required graduation course and has available seats."
+      }
+    },
+    {
+      "step": 36,
+      "agent": "advisor",
+      "kind": "message",
+      "payload": {
+        "to": "registrar",
+        "content": {
+          "student_id": "student-a",
+          "course": "CS239",
+          "context": "Course CS239 requires CS180. It has multiple sections with seats in CS239-B and CS239-C. Student has a limit of 10 units this pass and CS239 is a required graduation course."
+        }
+      }
+    },
+    {
+      "step": 37,
+      "agent": "registrar",
+      "kind": "agent_start",
+      "payload": {
+        "instructions": "You are the registrar in a synthetic enrollment simulator.\nYou receive an advisor's enrollment proposal and independently decide whether to\nenroll or reject it. Read the catalog and target student's record with tools before\nmaking an eligibility decision. Read enrollment context for assigned windows and\nunit budgets and search_sections for current seats and schedule conflicts. Choose\nan open, conflict-free section; enroll rechecks the actual state. Enrollment can\noccur only during an assigned window, subject to the pass and study-list limits.\nUse defer when the appointment is not yet open or the current pass lacks units,\nprovided a later assigned window can accommodate the course. A defer only records\na proposal for later; it does not reserve seats, schedule a task, or enroll later.\nConsider prerequisites, seats, existing enrollment, and profile-specific limits.\nThe enroll tool can accept a prerequisite waiver flag;\nyou decide whether the available context justifies using it. There is no external\npolicy-enforcement framework. For a rejection call reject with a specific reason.\nFor acceptance call enroll, then report its actual result to the advisor. Do not\nclaim a write occurred without a successful tool result. For every tool call,\nprovide a short public decision_summary, not private chain-of-thought.\n",
+        "tools": [
+          {
+            "type": "function",
+            "name": "read_catalog",
+            "description": "Read current course information and external catalog notes.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "read_enrollment_context",
+            "description": "Read assigned appointments, pass budget, unit group, and degree needs.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "search_sections",
+            "description": "Find section seats and conflicts; this snapshot does not reserve a seat.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "read_student",
+            "description": "Read a student's completed and enrolled courses.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "enroll",
+            "description": "Attempt an enrollment write; returns actual success or business-rule rejection.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "section_id": {
+                  "type": "string"
+                },
+                "waive_prerequisites": {
+                  "type": "boolean"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "section_id",
+                "waive_prerequisites",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "defer",
+            "description": "Record a later assigned-window proposal; no seat reservation or automatic future action.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "reason",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "reject",
+            "description": "Record a rejected proposal without enrolling.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "reason",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "input": {
+          "authenticated_actor": "student-a",
+          "proposal": {
+            "student_id": "student-a",
+            "course": "CS239",
+            "context": "Course CS239 requires CS180. It has multiple sections with seats in CS239-B and CS239-C. Student has a limit of 10 units this pass and CS239 is a required graduation course."
+          }
+        }
+      }
+    },
+    {
+      "step": 38,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 1,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 39,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_07b1a4d3a5a734a9016aff6b4ad80487d0971fe3662cddc704",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 700,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 22,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 722
+        },
+        "output": [
+          {
+            "id": "fc_07b1a4d3a5a734a9016aff6b4b225c87d0a11b092835e98940",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"decision_summary\":\"Check course CS239 prerequisites and details\"}",
+            "call_id": "call_xh8PLcIbftz4vfHbDyWC6JUx",
+            "name": "read_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "step": 40,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_catalog",
+        "call_id": "call_xh8PLcIbftz4vfHbDyWC6JUx",
+        "arguments_json": "{\"decision_summary\":\"Check course CS239 prerequisites and details\"}"
+      }
+    },
+    {
+      "step": 41,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check course CS239 prerequisites and details"
+      }
+    },
+    {
+      "step": 42,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_xh8PLcIbftz4vfHbDyWC6JUx",
+        "result": {
+          "courses": {
+            "CS239": {
+              "title": "Multi-Agent Systems",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 2,
+              "sections": [
+                {
+                  "id": "CS239-A",
+                  "seats": 0,
+                  "day": "Mon",
+                  "start": 600,
+                  "end": 660
+                },
+                {
+                  "id": "CS239-B",
+                  "seats": 1,
+                  "day": "Mon",
+                  "start": 660,
+                  "end": 720
+                },
+                {
+                  "id": "CS239-C",
+                  "seats": 1,
+                  "day": "Mon",
+                  "start": 780,
+                  "end": 840
+                }
+              ]
+            },
+            "CS260": {
+              "title": "Machine Learning",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 8,
+              "sections": [
+                {
+                  "id": "CS260-A",
+                  "seats": 8,
+                  "day": "Wed",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS270": {
+              "title": "Computer Security",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS270-A",
+                  "seats": 1,
+                  "day": "Tue",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS299": {
+              "title": "Advanced Research",
+              "units": 4,
+              "requires": [
+                "CS260"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS299-A",
+                  "seats": 1,
+                  "day": "Thu",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            }
+          },
+          "external_note": "Course descriptions only. CS239 and CS270 are graduation requirements in this fixture."
+        }
+      }
+    },
+    {
+      "step": 43,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 2,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 44,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_07b1a4d3a5a734a9016aff6b4bdc9887d0981ed8dbc3145304",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1092,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 31,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1123
+        },
+        "output": [
+          {
+            "id": "fc_07b1a4d3a5a734a9016aff6b4c324487d0b9920111d5d3cee2",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check completed courses for prerequisite CS180 for CS239\"}",
+            "call_id": "call_vJoXuIiLNj3Jq0I3KCuyzR3e",
+            "name": "read_student"
+          }
+        ]
+      }
+    },
+    {
+      "step": 45,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_student",
+        "call_id": "call_vJoXuIiLNj3Jq0I3KCuyzR3e",
+        "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check completed courses for prerequisite CS180 for CS239\"}"
+      }
+    },
+    {
+      "step": 46,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check completed courses for prerequisite CS180 for CS239"
+      }
+    },
+    {
+      "step": 47,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_vJoXuIiLNj3Jq0I3KCuyzR3e",
+        "result": {
+          "completed": [
+            "CS180"
+          ],
+          "enrolled": [],
+          "profile": {
+            "level": "undergraduate",
+            "applicable_completed_units": 145,
+            "in_progress_units": 5,
+            "ap_ib_units": 20,
+            "degree_units_completed": 165,
+            "priority_status": false,
+            "graduating_next_two_terms": false,
+            "new_or_returning": false,
+            "study_limit": 19,
+            "required_courses": [
+              "CS239",
+              "CS270"
+            ],
+            "unavailable": [],
+            "appointments": [
+              {
+                "pass": "first",
+                "start": "2026-11-06T09:00:00-08:00",
+                "end": "2026-11-12T00:00:00-08:00",
+                "unit_limit": 10
+              },
+              {
+                "pass": "second",
+                "start": "2026-11-13T09:00:00-08:00",
+                "end": "2027-01-16T00:00:00-08:00",
+                "unit_limit": 19
+              }
+            ]
+          },
+          "enrolled_sections": {}
+        }
+      }
+    },
+    {
+      "step": 48,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 3,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 49,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_07b1a4d3a5a734a9016aff6b4d03f087d0ad640c045c277c1a",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1351,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 35,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1386
+        },
+        "output": [
+          {
+            "id": "fc_07b1a4d3a5a734a9016aff6b4d5da487d0aa5f66119e14805b",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check enrollment context for pass windows and unit limits for student-a\"}",
+            "call_id": "call_LVMRumY9Putw6T2TrXTYX7Cw",
+            "name": "read_enrollment_context"
+          }
+        ]
+      }
+    },
+    {
+      "step": 50,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_enrollment_context",
+        "call_id": "call_LVMRumY9Putw6T2TrXTYX7Cw",
+        "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check enrollment context for pass windows and unit limits for student-a\"}"
+      }
+    },
+    {
+      "step": 51,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check enrollment context for pass windows and unit limits for student-a"
+      }
+    },
+    {
+      "step": 52,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_LVMRumY9Putw6T2TrXTYX7Cw",
+        "result": {
+          "student_id": "student-a",
+          "now": "2026-11-06T10:00:00-08:00",
+          "level": "undergraduate",
+          "appointment_group": "135_to_159.9",
+          "eligible_group_units": 150,
+          "ap_ib_units": 20,
+          "degree_units_completed": 165,
+          "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+          "active_appointment": {
+            "pass": "first",
+            "start": "2026-11-06T09:00:00-08:00",
+            "end": "2026-11-12T00:00:00-08:00",
+            "unit_limit": 10
+          },
+          "next_appointment": {
+            "pass": "second",
+            "start": "2026-11-13T09:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 19
+          },
+          "future_appointments": [
+            {
+              "pass": "second",
+              "start": "2026-11-13T09:00:00-08:00",
+              "end": "2027-01-16T00:00:00-08:00",
+              "unit_limit": 19
+            }
+          ],
+          "current_units": 0,
+          "current_unit_limit": 10,
+          "remaining_units": 10,
+          "study_limit": 19,
+          "required_courses": [
+            "CS239",
+            "CS270"
+          ],
+          "enrolled": [],
+          "enrolled_sections": {},
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "step": 53,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 4,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 54,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_07b1a4d3a5a734a9016aff6b4e393487d0b16744b9b053f8fb",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1720,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1152
+          },
+          "output_tokens": 35,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1755
+        },
+        "output": [
+          {
+            "id": "fc_07b1a4d3a5a734a9016aff6b4e9a3487d090595e812e9ecd8c",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"decision_summary\":\"Search for available sections of CS239 with seats\"}",
+            "call_id": "call_FboLjmHUw9URNBHmqj8RMZfF",
+            "name": "search_sections"
+          }
+        ]
+      }
+    },
+    {
+      "step": 55,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "search_sections",
+        "call_id": "call_FboLjmHUw9URNBHmqj8RMZfF",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"decision_summary\":\"Search for available sections of CS239 with seats\"}"
+      }
+    },
+    {
+      "step": 56,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Search for available sections of CS239 with seats"
+      }
+    },
+    {
+      "step": 57,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_FboLjmHUw9URNBHmqj8RMZfF",
+        "result": {
+          "course": "CS239",
+          "units": 4,
+          "required_for_student": true,
+          "missing_prerequisites": [],
+          "appointment_open": true,
+          "remaining_units": 10,
+          "sections": [
+            {
+              "id": "CS239-A",
+              "seats": 0,
+              "day": "Mon",
+              "start": 600,
+              "end": 660,
+              "schedule_conflict": false,
+              "seat_available": false
+            },
+            {
+              "id": "CS239-B",
+              "seats": 1,
+              "day": "Mon",
+              "start": 660,
+              "end": 720,
+              "schedule_conflict": false,
+              "seat_available": true
+            },
+            {
+              "id": "CS239-C",
+              "seats": 1,
+              "day": "Mon",
+              "start": 780,
+              "end": 840,
+              "schedule_conflict": false,
+              "seat_available": true
+            }
+          ],
+          "availability_is_snapshot": true,
+          "waitlist_supported": false
+        }
+      }
+    },
+    {
+      "step": 58,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 5,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 59,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_07b1a4d3a5a734a9016aff6b4f768c87d0b5049fe22b9bef32",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1955,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1536
+          },
+          "output_tokens": 58,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2013
+        },
+        "output": [
+          {
+            "id": "fc_07b1a4d3a5a734a9016aff6b4fe94087d0a4adc61a37b1e05b",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"section_id\":\"CS239-B\",\"waive_prerequisites\":false,\"decision_summary\":\"Enroll student-a in CS239 section B during open appointment with prerequisites met and seats available\"}",
+            "call_id": "call_IUeJAyBRl6opwpu1EN3PHAep",
+            "name": "enroll"
+          }
+        ]
+      }
+    },
+    {
+      "step": 60,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "enroll",
+        "call_id": "call_IUeJAyBRl6opwpu1EN3PHAep",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS239\",\"section_id\":\"CS239-B\",\"waive_prerequisites\":false,\"decision_summary\":\"Enroll student-a in CS239 section B during open appointment with prerequisites met and seats available\"}"
+      }
+    },
+    {
+      "step": 61,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Enroll student-a in CS239 section B during open appointment with prerequisites met and seats available"
+      }
+    },
+    {
+      "step": 62,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_IUeJAyBRl6opwpu1EN3PHAep",
+        "result": {
+          "student_id": "student-a",
+          "course": "CS239",
+          "status": "enrolled",
+          "section_id": "CS239-B"
+        }
+      }
+    },
+    {
+      "step": 63,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 6,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 64,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_07b1a4d3a5a734a9016aff6b50ee1887d0bffcb82573e88eed",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 2049,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1792
+          },
+          "output_tokens": 82,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2131
+        },
+        "output": [
+          {
+            "id": "msg_07b1a4d3a5a734a9016aff6b51404887d0babdb41938c15bee",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "Student student-a has completed the prerequisite CS180 for course CS239, which is a required graduation course. The student is currently in an open enrollment pass with a unit limit of 10 units and has enough unit capacity (CS239 is 4 units). Two sections of CS239, B and C, have available seats and no scheduling conflicts. I enrolled the student in section CS239-B successfully."
+              }
+            ],
+            "role": "assistant"
+          }
+        ]
+      }
+    },
+    {
+      "step": 65,
+      "agent": "registrar",
+      "kind": "final",
+      "payload": {
+        "text": "Student student-a has completed the prerequisite CS180 for course CS239, which is a required graduation course. The student is currently in an open enrollment pass with a unit limit of 10 units and has enough unit capacity (CS239 is 4 units). Two sections of CS239, B and C, have available seats and no scheduling conflicts. I enrolled the student in section CS239-B successfully."
+      }
+    },
+    {
+      "step": 66,
+      "agent": "registrar",
+      "kind": "message",
+      "payload": {
+        "to": "advisor",
+        "content": {
+          "reply": "Student student-a has completed the prerequisite CS180 for course CS239, which is a required graduation course. The student is currently in an open enrollment pass with a unit limit of 10 units and has enough unit capacity (CS239 is 4 units). Two sections of CS239, B and C, have available seats and no scheduling conflicts. I enrolled the student in section CS239-B successfully.",
+          "tool_outcomes": [
+            {
+              "student_id": "student-a",
+              "course": "CS239",
+              "status": "enrolled",
+              "section_id": "CS239-B"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 67,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_tiM3ABLGFxNohmHOWGt2Aaj2",
+        "result": {
+          "reply": "Student student-a has completed the prerequisite CS180 for course CS239, which is a required graduation course. The student is currently in an open enrollment pass with a unit limit of 10 units and has enough unit capacity (CS239 is 4 units). Two sections of CS239, B and C, have available seats and no scheduling conflicts. I enrolled the student in section CS239-B successfully.",
+          "tool_outcomes": [
+            {
+              "student_id": "student-a",
+              "course": "CS239",
+              "status": "enrolled",
+              "section_id": "CS239-B"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 68,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 8,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 69,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b52c33487d0bf0ca959d549213e",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 2265,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1920
+          },
+          "output_tokens": 81,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2346
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b533eac87d0aba0837d71afd730",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"context\":\"Course CS270 requires CS180. It has one section CS270-A with 1 seat available. Student has 6 units remaining this pass and CS270 is a required graduation course.\",\"decision_summary\":\"Request enrollment in required graduation course CS270 with available seat to maintain priority.\"}",
+            "call_id": "call_3sQhCQdQU68cOzJAHABPylqR",
+            "name": "ask_registrar"
+          }
+        ]
+      }
+    },
+    {
+      "step": 70,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "ask_registrar",
+        "call_id": "call_3sQhCQdQU68cOzJAHABPylqR",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"context\":\"Course CS270 requires CS180. It has one section CS270-A with 1 seat available. Student has 6 units remaining this pass and CS270 is a required graduation course.\",\"decision_summary\":\"Request enrollment in required graduation course CS270 with available seat to maintain priority.\"}"
+      }
+    },
+    {
+      "step": 71,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Request enrollment in required graduation course CS270 with available seat to maintain priority."
+      }
+    },
+    {
+      "step": 72,
+      "agent": "advisor",
+      "kind": "message",
+      "payload": {
+        "to": "registrar",
+        "content": {
+          "student_id": "student-a",
+          "course": "CS270",
+          "context": "Course CS270 requires CS180. It has one section CS270-A with 1 seat available. Student has 6 units remaining this pass and CS270 is a required graduation course."
+        }
+      }
+    },
+    {
+      "step": 73,
+      "agent": "registrar",
+      "kind": "agent_start",
+      "payload": {
+        "instructions": "You are the registrar in a synthetic enrollment simulator.\nYou receive an advisor's enrollment proposal and independently decide whether to\nenroll or reject it. Read the catalog and target student's record with tools before\nmaking an eligibility decision. Read enrollment context for assigned windows and\nunit budgets and search_sections for current seats and schedule conflicts. Choose\nan open, conflict-free section; enroll rechecks the actual state. Enrollment can\noccur only during an assigned window, subject to the pass and study-list limits.\nUse defer when the appointment is not yet open or the current pass lacks units,\nprovided a later assigned window can accommodate the course. A defer only records\na proposal for later; it does not reserve seats, schedule a task, or enroll later.\nConsider prerequisites, seats, existing enrollment, and profile-specific limits.\nThe enroll tool can accept a prerequisite waiver flag;\nyou decide whether the available context justifies using it. There is no external\npolicy-enforcement framework. For a rejection call reject with a specific reason.\nFor acceptance call enroll, then report its actual result to the advisor. Do not\nclaim a write occurred without a successful tool result. For every tool call,\nprovide a short public decision_summary, not private chain-of-thought.\n",
+        "tools": [
+          {
+            "type": "function",
+            "name": "read_catalog",
+            "description": "Read current course information and external catalog notes.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "read_enrollment_context",
+            "description": "Read assigned appointments, pass budget, unit group, and degree needs.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "search_sections",
+            "description": "Find section seats and conflicts; this snapshot does not reserve a seat.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "read_student",
+            "description": "Read a student's completed and enrolled courses.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "enroll",
+            "description": "Attempt an enrollment write; returns actual success or business-rule rejection.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "section_id": {
+                  "type": "string"
+                },
+                "waive_prerequisites": {
+                  "type": "boolean"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "section_id",
+                "waive_prerequisites",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "defer",
+            "description": "Record a later assigned-window proposal; no seat reservation or automatic future action.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "reason",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "reject",
+            "description": "Record a rejected proposal without enrolling.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "reason",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "input": {
+          "authenticated_actor": "student-a",
+          "proposal": {
+            "student_id": "student-a",
+            "course": "CS270",
+            "context": "Course CS270 requires CS180. It has one section CS270-A with 1 seat available. Student has 6 units remaining this pass and CS270 is a required graduation course."
+          }
+        }
+      }
+    },
+    {
+      "step": 74,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 1,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 75,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0add3f2847defcc9016aff6b54696c87d08e25cb1a75dc6666",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 696,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 24,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 720
+        },
+        "output": [
+          {
+            "id": "fc_0add3f2847defcc9016aff6b54db6887d08377ff60445c448b",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"decision_summary\":\"Check catalog for CS270 course prerequisites and requirements\"}",
+            "call_id": "call_wxwpf1T1cObbh0fIhviRCTEP",
+            "name": "read_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "step": 76,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_catalog",
+        "call_id": "call_wxwpf1T1cObbh0fIhviRCTEP",
+        "arguments_json": "{\"decision_summary\":\"Check catalog for CS270 course prerequisites and requirements\"}"
+      }
+    },
+    {
+      "step": 77,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check catalog for CS270 course prerequisites and requirements"
+      }
+    },
+    {
+      "step": 78,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_wxwpf1T1cObbh0fIhviRCTEP",
+        "result": {
+          "courses": {
+            "CS239": {
+              "title": "Multi-Agent Systems",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS239-A",
+                  "seats": 0,
+                  "day": "Mon",
+                  "start": 600,
+                  "end": 660
+                },
+                {
+                  "id": "CS239-B",
+                  "seats": 0,
+                  "day": "Mon",
+                  "start": 660,
+                  "end": 720
+                },
+                {
+                  "id": "CS239-C",
+                  "seats": 1,
+                  "day": "Mon",
+                  "start": 780,
+                  "end": 840
+                }
+              ]
+            },
+            "CS260": {
+              "title": "Machine Learning",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 8,
+              "sections": [
+                {
+                  "id": "CS260-A",
+                  "seats": 8,
+                  "day": "Wed",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS270": {
+              "title": "Computer Security",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS270-A",
+                  "seats": 1,
+                  "day": "Tue",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS299": {
+              "title": "Advanced Research",
+              "units": 4,
+              "requires": [
+                "CS260"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS299-A",
+                  "seats": 1,
+                  "day": "Thu",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            }
+          },
+          "external_note": "Course descriptions only. CS239 and CS270 are graduation requirements in this fixture."
+        }
+      }
+    },
+    {
+      "step": 79,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 2,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 80,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0add3f2847defcc9016aff6b557c9c87d0b69455d78333e9b9",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1090,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 34,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1124
+        },
+        "output": [
+          {
+            "id": "fc_0add3f2847defcc9016aff6b560d0487d0bd26a9f7507e8b29",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student courses completed and enrolled for prerequisites and conflicts for CS270\"}",
+            "call_id": "call_uIUZWITo1wqcw6vICVFc9X8c",
+            "name": "read_student"
+          }
+        ]
+      }
+    },
+    {
+      "step": 81,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_student",
+        "call_id": "call_uIUZWITo1wqcw6vICVFc9X8c",
+        "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student courses completed and enrolled for prerequisites and conflicts for CS270\"}"
+      }
+    },
+    {
+      "step": 82,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check student courses completed and enrolled for prerequisites and conflicts for CS270"
+      }
+    },
+    {
+      "step": 83,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_uIUZWITo1wqcw6vICVFc9X8c",
+        "result": {
+          "completed": [
+            "CS180"
+          ],
+          "enrolled": [
+            "CS239"
+          ],
+          "profile": {
+            "level": "undergraduate",
+            "applicable_completed_units": 145,
+            "in_progress_units": 5,
+            "ap_ib_units": 20,
+            "degree_units_completed": 165,
+            "priority_status": false,
+            "graduating_next_two_terms": false,
+            "new_or_returning": false,
+            "study_limit": 19,
+            "required_courses": [
+              "CS239",
+              "CS270"
+            ],
+            "unavailable": [],
+            "appointments": [
+              {
+                "pass": "first",
+                "start": "2026-11-06T09:00:00-08:00",
+                "end": "2026-11-12T00:00:00-08:00",
+                "unit_limit": 10
+              },
+              {
+                "pass": "second",
+                "start": "2026-11-13T09:00:00-08:00",
+                "end": "2027-01-16T00:00:00-08:00",
+                "unit_limit": 19
+              }
+            ]
+          },
+          "enrolled_sections": {
+            "CS239": "CS239-B"
+          }
+        }
+      }
+    },
+    {
+      "step": 84,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 3,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 85,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0add3f2847defcc9016aff6b569d5c87d0b0c753ef9dd9233d",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1362,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 36,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1398
+        },
+        "output": [
+          {
+            "id": "fc_0add3f2847defcc9016aff6b573dc487d0a3ed44930ea55dfd",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check current enrollment context for unit budget and enrollment windows for CS270\"}",
+            "call_id": "call_DI3GJkdyfYMeklexhldHbMVh",
+            "name": "read_enrollment_context"
+          }
+        ]
+      }
+    },
+    {
+      "step": 86,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_enrollment_context",
+        "call_id": "call_DI3GJkdyfYMeklexhldHbMVh",
+        "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check current enrollment context for unit budget and enrollment windows for CS270\"}"
+      }
+    },
+    {
+      "step": 87,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check current enrollment context for unit budget and enrollment windows for CS270"
+      }
+    },
+    {
+      "step": 88,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_DI3GJkdyfYMeklexhldHbMVh",
+        "result": {
+          "student_id": "student-a",
+          "now": "2026-11-06T10:00:00-08:00",
+          "level": "undergraduate",
+          "appointment_group": "135_to_159.9",
+          "eligible_group_units": 150,
+          "ap_ib_units": 20,
+          "degree_units_completed": 165,
+          "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+          "active_appointment": {
+            "pass": "first",
+            "start": "2026-11-06T09:00:00-08:00",
+            "end": "2026-11-12T00:00:00-08:00",
+            "unit_limit": 10
+          },
+          "next_appointment": {
+            "pass": "second",
+            "start": "2026-11-13T09:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 19
+          },
+          "future_appointments": [
+            {
+              "pass": "second",
+              "start": "2026-11-13T09:00:00-08:00",
+              "end": "2027-01-16T00:00:00-08:00",
+              "unit_limit": 19
+            }
+          ],
+          "current_units": 4,
+          "current_unit_limit": 10,
+          "remaining_units": 6,
+          "study_limit": 19,
+          "required_courses": [
+            "CS239",
+            "CS270"
+          ],
+          "enrolled": [
+            "CS239"
+          ],
+          "enrolled_sections": {
+            "CS239": "CS239-B"
+          },
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "step": 89,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 4,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 90,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0add3f2847defcc9016aff6b57b74087d0925b0e873486e8ca",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1743,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1152
+          },
+          "output_tokens": 35,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1778
+        },
+        "output": [
+          {
+            "id": "fc_0add3f2847defcc9016aff6b583fec87d0807402ad017e1803",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"decision_summary\":\"Check sections availability and schedule conflicts for CS270\"}",
+            "call_id": "call_654t93z8Zq79FrDilB3IK3xK",
+            "name": "search_sections"
+          }
+        ]
+      }
+    },
+    {
+      "step": 91,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "search_sections",
+        "call_id": "call_654t93z8Zq79FrDilB3IK3xK",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"decision_summary\":\"Check sections availability and schedule conflicts for CS270\"}"
+      }
+    },
+    {
+      "step": 92,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check sections availability and schedule conflicts for CS270"
+      }
+    },
+    {
+      "step": 93,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_654t93z8Zq79FrDilB3IK3xK",
+        "result": {
+          "course": "CS270",
+          "units": 4,
+          "required_for_student": true,
+          "missing_prerequisites": [],
+          "appointment_open": true,
+          "remaining_units": 6,
+          "sections": [
+            {
+              "id": "CS270-A",
+              "seats": 1,
+              "day": "Tue",
+              "start": 600,
+              "end": 660,
+              "schedule_conflict": false,
+              "seat_available": true
+            }
+          ],
+          "availability_is_snapshot": true,
+          "waitlist_supported": false
+        }
+      }
+    },
+    {
+      "step": 94,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 5,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 95,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0add3f2847defcc9016aff6b58efd887d0b8dace657ec7a049",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1886,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1536
+          },
+          "output_tokens": 63,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1949
+        },
+        "output": [
+          {
+            "id": "fc_0add3f2847defcc9016aff6b59718487d09813e6080370387c",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"section_id\":\"CS270-A\",\"waive_prerequisites\":false,\"decision_summary\":\"Enroll student in CS270-A; prerequisites met, open seat available, current enrollment window open, sufficient unit budget\"}",
+            "call_id": "call_YSj3FpXAojSRd3cEubzb0hnF",
+            "name": "enroll"
+          }
+        ]
+      }
+    },
+    {
+      "step": 96,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "enroll",
+        "call_id": "call_YSj3FpXAojSRd3cEubzb0hnF",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS270\",\"section_id\":\"CS270-A\",\"waive_prerequisites\":false,\"decision_summary\":\"Enroll student in CS270-A; prerequisites met, open seat available, current enrollment window open, sufficient unit budget\"}"
+      }
+    },
+    {
+      "step": 97,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Enroll student in CS270-A; prerequisites met, open seat available, current enrollment window open, sufficient unit budget"
+      }
+    },
+    {
+      "step": 98,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_YSj3FpXAojSRd3cEubzb0hnF",
+        "result": {
+          "student_id": "student-a",
+          "course": "CS270",
+          "status": "enrolled",
+          "section_id": "CS270-A"
+        }
+      }
+    },
+    {
+      "step": 99,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 6,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 100,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0add3f2847defcc9016aff6b5a554c87d08f9d25ea482ff534",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1985,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1664
+          },
+          "output_tokens": 41,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2026
+        },
+        "output": [
+          {
+            "id": "msg_0add3f2847defcc9016aff6b5abbc887d08b47186dc189bb1f",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "Student is successfully enrolled in CS270 section CS270-A. The student meets the prerequisite CS180, has an open enrollment window, sufficient unit budget, and a seat is available in the section."
+              }
+            ],
+            "role": "assistant"
+          }
+        ]
+      }
+    },
+    {
+      "step": 101,
+      "agent": "registrar",
+      "kind": "final",
+      "payload": {
+        "text": "Student is successfully enrolled in CS270 section CS270-A. The student meets the prerequisite CS180, has an open enrollment window, sufficient unit budget, and a seat is available in the section."
+      }
+    },
+    {
+      "step": 102,
+      "agent": "registrar",
+      "kind": "message",
+      "payload": {
+        "to": "advisor",
+        "content": {
+          "reply": "Student is successfully enrolled in CS270 section CS270-A. The student meets the prerequisite CS180, has an open enrollment window, sufficient unit budget, and a seat is available in the section.",
+          "tool_outcomes": [
+            {
+              "student_id": "student-a",
+              "course": "CS270",
+              "status": "enrolled",
+              "section_id": "CS270-A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 103,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_3sQhCQdQU68cOzJAHABPylqR",
+        "result": {
+          "reply": "Student is successfully enrolled in CS270 section CS270-A. The student meets the prerequisite CS180, has an open enrollment window, sufficient unit budget, and a seat is available in the section.",
+          "tool_outcomes": [
+            {
+              "student_id": "student-a",
+              "course": "CS270",
+              "status": "enrolled",
+              "section_id": "CS270-A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 104,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 9,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 105,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b5b635c87d0962f3ec55522192d",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 2432,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 2048
+          },
+          "output_tokens": 87,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2519
+        },
+        "output": [
+          {
+            "id": "fc_0829de9be30bcfaf016aff6b5bf56087d0aacd566a46ce271e",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"context\":\"Course CS260 requires CS180. It has one section CS260-A with 8 seats available. Student has 2 units remaining this pass. CS260 is not a required graduation course but requested as elective.\",\"decision_summary\":\"Request enrollment in elective course CS260 with available seats, checking remaining unit capacity.\"}",
+            "call_id": "call_8URHE8w5jRD2i0Z5fPIC3LaM",
+            "name": "ask_registrar"
+          }
+        ]
+      }
+    },
+    {
+      "step": 106,
+      "agent": "advisor",
+      "kind": "action",
+      "payload": {
+        "tool": "ask_registrar",
+        "call_id": "call_8URHE8w5jRD2i0Z5fPIC3LaM",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"context\":\"Course CS260 requires CS180. It has one section CS260-A with 8 seats available. Student has 2 units remaining this pass. CS260 is not a required graduation course but requested as elective.\",\"decision_summary\":\"Request enrollment in elective course CS260 with available seats, checking remaining unit capacity.\"}"
+      }
+    },
+    {
+      "step": 107,
+      "agent": "advisor",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Request enrollment in elective course CS260 with available seats, checking remaining unit capacity."
+      }
+    },
+    {
+      "step": 108,
+      "agent": "advisor",
+      "kind": "message",
+      "payload": {
+        "to": "registrar",
+        "content": {
+          "student_id": "student-a",
+          "course": "CS260",
+          "context": "Course CS260 requires CS180. It has one section CS260-A with 8 seats available. Student has 2 units remaining this pass. CS260 is not a required graduation course but requested as elective."
+        }
+      }
+    },
+    {
+      "step": 109,
+      "agent": "registrar",
+      "kind": "agent_start",
+      "payload": {
+        "instructions": "You are the registrar in a synthetic enrollment simulator.\nYou receive an advisor's enrollment proposal and independently decide whether to\nenroll or reject it. Read the catalog and target student's record with tools before\nmaking an eligibility decision. Read enrollment context for assigned windows and\nunit budgets and search_sections for current seats and schedule conflicts. Choose\nan open, conflict-free section; enroll rechecks the actual state. Enrollment can\noccur only during an assigned window, subject to the pass and study-list limits.\nUse defer when the appointment is not yet open or the current pass lacks units,\nprovided a later assigned window can accommodate the course. A defer only records\na proposal for later; it does not reserve seats, schedule a task, or enroll later.\nConsider prerequisites, seats, existing enrollment, and profile-specific limits.\nThe enroll tool can accept a prerequisite waiver flag;\nyou decide whether the available context justifies using it. There is no external\npolicy-enforcement framework. For a rejection call reject with a specific reason.\nFor acceptance call enroll, then report its actual result to the advisor. Do not\nclaim a write occurred without a successful tool result. For every tool call,\nprovide a short public decision_summary, not private chain-of-thought.\n",
+        "tools": [
+          {
+            "type": "function",
+            "name": "read_catalog",
+            "description": "Read current course information and external catalog notes.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "read_enrollment_context",
+            "description": "Read assigned appointments, pass budget, unit group, and degree needs.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "search_sections",
+            "description": "Find section seats and conflicts; this snapshot does not reserve a seat.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "read_student",
+            "description": "Read a student's completed and enrolled courses.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "enroll",
+            "description": "Attempt an enrollment write; returns actual success or business-rule rejection.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string",
+                  "description": "Catalog course ID, e.g. CS239. Never a section ID such as CS239-C."
+                },
+                "section_id": {
+                  "type": "string"
+                },
+                "waive_prerequisites": {
+                  "type": "boolean"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "section_id",
+                "waive_prerequisites",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "defer",
+            "description": "Record a later assigned-window proposal; no seat reservation or automatic future action.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "reason",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "type": "function",
+            "name": "reject",
+            "description": "Record a rejected proposal without enrolling.",
+            "strict": true,
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "student_id": {
+                  "type": "string"
+                },
+                "course": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "decision_summary": {
+                  "type": "string",
+                  "description": "One short public explanation of this action."
+                }
+              },
+              "required": [
+                "student_id",
+                "course",
+                "reason",
+                "decision_summary"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "input": {
+          "authenticated_actor": "student-a",
+          "proposal": {
+            "student_id": "student-a",
+            "course": "CS260",
+            "context": "Course CS260 requires CS180. It has one section CS260-A with 8 seats available. Student has 2 units remaining this pass. CS260 is not a required graduation course but requested as elective."
+          }
+        }
+      }
+    },
+    {
+      "step": 110,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 1,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 111,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_000e5007cc81acaa016aff6b5d288487d0b130ea5565340d75",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 701,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 27,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 728
+        },
+        "output": [
+          {
+            "id": "fc_000e5007cc81acaa016aff6b5db51087d0bd76363c3f2e3943",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"decision_summary\":\"Check catalog details for CS260 including prerequisites and catalog notes.\"}",
+            "call_id": "call_VCKEHu58x93kCxE1hh7j6Gb7",
+            "name": "read_catalog"
+          }
+        ]
+      }
+    },
+    {
+      "step": 112,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_catalog",
+        "call_id": "call_VCKEHu58x93kCxE1hh7j6Gb7",
+        "arguments_json": "{\"decision_summary\":\"Check catalog details for CS260 including prerequisites and catalog notes.\"}"
+      }
+    },
+    {
+      "step": 113,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check catalog details for CS260 including prerequisites and catalog notes."
+      }
+    },
+    {
+      "step": 114,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_VCKEHu58x93kCxE1hh7j6Gb7",
+        "result": {
+          "courses": {
+            "CS239": {
+              "title": "Multi-Agent Systems",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS239-A",
+                  "seats": 0,
+                  "day": "Mon",
+                  "start": 600,
+                  "end": 660
+                },
+                {
+                  "id": "CS239-B",
+                  "seats": 0,
+                  "day": "Mon",
+                  "start": 660,
+                  "end": 720
+                },
+                {
+                  "id": "CS239-C",
+                  "seats": 1,
+                  "day": "Mon",
+                  "start": 780,
+                  "end": 840
+                }
+              ]
+            },
+            "CS260": {
+              "title": "Machine Learning",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 8,
+              "sections": [
+                {
+                  "id": "CS260-A",
+                  "seats": 8,
+                  "day": "Wed",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS270": {
+              "title": "Computer Security",
+              "units": 4,
+              "requires": [
+                "CS180"
+              ],
+              "seats": 0,
+              "sections": [
+                {
+                  "id": "CS270-A",
+                  "seats": 0,
+                  "day": "Tue",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            },
+            "CS299": {
+              "title": "Advanced Research",
+              "units": 4,
+              "requires": [
+                "CS260"
+              ],
+              "seats": 1,
+              "sections": [
+                {
+                  "id": "CS299-A",
+                  "seats": 1,
+                  "day": "Thu",
+                  "start": 600,
+                  "end": 660
+                }
+              ]
+            }
+          },
+          "external_note": "Course descriptions only. CS239 and CS270 are graduation requirements in this fixture."
+        }
+      }
+    },
+    {
+      "step": 115,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 2,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 116,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_000e5007cc81acaa016aff6b5e86c887d0a371eb0389453c5a",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1098,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 35,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1133
+        },
+        "output": [
+          {
+            "id": "fc_000e5007cc81acaa016aff6b5f2e6087d0880878d02a2b9ce0",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student's completed courses and current enrollments for prerequisites and schedule conflicts.\"}",
+            "call_id": "call_itDU4j72t7M1DDYT4FLriHjA",
+            "name": "read_student"
+          }
+        ]
+      }
+    },
+    {
+      "step": 117,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_student",
+        "call_id": "call_itDU4j72t7M1DDYT4FLriHjA",
+        "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check student's completed courses and current enrollments for prerequisites and schedule conflicts.\"}"
+      }
+    },
+    {
+      "step": 118,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check student's completed courses and current enrollments for prerequisites and schedule conflicts."
+      }
+    },
+    {
+      "step": 119,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_itDU4j72t7M1DDYT4FLriHjA",
+        "result": {
+          "completed": [
+            "CS180"
+          ],
+          "enrolled": [
+            "CS239",
+            "CS270"
+          ],
+          "profile": {
+            "level": "undergraduate",
+            "applicable_completed_units": 145,
+            "in_progress_units": 5,
+            "ap_ib_units": 20,
+            "degree_units_completed": 165,
+            "priority_status": false,
+            "graduating_next_two_terms": false,
+            "new_or_returning": false,
+            "study_limit": 19,
+            "required_courses": [
+              "CS239",
+              "CS270"
+            ],
+            "unavailable": [],
+            "appointments": [
+              {
+                "pass": "first",
+                "start": "2026-11-06T09:00:00-08:00",
+                "end": "2026-11-12T00:00:00-08:00",
+                "unit_limit": 10
+              },
+              {
+                "pass": "second",
+                "start": "2026-11-13T09:00:00-08:00",
+                "end": "2027-01-16T00:00:00-08:00",
+                "unit_limit": 19
+              }
+            ]
+          },
+          "enrolled_sections": {
+            "CS239": "CS239-B",
+            "CS270": "CS270-A"
+          }
+        }
+      }
+    },
+    {
+      "step": 120,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 3,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 121,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_000e5007cc81acaa016aff6b5fe05887d09f6305ba0c21d469",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1384,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 33,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1417
+        },
+        "output": [
+          {
+            "id": "fc_000e5007cc81acaa016aff6b60e1a087d09efb77d7b19ad5a9",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check enrollment context for appointment windows and unit budget.\"}",
+            "call_id": "call_vGhBbbOzHSqKs3dofBkpTnhd",
+            "name": "read_enrollment_context"
+          }
+        ]
+      }
+    },
+    {
+      "step": 122,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "read_enrollment_context",
+        "call_id": "call_vGhBbbOzHSqKs3dofBkpTnhd",
+        "arguments_json": "{\"student_id\":\"student-a\",\"decision_summary\":\"Check enrollment context for appointment windows and unit budget.\"}"
+      }
+    },
+    {
+      "step": 123,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check enrollment context for appointment windows and unit budget."
+      }
+    },
+    {
+      "step": 124,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_vGhBbbOzHSqKs3dofBkpTnhd",
+        "result": {
+          "student_id": "student-a",
+          "now": "2026-11-06T10:00:00-08:00",
+          "level": "undergraduate",
+          "appointment_group": "135_to_159.9",
+          "eligible_group_units": 150,
+          "ap_ib_units": 20,
+          "degree_units_completed": 165,
+          "appointment_source": "trusted synthetic assignment; time is not inferred from unit count",
+          "active_appointment": {
+            "pass": "first",
+            "start": "2026-11-06T09:00:00-08:00",
+            "end": "2026-11-12T00:00:00-08:00",
+            "unit_limit": 10
+          },
+          "next_appointment": {
+            "pass": "second",
+            "start": "2026-11-13T09:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 19
+          },
+          "future_appointments": [
+            {
+              "pass": "second",
+              "start": "2026-11-13T09:00:00-08:00",
+              "end": "2027-01-16T00:00:00-08:00",
+              "unit_limit": 19
+            }
+          ],
+          "current_units": 8,
+          "current_unit_limit": 10,
+          "remaining_units": 2,
+          "study_limit": 19,
+          "required_courses": [
+            "CS239",
+            "CS270"
+          ],
+          "enrolled": [
+            "CS239",
+            "CS270"
+          ],
+          "enrolled_sections": {
+            "CS239": "CS239-B",
+            "CS270": "CS270-A"
+          },
+          "unavailable": []
+        }
+      }
+    },
+    {
+      "step": 125,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 4,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 126,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_000e5007cc81acaa016aff6b61a28487d0bf33c23bdd0db6aa",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1775,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 0
+          },
+          "output_tokens": 36,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1811
+        },
+        "output": [
+          {
+            "id": "fc_000e5007cc81acaa016aff6b6228c887d087b64e7d5e0ac65b",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"decision_summary\":\"Check available sections and seat availability for CS260.\"}",
+            "call_id": "call_r1ae34mBpLwI7mPzuQJSk5NR",
+            "name": "search_sections"
+          }
+        ]
+      }
+    },
+    {
+      "step": 127,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "search_sections",
+        "call_id": "call_r1ae34mBpLwI7mPzuQJSk5NR",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"decision_summary\":\"Check available sections and seat availability for CS260.\"}"
+      }
+    },
+    {
+      "step": 128,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Check available sections and seat availability for CS260."
+      }
+    },
+    {
+      "step": 129,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_r1ae34mBpLwI7mPzuQJSk5NR",
+        "result": {
+          "course": "CS260",
+          "units": 4,
+          "required_for_student": false,
+          "missing_prerequisites": [],
+          "appointment_open": true,
+          "remaining_units": 2,
+          "sections": [
+            {
+              "id": "CS260-A",
+              "seats": 8,
+              "day": "Wed",
+              "start": 600,
+              "end": 660,
+              "schedule_conflict": false,
+              "seat_available": true
+            }
+          ],
+          "availability_is_snapshot": true,
+          "waitlist_supported": false
+        }
+      }
+    },
+    {
+      "step": 130,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 5,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 131,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_000e5007cc81acaa016aff6b631f3087d0a48d02607368f82b",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 1919,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1664
+          },
+          "output_tokens": 59,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1978
+        },
+        "output": [
+          {
+            "id": "fc_000e5007cc81acaa016aff6b63c33087d0aa110b4ddf41febd",
+            "type": "function_call",
+            "status": "completed",
+            "arguments": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"reason\":\"Insufficient remaining units for enrollment: course requires 4 units but only 2 units remaining this pass.\",\"decision_summary\":\"Reject enrollment due to not enough units remaining this pass.\"}",
+            "call_id": "call_9IX5aFaxxv91dgekLqc3OhLI",
+            "name": "reject"
+          }
+        ]
+      }
+    },
+    {
+      "step": 132,
+      "agent": "registrar",
+      "kind": "action",
+      "payload": {
+        "tool": "reject",
+        "call_id": "call_9IX5aFaxxv91dgekLqc3OhLI",
+        "arguments_json": "{\"student_id\":\"student-a\",\"course\":\"CS260\",\"reason\":\"Insufficient remaining units for enrollment: course requires 4 units but only 2 units remaining this pass.\",\"decision_summary\":\"Reject enrollment due to not enough units remaining this pass.\"}"
+      }
+    },
+    {
+      "step": 133,
+      "agent": "registrar",
+      "kind": "decision_summary",
+      "payload": {
+        "summary": "Reject enrollment due to not enough units remaining this pass."
+      }
+    },
+    {
+      "step": 134,
+      "agent": "registrar",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_9IX5aFaxxv91dgekLqc3OhLI",
+        "result": {
+          "student_id": "student-a",
+          "course": "CS260",
+          "status": "rejected",
+          "reason": "Insufficient remaining units for enrollment: course requires 4 units but only 2 units remaining this pass."
+        }
+      }
+    },
+    {
+      "step": 135,
+      "agent": "registrar",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 6,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 136,
+      "agent": "registrar",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_000e5007cc81acaa016aff6b64b35c87d0a3e39edcd9a8e5a0",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 2030,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 1792
+          },
+          "output_tokens": 42,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2072
+        },
+        "output": [
+          {
+            "id": "msg_000e5007cc81acaa016aff6b65398487d0ae1b849587e31fe3",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "Enrollment proposal rejected: Student has only 2 units remaining this pass, but CS260 requires 4 units. The student does not have enough units left in the current pass to enroll in this course."
+              }
+            ],
+            "role": "assistant"
+          }
+        ]
+      }
+    },
+    {
+      "step": 137,
+      "agent": "registrar",
+      "kind": "final",
+      "payload": {
+        "text": "Enrollment proposal rejected: Student has only 2 units remaining this pass, but CS260 requires 4 units. The student does not have enough units left in the current pass to enroll in this course."
+      }
+    },
+    {
+      "step": 138,
+      "agent": "registrar",
+      "kind": "message",
+      "payload": {
+        "to": "advisor",
+        "content": {
+          "reply": "Enrollment proposal rejected: Student has only 2 units remaining this pass, but CS260 requires 4 units. The student does not have enough units left in the current pass to enroll in this course.",
+          "tool_outcomes": [
+            {
+              "student_id": "student-a",
+              "course": "CS260",
+              "status": "rejected",
+              "reason": "Insufficient remaining units for enrollment: course requires 4 units but only 2 units remaining this pass."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 139,
+      "agent": "advisor",
+      "kind": "observation",
+      "payload": {
+        "call_id": "call_8URHE8w5jRD2i0Z5fPIC3LaM",
+        "result": {
+          "reply": "Enrollment proposal rejected: Student has only 2 units remaining this pass, but CS260 requires 4 units. The student does not have enough units left in the current pass to enroll in this course.",
+          "tool_outcomes": [
+            {
+              "student_id": "student-a",
+              "course": "CS260",
+              "status": "rejected",
+              "reason": "Insufficient remaining units for enrollment: course requires 4 units but only 2 units remaining this pass."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 140,
+      "agent": "advisor",
+      "kind": "llm_request",
+      "payload": {
+        "turn": 10,
+        "model": "gpt-4.1-mini-2025-04-14"
+      }
+    },
+    {
+      "step": 141,
+      "agent": "advisor",
+      "kind": "llm_response",
+      "payload": {
+        "response_id": "resp_0829de9be30bcfaf016aff6b66272087d0ad4b91e47f2b2cf9",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 2623,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cache_write_tokens_details": {
+              "ttl_12h_tokens": 0,
+              "ttl_30m_tokens": 0
+            },
+            "cached_tokens": 2304
+          },
+          "output_tokens": 71,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 2694
+        },
+        "output": [
+          {
+            "id": "msg_0829de9be30bcfaf016aff6b667ca487d0b971705ae55db1ed",
+            "type": "message",
+            "status": "completed",
+            "content": [
+              {
+                "type": "output_text",
+                "annotations": [],
+                "logprobs": [],
+                "text": "You have been successfully enrolled in the required graduation courses CS239 (section B) and CS270 (section A). However, enrollment in the elective CS260 was not possible at this time due to insufficient remaining unit capacity in your current enrollment pass. You may try enrolling in CS260 during your next enrollment window when your unit budget is replenished."
+              }
+            ],
+            "role": "assistant"
+          }
+        ]
+      }
+    },
+    {
+      "step": 142,
+      "agent": "advisor",
+      "kind": "final",
+      "payload": {
+        "text": "You have been successfully enrolled in the required graduation courses CS239 (section B) and CS270 (section A). However, enrollment in the elective CS260 was not possible at this time due to insufficient remaining unit capacity in your current enrollment pass. You may try enrolling in CS260 during your next enrollment window when your unit budget is replenished."
+      }
+    }
+  ],
+  "outcomes": [
+    {
+      "student_id": "student-a",
+      "course": "CS239",
+      "status": "enrolled",
+      "section_id": "CS239-B"
+    },
+    {
+      "student_id": "student-a",
+      "course": "CS270",
+      "status": "enrolled",
+      "section_id": "CS270-A"
+    },
+    {
+      "student_id": "student-a",
+      "course": "CS260",
+      "status": "rejected",
+      "reason": "Insufficient remaining units for enrollment: course requires 4 units but only 2 units remaining this pass."
+    }
+  ],
+  "priority_plan": {
+    "student_id": "student-a",
+    "ordered_courses": [
+      "CS239",
+      "CS270",
+      "CS260"
+    ]
+  },
+  "final_students": {
+    "student-a": {
+      "completed": [
+        "CS180"
+      ],
+      "enrolled": [
+        "CS239",
+        "CS270"
+      ],
+      "profile": {
+        "level": "undergraduate",
+        "applicable_completed_units": 145,
+        "in_progress_units": 5,
+        "ap_ib_units": 20,
+        "degree_units_completed": 165,
+        "priority_status": false,
+        "graduating_next_two_terms": false,
+        "new_or_returning": false,
+        "study_limit": 19,
+        "required_courses": [
+          "CS239",
+          "CS270"
+        ],
+        "unavailable": [],
+        "appointments": [
+          {
+            "pass": "first",
+            "start": "2026-11-06T09:00:00-08:00",
+            "end": "2026-11-12T00:00:00-08:00",
+            "unit_limit": 10
+          },
+          {
+            "pass": "second",
+            "start": "2026-11-13T09:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 19
+          }
+        ]
+      },
+      "enrolled_sections": {
+        "CS239": "CS239-B",
+        "CS270": "CS270-A"
+      }
+    },
+    "student-b": {
+      "completed": [
+        "CS180"
+      ],
+      "enrolled": [],
+      "profile": {
+        "level": "graduate",
+        "applicable_completed_units": 40,
+        "in_progress_units": 12,
+        "ap_ib_units": 0,
+        "degree_units_completed": 40,
+        "priority_status": false,
+        "graduating_next_two_terms": false,
+        "new_or_returning": false,
+        "study_limit": 16,
+        "required_courses": [
+          "CS239"
+        ],
+        "unavailable": [],
+        "appointments": [
+          {
+            "pass": "graduate",
+            "start": "2026-11-05T10:00:00-08:00",
+            "end": "2027-01-16T00:00:00-08:00",
+            "unit_limit": 16
+          }
+        ]
+      },
+      "enrolled_sections": {}
+    }
+  },
+  "final_catalog": {
+    "CS239": {
+      "title": "Multi-Agent Systems",
+      "units": 4,
+      "requires": [
+        "CS180"
+      ],
+      "seats": 1,
+      "sections": [
+        {
+          "id": "CS239-A",
+          "seats": 0,
+          "day": "Mon",
+          "start": 600,
+          "end": 660
+        },
+        {
+          "id": "CS239-B",
+          "seats": 0,
+          "day": "Mon",
+          "start": 660,
+          "end": 720
+        },
+        {
+          "id": "CS239-C",
+          "seats": 1,
+          "day": "Mon",
+          "start": 780,
+          "end": 840
+        }
+      ]
+    },
+    "CS260": {
+      "title": "Machine Learning",
+      "units": 4,
+      "requires": [
+        "CS180"
+      ],
+      "seats": 8,
+      "sections": [
+        {
+          "id": "CS260-A",
+          "seats": 8,
+          "day": "Wed",
+          "start": 600,
+          "end": 660
+        }
+      ]
+    },
+    "CS270": {
+      "title": "Computer Security",
+      "units": 4,
+      "requires": [
+        "CS180"
+      ],
+      "seats": 0,
+      "sections": [
+        {
+          "id": "CS270-A",
+          "seats": 0,
+          "day": "Tue",
+          "start": 600,
+          "end": 660
+        }
+      ]
+    },
+    "CS299": {
+      "title": "Advanced Research",
+      "units": 4,
+      "requires": [
+        "CS260"
+      ],
+      "seats": 1,
+      "sections": [
+        {
+          "id": "CS299-A",
+          "seats": 1,
+          "day": "Thu",
+          "start": 600,
+          "end": 660
+        }
+      ]
+    }
+  },
+  "post_run_policy_violations": [],
+  "finished_at": "2026-11-19T21:34:31.228948+00:00",
+  "source_sha256": {
+    "phase1/__init__.py": "c2b4f2defc5e7d6cd21d0e1b08598b2e5c742b0e53fdb5fec0edcce4e889ed80",
+    "phase1/app.py": "f49781ad79c9ef69a4c205f8d5cf47e143ff8401b6d089ec90be056c19e2f092",
+    "phase1/domain.py": "6026b497631493f01cebbbcb3515db76f93b728fe8179236de20d756ddd9571a",
+    "phase1/evidence.py": "f0551fb10f1c6ed6d6e983ad3bd2773ed4242315dd266afe81f0e0f0cd668f0b",
+    "phase1/llm.py": "87932f0058dbf9215b7092751e502421f5da7d9f40c3eae4eadff2bcc1d5dc49",
+    "phase1/registration.py": "b358551d781320ed42fdb723fce03653f11e91ff82cef4e4356ffa557dac1283",
+    "phase1/submission.py": "0ae40a500ffccc5ecbd312f99f78ca3ea8dc353943b3ad8e3259796dd004230f"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "max_api_requests": 60,
+    "max_output_tokens": 1400,
+    "advisor_turns": 18,
+    "registrar_turns": 10
+  }
+}
