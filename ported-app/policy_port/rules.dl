@@ -1,0 +1,419 @@
+// Frozen configuration: exactly the 16 source-backed facts in binding-plan.json.
+PrincipalGroup("advisor", "AdvisorRole").
+PrincipalGroup("registrar", "RegistrarRole").
+Capability("AdvisorRole", "enrollment", "read_catalog").
+Capability("AdvisorRole", "enrollment", "read_enrollment_context").
+Capability("AdvisorRole", "enrollment", "search_sections").
+Capability("AdvisorRole", "enrollment", "record_plan").
+Capability("AdvisorRole", "enrollment", "ask_registrar").
+Capability("RegistrarRole", "enrollment", "registrar_read_catalog").
+Capability("RegistrarRole", "enrollment", "read_student").
+Capability("RegistrarRole", "enrollment", "registrar_read_enrollment_context").
+Capability("RegistrarRole", "enrollment", "registrar_search_sections").
+Capability("RegistrarRole", "enrollment", "enroll").
+Capability("RegistrarRole", "enrollment", "reject").
+Capability("RegistrarRole", "enrollment", "defer").
+Capability("AdvisorRole", "enrollment", "registrar_read_enrollment_context").
+Capability("AdvisorRole", "enrollment", "registrar_search_sections").
+
+// Only capability and observations are selected. No custom relations or helper aliases.
+// Field(Q, ...) is the frozen current-request snapshot, not agent testimony.
+// Receipt fields certify successful historical action/result pairs by the trusted producer;
+// Advisor history is task-scoped; Registrar history is scoped to this proposal.
+// These are inspection obligations, not message-content dependencies. A search is no seat guarantee.
+
+Allow(Q) :-
+    Request(Q, P, "read_catalog"),
+    Can(P, "enrollment", "read_catalog").
+
+Allow(Q) :-
+    Request(Q, P, "registrar_read_catalog"),
+    Can(P, "enrollment", "registrar_read_catalog").
+
+Allow(Q) :-
+    Request(Q, P, "read_enrollment_context"),
+    Can(P, "enrollment", "read_enrollment_context"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S).
+
+Allow(Q) :-
+    Request(Q, P, "search_sections"),
+    Can(P, "enrollment", "search_sections"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C).
+
+Allow(Q) :-
+    Request(Q, P, "record_plan"),
+    Can(P, "enrollment", "record_plan"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "ordered_courses", Order),
+    Field(Q, "catalog_receipt", CatalogReceipt),
+    Field(Q, "context_receipt", S).
+
+Allow(Q) :-
+    Request(Q, P, "ask_registrar"),
+    Can(P, "enrollment", "ask_registrar"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C),
+    Field(Q, "requested_course", C),
+    Parameter(Q, "context", Context),
+    Field(Q, "catalog_receipt", CatalogReceipt),
+    Field(Q, "context_receipt", S),
+    Field(Q, "plan_receipt", PlanReceipt).
+
+Allow(Q) :-
+    Request(Q, P, "read_student"),
+    Can(P, "enrollment", "read_student"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S).
+
+Allow(Q) :-
+    Request(Q, P, "registrar_read_enrollment_context"),
+    Can(P, "enrollment", "registrar_read_enrollment_context"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S).
+
+Allow(Q) :-
+    Request(Q, P, "registrar_search_sections"),
+    Can(P, "enrollment", "registrar_search_sections"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C).
+
+Allow(Q) :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C),
+    Parameter(Q, "waive_prerequisites", "false"),
+    Field(Q, "catalog_receipt", CatalogReceipt),
+    Field(Q, "context_receipt", S),
+    Field(Q, "student_key", S),
+    Field(Q, "course_key", C),
+    Field(Q, "student_receipt", S),
+    Field(Q, "section_receipt", C).
+
+Allow(Q) :-
+    Request(Q, P, "defer"),
+    Can(P, "enrollment", "defer"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C),
+    Parameter(Q, "reason", Reason),
+    Field(Q, "catalog_receipt", CatalogReceipt),
+    Field(Q, "context_receipt", S),
+    Field(Q, "student_key", S),
+    Field(Q, "course_key", C),
+    Field(Q, "student_receipt", S),
+    Field(Q, "section_receipt", C).
+
+// reject never reads a record or changes enrollment/seats. Preserve the original
+// explicit rejection of unknown IDs and unauthorized targets. Inspection checks below
+// apply only to substantive decisions on known courses for the authenticated student.
+
+Allow(Q) :-
+    Request(Q, P, "reject"),
+    Can(P, "enrollment", "reject"),
+    Field(Q, "authenticated_actor", Actor),
+    Parameter(Q, "student_id", S),
+    Parameter(Q, "course", C),
+    Parameter(Q, "reason", Reason),
+    S != Actor.
+
+Allow(Q) :-
+    Request(Q, P, "reject"),
+    Can(P, "enrollment", "reject"),
+    Parameter(Q, "student_id", S),
+    Parameter(Q, "course", C),
+    Parameter(Q, "reason", Reason),
+    Field(Q, "authenticated_actor", S),
+    not Field(Q, "student_key", S).
+
+Allow(Q) :-
+    Request(Q, P, "reject"),
+    Can(P, "enrollment", "reject"),
+    Parameter(Q, "student_id", S),
+    Parameter(Q, "course", C),
+    Parameter(Q, "reason", Reason),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    not Field(Q, "course_key", C).
+
+Allow(Q) :-
+    Request(Q, P, "reject"),
+    Can(P, "enrollment", "reject"),
+    Parameter(Q, "student_id", S),
+    Parameter(Q, "course", C),
+    Parameter(Q, "reason", Reason),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Field(Q, "course_key", C),
+    Field(Q, "catalog_receipt", CatalogReceipt),
+    Field(Q, "student_receipt", S),
+    Field(Q, "context_receipt", S),
+    Field(Q, "section_receipt", C).
+
+Deny(Q, "unknown_tool") :-
+    Request(Q, P, A),
+    not Can(P, "enrollment", A).
+
+Deny(Q, "authorization_error") :-
+    Request(Q, P, A),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", Actor),
+    S != Actor,
+    A != "reject".
+
+// Unknown authorized decision targets use native original-vocabulary errors.
+// Never execute enroll/defer merely to obtain an error inferred from absent keys.
+// Snapshot acquisition must succeed completely; failure is not an empty key set.
+// Ownership is joined first so other-student existence and prerequisites stay private.
+Deny(Q, "unknown_student") :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    not Field(Q, "student_key", S).
+
+Deny(Q, "unknown_course") :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    not Field(Q, "course_key", C).
+
+Deny(Q, "unknown_student") :-
+    Request(Q, P, "defer"),
+    Can(P, "enrollment", "defer"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    not Field(Q, "student_key", S).
+
+Deny(Q, "unknown_course") :-
+    Request(Q, P, "defer"),
+    Can(P, "enrollment", "defer"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    not Field(Q, "course_key", C).
+
+// P2: fresh complete trusted lists on this enroll request. No prose/waiver authority.
+// No enumeration of prerequisite sets or surrogate completion/eligibility facts.
+Deny(Q, "waiver_not_authorized") :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    Parameter(Q, "waive_prerequisites", "true").
+
+Deny(Q, "missing_prerequisites") :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    Field(Q, "required_prerequisite", Required),
+    not Field(Q, "completed_course", Required).
+
+// P9: real inspections before a plan and before delegation. Universal section
+// coverage uses a counterexample over actual requested courses, not an aggregate.
+// No clock/window prerequisite on planning; early planning remains legal.
+
+Deny(Q, "context_inspection_required") :-
+    Request(Q, P, "record_plan"),
+    Can(P, "enrollment", "record_plan"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    not Field(Q, "context_receipt", S).
+
+Deny(Q, "section_inspection_required") :-
+    Request(Q, P, "record_plan"),
+    Can(P, "enrollment", "record_plan"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "requested_course", Required),
+    not Field(Q, "section_receipt", Required).
+
+Deny(Q, "context_inspection_required") :-
+    Request(Q, P, "ask_registrar"),
+    Can(P, "enrollment", "ask_registrar"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C),
+    Field(Q, "requested_course", C),
+    not Field(Q, "context_receipt", S).
+
+Deny(Q, "section_inspection_required") :-
+    Request(Q, P, "ask_registrar"),
+    Can(P, "enrollment", "ask_registrar"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C),
+    Field(Q, "requested_course", C),
+    Field(Q, "requested_course", Required),
+    not Field(Q, "section_receipt", Required).
+
+Deny(Q, "requested_course_required") :-
+    Request(Q, P, "ask_registrar"),
+    Can(P, "enrollment", "ask_registrar"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Parameter(Q, "course", C),
+    not Field(Q, "requested_course", C).
+
+// requested_course_required maps to the original requested-catalog-course error
+// (including its requested_courses payload); no Registrar/delegation callback runs.
+
+// Same-proposal inspection receipts are prerequisites only for known, authorized
+// substantive decisions. Unknown enroll/defer are refused above; reject remains
+// a no-read decision for unknown or unauthorized targets. No fabricated read receipts.
+
+Deny(Q, "student_inspection_required") :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "student_receipt", S).
+
+Deny(Q, "context_inspection_required") :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "context_receipt", S).
+
+Deny(Q, "section_inspection_required") :-
+    Request(Q, P, "enroll"),
+    Can(P, "enrollment", "enroll"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "section_receipt", C).
+
+Deny(Q, "student_inspection_required") :-
+    Request(Q, P, "reject"),
+    Can(P, "enrollment", "reject"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "student_receipt", S).
+
+Deny(Q, "context_inspection_required") :-
+    Request(Q, P, "reject"),
+    Can(P, "enrollment", "reject"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "context_receipt", S).
+
+Deny(Q, "section_inspection_required") :-
+    Request(Q, P, "reject"),
+    Can(P, "enrollment", "reject"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "section_receipt", C).
+
+Deny(Q, "student_inspection_required") :-
+    Request(Q, P, "defer"),
+    Can(P, "enrollment", "defer"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "student_receipt", S).
+
+Deny(Q, "context_inspection_required") :-
+    Request(Q, P, "defer"),
+    Can(P, "enrollment", "defer"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "context_receipt", S).
+
+Deny(Q, "section_inspection_required") :-
+    Request(Q, P, "defer"),
+    Can(P, "enrollment", "defer"),
+    Parameter(Q, "student_id", S),
+    Field(Q, "authenticated_actor", S),
+    Field(Q, "student_key", S),
+    Parameter(Q, "course", C),
+    Field(Q, "course_key", C),
+    not Field(Q, "section_receipt", C).
+
+// RETAINED ORIGINAL ENFORCEMENT (not new Datalog coverage):
+// P4/P6: enrollment_block at write time preserves duplicate/section/seat/schedule,
+// cumulative units, profile/pass limits and timezone-aware [start,end) appointment checks.
+// Preserve auto section selection, all four mutation statements, ordinary rejected receipts,
+// and defer selection of an actual later assigned window with capacity and no future effect.
+// P7/P8/P9/P11/P12: immutable fixture profiles/clock, exclusive original role tools,
+// original plan full-list validation and caller-safe errors, synchronous replies, fresh
+// per-proposal histories, budgets, completion guards, fixed transport and package utilities.
+// observe_public_event is a producer only: no dummy Allow, Event or Field seed.
+// Refusal adapter must preserve original error/result paths, mask private combined reasons
+// on ownership mismatch, keep full native feedback private, and never retry or fake success.
+
+// REPORTED GAPS / LIMITS (partial/unsupported in the frozen plan remain so):
+// P2/P3/P7: arbitrary natural-language waiver/override/priority claims cannot be classified.
+// P4: interruptions between mutations or after mutation/before fact publication lack a
+// shared rollback transaction; effects are failed/unknown, not certified unchanged.
+// P5/P9: no semantic claim-to-receipt matching or exhaustive terminal record for interrupted
+// calls/unexecuted later calls. Existing completion checks do not cover all free-text work.
+// P9: ordinal delegation pre-enforcement and terminal-receipt-before-every-free-text-final
+// are unexpressible with the frozen fields; original post-run checks are not pre-effect gates.
+// No-read rejections for unknown/unauthorized targets preserve the documented inspection gap.
+// P5/P10/P11/P12: no exact relevance/minimum-disclosure, secret/reasoning classification,
+// arbitrary text laundering/export filter, global grading-publication boundary or real-data
+// detector. Retained full actor-profile reads are not a data-minimization guarantee.
+// Raw encrypted provider reasoning remains in the original private model history; public
+// observation sanitization and finite package scans do not implement universal exclusion.
+// Synthetic local auditor visibility is permitted only in its original scope; it grants
+// neither cross-student actions nor real-data or user-facing private exports.
+// Content-lineage capture is incomplete and is not selected for enforcement here.
+// DependsOn/Provenance would mean possible influence at their producer granularity, not
+// actual content use, truth, approval or authorization. Missing origins cannot certify clean
+// content without complete capture. Coarse task exposure cannot establish exact message
+// disclosure and may overblock allowed catalog relay or concise replies. Preserve those
+// legitimate exceptions; do not add unseen task history to model inputs or infer delivery.
+// Frozen key/prerequisite snapshots have no completeness marker. Acquisition failure must
+// stop ingestion, never simulate an empty set. Exact absence/history/freshness guarantees
+// beyond the documented synchronous complete producers cannot be expressed in these rules.
+
+// Native reason-code limitation: the admitted safety check rejects an unbound
+// variable (including _) in a negative atom. Missing arbitrary catalog/plan
+// receipt or actor cannot get a specific existential-absence Deny without a new
+// relation, which is forbidden. Positive Allow joins enforce those prerequisites;
+// missing evidence yields no_explicit_allow, never an error-only callback grant.
+// The bound-value absences for prerequisites, inspections and complete keys remain
+// expressible. Reject's unknown/unauthorized exceptions execute only the original
+// no-read rejection, which remains harmless if key presence changes; they never
+// grant enrollment/defer or student-specific reads from an absent-key snapshot.

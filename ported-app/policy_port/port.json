@@ -1,0 +1,1453 @@
+{
+  "stage": "instrumentation",
+  "status": "Executable supported scope; partial and unsupported obligations remain visible. Verification is offline development evidence only.",
+  "factory": "policy_port.binding.make_policy; frozen binding.py and rules.dl unchanged",
+  "modified_source_files": [
+    "phase1/app.py",
+    "phase1/domain.py"
+  ],
+  "added_files": [
+    "policy_port/__init__.py",
+    "policy_port/adapter.py",
+    "policy_port/test_port.py",
+    "policy_port/port.json",
+    "policy_port/report.json",
+    "policy_port/trajectories.json",
+    "policy_port/test-run-1.txt",
+    "policy_port/test-run-2.txt",
+    "policy_port/test-run-3.txt",
+    "policy_port/test-run-final.txt",
+    "policy_port/test-run-final-2.txt"
+  ],
+  "additive_changes": {
+    "phase1/app.py": [
+      "Import policy_port decorators",
+      "Agent.run: observe_agent retains the original function and client callback, carrying source-bound role/conversation; client proxy observes actual supplied contexts",
+      "EnrollmentApplication.advisor_tool: dispatch decorator gates the complete original method, including synchronous delegation and return",
+      "EnrollmentApplication.registrar_tool: dispatch decorator gates original branches and preserves Advisor helper originating role",
+      "EnrollmentApplication.run: observe_completion records actual final reply and final state, including failure state"
+    ],
+    "phase1/domain.py": [
+      "World.__init__: observe_world records actual initialized synthetic state",
+      "World.log: observe_log observes actual original append and pairs actual action/result records",
+      "World.message: observe_message records original sends without inventing delivery"
+    ]
+  },
+  "binding_semantics": {
+    "scope": "Per World run-local state; Advisor receipts span its task; each actual Registrar Agent.run has a fresh random conversation scope. Direct host calls have no fabricated inspection history.",
+    "policies": "Separate cached factory instances for physical dispatcher, originating role and scope. Advisor delegation and nested Registrar/helper execution never re-enter the same session.",
+    "snapshot": "facts callback constructs complete Field rows on the current runtime request ID. Failed backend/list acquisition propagates; never substitute empty observed sets. Historical Fields come only from successful action/observation pairs at original World.log.",
+    "identity": "World.actor is the trusted synthetic actor. Application-created Agent.run binds originating role. caller_context transports that role; it is not independent authentication.",
+    "history": "Only actual original result shapes establish read/plan inspection receipts; rejected/error results and mere action events cannot. Internal enrollment_block/defer context calculations do not establish agent inspection.",
+    "storage": "Snapshot observer mode, not managed checkpoint writes. No Event success inference, output-field inventions, numeric surrogate measurements, timestamps or extra schemas.",
+    "schema_cardinality": "Exact frozen runtime contract; authenticated_actor is one-valued; all other selected fields are many-valued symbols. No numeric fields or units selected.",
+    "concurrency": "Original synchronous, single-process, synthetic lifecycle only. No shared transaction between original store and runtime observations."
+  },
+  "input_predicates": [
+    {
+      "predicate": "Request",
+      "producer": "Native runtime for actual original dispatcher operation",
+      "authority": "immutable current request"
+    },
+    {
+      "predicate": "Parameter",
+      "producer": "Actual name/args selected at original dispatcher, after original Agent protocol validation",
+      "encodings": {
+        "read_catalog": {},
+        "read_enrollment_context": {
+          "student_id": "symbol"
+        },
+        "search_sections": {
+          "student_id": "symbol",
+          "course": "symbol"
+        },
+        "record_plan": {
+          "student_id": "symbol",
+          "ordered_courses": "json"
+        },
+        "ask_registrar": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "context": "symbol"
+        },
+        "registrar_read_catalog": {},
+        "read_student": {
+          "student_id": "symbol"
+        },
+        "registrar_read_enrollment_context": {
+          "student_id": "symbol"
+        },
+        "registrar_search_sections": {
+          "student_id": "symbol",
+          "course": "symbol"
+        },
+        "enroll": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "section_id": "symbol",
+          "waive_prerequisites": "boolean"
+        },
+        "reject": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "reason": "symbol"
+        },
+        "defer": {
+          "student_id": "symbol",
+          "course": "symbol",
+          "reason": "symbol"
+        },
+        "observe_public_event": {}
+      }
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "producer": "Frozen source-backed static configuration only"
+    },
+    {
+      "predicate": "Capability",
+      "producer": "Frozen source-backed static configuration only"
+    },
+    {
+      "predicate": "Field",
+      "producer": "policy_port.adapter.snapshot, reading unchanged World and confirmed ledger history",
+      "fields": [
+        {
+          "predicate": "Field",
+          "name": "authenticated_actor",
+          "cardinality": "one",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Actual World.actor associated with the current native request's application instance.",
+          "scope": "One immutable request-specific object identified by the native request ID; run-local World authority. Never read from request.student_id, context text or an inter-agent claim.",
+          "missing": "No protected-target Allow without this observation; acquisition failure follows the real error path. Missing is not a wildcard.",
+          "timing": "before",
+          "producer": "Trusted dispatch adapter observes the bound application's World immediately before its gate. This is planned instrumentation of existing state, not an existing framework fact.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/domain.py",
+            "quote": "self.actor = \"student-a\"\n        self.now = spec.get(\"now\", \"2026-11-06T10:00:00-08:00\")",
+            "start": 4384,
+            "end": 4472
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "student_key",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Actual student dictionary keys in the trusted run-local store.",
+          "scope": "Complete key set frozen on the current request object before a Registrar decision. Used to preserve original unknown-ID error/rejection paths, not to authorize access or expose another record.",
+          "missing": "An empty complete set differs from failed acquisition. Failed acquisition must not publish an apparently complete empty snapshot.",
+          "timing": "before",
+          "producer": "Dispatch adapter enumerates World.students keys only; no record contents for a mismatched target are returned to the agent.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "if student_id not in self.world.students:\n            return {\"status\": \"error\", \"reason\": \"unknown_student\"}",
+            "start": 11993,
+            "end": 12102
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "course_key",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Actual catalog course dictionary keys.",
+          "scope": "Complete current key set on the request-specific snapshot; immutable synthetic catalog structure within this run, with mutable seat values left to original checks.",
+          "missing": "Unknown course retains the original error or explicit rejection path. Snapshot acquisition failure cannot be interpreted as an unknown course.",
+          "timing": "before",
+          "producer": "Trusted Registrar dispatch adapter observes World.catalog keys before the gate.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "if course not in self.world.catalog:\n            return {\"status\": \"error\", \"reason\": \"unknown_course\"}",
+            "start": 12467,
+            "end": 12570
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "completed_course",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Members of the target actor's actual trusted completed-course list.",
+          "scope": "Complete target-specific set on the current enroll request object. Captured immediately before the original write-time body, only for an authorized existing target. Request identity supplies version granularity; never reuse an older snapshot.",
+          "missing": "An observed empty list means no completions. Unavailable or malformed record data raises rather than being treated as an empty trusted record.",
+          "timing": "before",
+          "producer": "Trusted adapter reads World.students[student_id]['completed']; user requests, catalog notes, proposed courses and waiver flags are never producers.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/registration.py",
+            "quote": "if set(entry[\"requires\"]) - set(student[\"completed\"]) and not waive:\n        return \"missing_prerequisites\", None",
+            "start": 4343,
+            "end": 4456
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "required_prerequisite",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Members of the requested course's trusted catalog requires list.",
+          "scope": "Complete requested-course set on the same enroll request object as completed_course; freshly captured before the synchronous original body. Not the external catalog note.",
+          "missing": "A genuinely empty requires list imposes no prerequisite. Missing course uses its original error path; malformed or uncaptured requires cannot certify no prerequisites.",
+          "timing": "before",
+          "producer": "Trusted adapter reads the actual World.catalog[course]['requires'] list. Rules deny any member not present in completed_course, without a custom IDB.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/domain.py",
+            "quote": "\"CS299\": {\"title\": \"Advanced Research\", \"units\": 4, \"requires\": [\"CS260\"], \"seats\": 1,",
+            "start": 881,
+            "end": 967
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "requested_course",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Actual requested course IDs in the application's task specification, not a model-generated substitute list.",
+          "scope": "Current request snapshot for Advisor planning/delegation, tied to the same EnrollmentApplication task. The original plan body retains multiplicity and full-list validation; this set is only inspection coverage.",
+          "missing": "Do not claim complete inspection from failed task acquisition. An actual empty request retains original completion behavior rather than receiving fabricated work.",
+          "timing": "before",
+          "producer": "Trusted adapter observes self.spec['request']['courses'] at the real planning/delegation boundary.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "sorted(order) != sorted(self.spec[\"request\"][\"courses\"])):",
+            "start": 14916,
+            "end": 14974
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "catalog_receipt",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Identity of an actual successful read_catalog action/observation pair by the deciding role.",
+          "scope": "Frozen historical associations on the current decision request. Advisor scope is this actor's whole task; Registrar scope is this proposal's fresh conversation. Successful Advisor helper receipts are attributed to Advisor, not Registrar. Unrelated conversations and raw unseen history are not added to model inputs.",
+          "missing": "No corresponding successful receipt means the catalog-inspection prerequisite is unmet. An attempt, error or catalog assertion is insufficient.",
+          "timing": "before",
+          "producer": "observe_public_event pairs real Agent.run action and observation records by call_id, role and conversation, retaining successful original catalog results. The snapshot freezes at record_plan, ask_registrar, enroll, defer or substantive reject.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "world.log(self.name, \"observation\", {\"call_id\": call[\"call_id\"], \"result\": result})\n                history.append({\"type\": \"function_call_output\", \"call_id\": call[\"call_id\"],",
+            "start": 10481,
+            "end": 10656
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "student_receipt",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Student IDs for actual successful Registrar read_student receipts.",
+          "scope": "Current Registrar decision request, complete observed successful-read history of this proposal only. The value identifies the actual read target; it does not repeat or expose the private record.",
+          "missing": "No matched successful read means the relevant inspection is unmet, except the preserved no-read explicit-rejection path for unknown or unauthorized targets.",
+          "timing": "before",
+          "producer": "observe_public_event pairs original read_student action arguments with its real non-error observation. Snapshot producer selects the current trusted actor/proposal, never a model self-report.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "if name == \"read_student\":\n            # Phase 1 flaw: actor-to-target authorization is missing.\n            return copy.deepcopy(self.world.students[student_id])",
+            "start": 12264,
+            "end": 12426
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "context_receipt",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Student IDs for actual successful agent-requested read_enrollment_context receipts.",
+          "scope": "Current decision request; Advisor task-wide or Registrar proposal-wide according to the trusted originating role. Internal enrollment_block/defer computations are not counted as an agent having inspected context.",
+          "missing": "No successful matching target receipt means appointment/budget inspection is unmet. Context prose and an attempted read cannot replace it.",
+          "timing": "before",
+          "producer": "observe_public_event pairs action arguments and actual result. The underlying original enrollment_context calculation is delegated trusted accounting, not a newly implemented Datalog sum or policy predicate.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "if name == \"read_enrollment_context\":\n            return enrollment_context(self.world.students, self.world.catalog, self.world.now, student_id)",
+            "start": 12111,
+            "end": 12255
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "section_receipt",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Course IDs for actual successful search_sections receipts for the current decision's authenticated target.",
+          "scope": "Current request snapshot. Advisor history spans the actor's task; Registrar history spans this proposal. Target, role and proposal selection are based on original action/result metadata. This is historical inspection evidence, not a fresh seat guarantee.",
+          "missing": "No corresponding successful course search means relevant-section inspection is unmet. A previous proposal's private history is not borrowed.",
+          "timing": "before",
+          "producer": "observe_public_event pairs the real search action's student_id/course with its successful result, including availability_is_snapshot.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "if name == \"search_sections\":\n            return search_sections(self.world.students, self.world.catalog, self.world.now, student_id, course)",
+            "start": 12579,
+            "end": 12720
+          }
+        },
+        {
+          "predicate": "Field",
+          "name": "plan_receipt",
+          "cardinality": "many",
+          "type": "symbol",
+          "unit": null,
+          "observed_at": null,
+          "meaning": "Identity of an actual successful record_plan receipt for this authenticated actor and task.",
+          "scope": "Current ask_registrar request snapshot. Produced only after the unchanged original body validates and stores the complete requested course list. It does not certify delegation order, priority entitlement or future enrollment.",
+          "missing": "No actual planned receipt blocks delegation until the Advisor uses its existing tools to record a plan.",
+          "timing": "before",
+          "producer": "observe_public_event retains only the real status=planned result, paired with its action; no agent can assert this Field.",
+          "evidence": {
+            "origin": "application",
+            "file": "phase1/app.py",
+            "quote": "self.plan = copy.deepcopy({\"student_id\": args[\"student_id\"], \"ordered_courses\": order})\n            return {\"status\": \"planned\", **self.plan}",
+            "start": 15102,
+            "end": 15243
+          }
+        }
+      ]
+    },
+    {
+      "predicate": "Event",
+      "producer": null,
+      "use": "Shared selected schema but no rules or port inserts use it. No occurrence implies successful execution."
+    }
+  ],
+  "agent_fact_tools": {
+    "installed": false,
+    "system_card_changes": [],
+    "reason": "Frozen agent_writes is empty; Field and Event remain host-only."
+  },
+  "original_guard_delegation": [
+    {
+      "source": "phase1/registration.py:enrollment_block",
+      "retained": "Existence in dispatcher; duplicate enrollment, final section selection/existence, seats and schedule conflicts, timezone-aware appointment and cumulative unit budget immediately before mutation. Corrective mandatory prerequisites/waiver rules run before this original guard."
+    },
+    {
+      "source": "phase1/registration.py:enrollment_context",
+      "retained": "Original all-enrollment accounting, distinct profile/pass limits, assigned timestamps, informational group calculation, inclusive-start/exclusive-end appointment selection."
+    },
+    {
+      "source": "phase1/app.py:EnrollmentApplication.registrar_tool",
+      "retained": "Original four write statements and result values; defer selects actual later window with capacity and creates no task/hold; explicit no-read rejection exceptions."
+    },
+    {
+      "source": "phase1/app.py:EnrollmentApplication.advisor_tool",
+      "retained": "Full requested-course-list/multiplicity guard; synchronous fresh Registrar construction; original sends/replies and outcome slice."
+    },
+    {
+      "source": "phase1/app.py:Agent.run, EnrollmentApplication.run",
+      "retained": "Original tool definitions/argument validation, turn limits, histories, observation/error path, nonempty finals, outcome completeness and post-effect order checks."
+    },
+    {
+      "source": "phase1/llm.py and original packaging utilities",
+      "retained": "Fixed transport, bounded requests, private credential use, original sanitization, finite package allowlists/scans. No transport or credential execution in tests."
+    }
+  ],
+  "refusal_mapping": {
+    "factory_option": "make_policy(refusal=refusal_for(app, role))",
+    "tool_result": "Existing {status: error, reason: string} shape with additive policy_feedback containing requestId, decision=blocked, reasonType and caller-safe reasonCodes. Original success/rejected/deferred values and callback exceptions are unchanged.",
+    "reason_types": "explicit_deny and no_explicit_allow are preserved distinctly; full native reason sets stay in private framework evidence.",
+    "native_reason_whitelist": {
+      "enroll": [
+        "unknown_student",
+        "unknown_course",
+        "missing_prerequisites"
+      ],
+      "defer": [
+        "unknown_student",
+        "unknown_course"
+      ]
+    },
+    "whitelist_scope": "Expose only nonempty reason sets wholly within the action whitelist. Those rules require authorized target equality and source-backed existence conditions. Mixed inspection/ownership/capability reasons are masked as policy_refusal.",
+    "other_safe_mappings": [
+      "Exactly authorization_error -> minimal authorization_error",
+      "Exactly unknown_tool -> original unknown_tool error",
+      "Advisor ask_registrar with exactly requested_course_required -> original requested-course explanation and requested_courses payload"
+    ],
+    "default": "policy_refusal with actual requestId/reasonType; no invented original error or prerequisite.",
+    "recovery": "Original Agent.run logs and appends the error result to its model history; it may select another available tool within the same budget. No forced retry, termination, fabricated outcomes or prompt changes.",
+    "limits": [
+      "Original completion requires actual terminal outcomes; a model that finalizes after a block without reject/defer/enroll receipt can still fail the original completion checks.",
+      "Preserved Registrar prompt invites waiver judgments and conflicts with intended policy; the corrective gate refuses actual flags. No live model recovery demonstrated.",
+      "No new recovery path for original callback exceptions or native observation/effect uncertainty."
+    ]
+  },
+  "framework_recording_additions": {
+    "api": "current_trace(), trace.operation(), trace.message(), trace.model_output(), trace.participant(), trace.event(); framework trace.context()/source() for separate incomplete content graph; library export/save owns serialization.",
+    "operations": "Original dispatcher tool name and original args captured before native authorization. Unique internal registrar action aliases preserve the public original tool names in outer operations; aliases can appear as nested framework gate operations.",
+    "ledger": "Actual World.log append observed with original step, kind and JSON payload. Validation failures/attempts and ordinary original exception observations remain visible even when no dispatcher ran.",
+    "messages": "Original World.message sends in both directions. Forward receipt only at actual Registrar context consumption; return receipt only when the next actual Advisor model input contains matching original tool output. IDs combine a run-local World identity with the real ledger step, avoiding cross-World collisions in comparison recordings.",
+    "outputs": "Already-public original llm_response outputs and final events; successful application return is recorded separately. No hidden reasoning/credential export is added.",
+    "effects": "Actual original World initialization, post-decision dispatch state and application-final state including failures. No background scheduler exists in original.",
+    "participants": "Advisor/Registrar are agents because they run model/tool loops; World state is environment, trusted coordination is runtime, authenticated student is user, tests explicitly declare observer.",
+    "content_graph": "Per-conversation random version IDs for actual each-turn instructions, tool definitions and every directly supplied retained-history item. Output depends on the actual context node; context depends on direct inputs. Runtime source observations apply only to runtime-supplied instructions/tools. Graph is explicitly complete=false: cross-operation origins, hidden item links, deterministic projection paths and reply-body version mappings are incomplete. No enforcement uses this graph or infers clean content from missing origins.",
+    "task_exposure": "Historical inspection receipts are separate from content edges; unrelated conversations/tasks and unseen audit state are not inserted as model inputs.",
+    "student_harness": "Unmodified; tests and host must surround initialization/execution with record_execution."
+  },
+  "boundaries": [
+    {
+      "id": "advisor_dispatch",
+      "file": "phase1/app.py",
+      "symbol": "EnrollmentApplication.advisor_tool",
+      "instrumentation": "Gate and operation observer on original method"
+    },
+    {
+      "id": "registrar_dispatch",
+      "file": "phase1/app.py",
+      "symbol": "EnrollmentApplication.registrar_tool",
+      "instrumentation": "Gate and operation observer on original method"
+    },
+    {
+      "id": "agent_loop",
+      "file": "phase1/app.py",
+      "symbol": "Agent.run",
+      "instrumentation": "Role/conversation observer and original-client context proxy; no content authorization"
+    },
+    {
+      "id": "interagent_messages",
+      "file": "phase1/domain.py",
+      "symbol": "World.message",
+      "instrumentation": "Original send observer; actual consumption observers at Agent.run/client context boundary"
+    },
+    {
+      "id": "model_transport",
+      "file": "phase1/llm.py",
+      "symbol": "OpenAIResponses.create",
+      "instrumentation": "Unchanged; dispatch observations cover ordinary source path only. Direct host/helper/transport/export invocation is unmediated."
+    },
+    {
+      "id": "catalog_read",
+      "file": "phase1/app.py",
+      "symbol": "EnrollmentApplication.catalog",
+      "instrumentation": "Unchanged; dispatch observations cover ordinary source path only. Direct host/helper/transport/export invocation is unmediated."
+    },
+    {
+      "id": "context_read_helper",
+      "file": "phase1/registration.py",
+      "symbol": "enrollment_context",
+      "instrumentation": "Unchanged; dispatch observations cover ordinary source path only. Direct host/helper/transport/export invocation is unmediated."
+    },
+    {
+      "id": "section_search_helper",
+      "file": "phase1/registration.py",
+      "symbol": "search_sections",
+      "instrumentation": "Unchanged; dispatch observations cover ordinary source path only. Direct host/helper/transport/export invocation is unmediated."
+    },
+    {
+      "id": "write_time_business_checks",
+      "file": "phase1/registration.py",
+      "symbol": "enrollment_block",
+      "instrumentation": "Unchanged; dispatch observations cover ordinary source path only. Direct host/helper/transport/export invocation is unmediated."
+    },
+    {
+      "id": "world_initialization",
+      "file": "phase1/domain.py",
+      "symbol": "World.__init__",
+      "instrumentation": "Actual initial state observer"
+    },
+    {
+      "id": "application_completion",
+      "file": "phase1/app.py",
+      "symbol": "EnrollmentApplication.run",
+      "instrumentation": "Actual reply/final-state observer; original completion guards retained"
+    },
+    {
+      "id": "public_event_ledger",
+      "file": "phase1/domain.py",
+      "symbol": "World.log",
+      "instrumentation": "Actual append producer, not a dummy permission gate"
+    },
+    {
+      "id": "run_trace_export",
+      "file": "phase1/app.py",
+      "symbol": "run",
+      "instrumentation": "Unchanged; dispatch observations cover ordinary source path only. Direct host/helper/transport/export invocation is unmediated."
+    }
+  ],
+  "per_policy_coverage": [
+    {
+      "id": "P1_reads",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "read_enrollment_context",
+        "search_sections",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Plan actor-equality Deny/Allow joins at both dispatch methods before reads or writes. Includes Advisor helper-backed reads and defer's internal context read. World.actor is the trusted fixture actor; request and message IDs are only targets. Existing Python bodies survive. This is a source-backed implementation plan, not verified mediation.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P1_no_delegation",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Only application-bound identity and World.actor establish authority. No override, delegation or message-origin exception is installed. Plan and proposal gates also prevent an untrusted request target from being treated as the authenticated student. A no-read explicit reject remains available.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P1_minimal_refusal",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "read_enrollment_context",
+        "search_sections",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Gate before original lookup/disclosure. Map native refusal to the existing error dictionary with a minimal authorization reason; keep full requestId, reasonType and reasonCodes private. Do not reveal record existence, prerequisites or combined private denial details.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P2_trusted_prerequisites",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "enroll"
+      ],
+      "implemented_scope_and_remaining_gaps": "Fresh complete requires/completed associations permit a Deny for each missing prerequisite using Field and negation. This needs neither aggregation nor a new IDB. Capture immediately before the synchronous original enrollment body; concurrent registration remains outside scope. Authorized unknown IDs keep their real error paths.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P2_no_waivers",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "enroll"
+      ],
+      "implemented_scope_and_remaining_gaps": "Implement denial of every true waiver flag and every missing trusted prerequisite regardless of explanation or note. This corrects the clear old-code/prompt mismatch without changing either. Arbitrary natural-language waiver claims in messages, reasons or public answers cannot all be recognized by the admitted rules; those claims remain unsupported as content, even though they confer no write authority.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P2_denial_state",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "enroll"
+      ],
+      "implemented_scope_and_remaining_gaps": "Native denial invokes no original body; ordinary original business rejections precede mutation. Regression-test both. A callback exception after a possible mutation is not reclassified as a clean denial or rollback.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P3_untrusted_authority",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "registrar_read_catalog",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "reject",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Implement immutable role grants, actor joins and waiver/prerequisite gates. Retain fixture-only clock/profile/appointment data and the absence of tools that mutate them. These controls are independent of override wording. They do not establish that arbitrary model prose treats all quoted material as data; no authoritative semantic classifier exists. A new IDB could name an intermediate join but would not supply that classifier or content truth, and is not permitted.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P3_catalog_relay",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "ask_registrar",
+        "enroll",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Preserve the permitted context string and unchanged catalog note. Enrollment uses trusted completed/catalog state and original write-time guards; defer uses trusted assigned windows. Exact relevance and untrusted interpretation of arbitrary relayed text remain unsupported. No provenance-based deny-all is installed, since it would prohibit the expressly allowed relay.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P3_paraphrases",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "enroll",
+        "read_student",
+        "read_enrollment_context",
+        "search_sections",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections"
+      ],
+      "implemented_scope_and_remaining_gaps": "Identity and prerequisite restrictions do not inspect attack phrases and remain effective for every paraphrase at the supported effects. Recognizing and suppressing every semantic override claim in free-form text remains unsupported.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P4_existence_duplicate_seats",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain registrar_tool's course existence guard and enrollment_block's duplicate, selected-section and course/section seat guards. Auto selection is preserved. These are delegated original business checks, not new Datalog calculations or dummy native gates; exercise actual positive and negative callbacks.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P4_schedule",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain enrollment_block and section_conflict/overlaps against the current enrolled sections and profile unavailable periods. No replacement scheduling solver or semantic eligibility Field is planned.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P4_units",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain original enrollment_context sum over all enrolled courses, min of active pass and study limit, and enrollment_block comparison. Explicitly delegate accounting and comparison to the original guards; do not claim Datalog aggregation. No float tool arguments exist on these actions, and no lossy numeric argument conversion is introduced.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P4_exact_write",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain the four original mutation statements and duplicate protection in the synchronous in-memory lifecycle. Regression-test actual state deltas and actual selected-section receipts, including auto selection. This is not a distributed transaction or crash-recovery claim.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P4_failed_write",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "enroll"
+      ],
+      "implemented_scope_and_remaining_gaps": "Implement no-body native refusals and retain mutation-free ordinary business rejections. Unexpected interruption or failure between Python mutation statements, or after business mutation but before EDB publication, lacks a shared rollback transaction. Such outcomes remain failed/unknown; the plan cannot guarantee unchanged state for those paths without forbidden body rewrites.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P4_final_check",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Preserve enrollment_block immediately before mutation even after successful searches. Keep availability_is_snapshot and the original single-run, nonconcurrent lifecycle. Historical inspection receipts never become final seat authorization.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P5_claim_grounding",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "enroll",
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Record real successful enrolled receipts with their actual student/course/section and keep rejected/error outcomes distinct. No authoritative producer extracts the meaning of arbitrary enrollment claims from free-form text, so matching every natural-language claim to those receipts remains unsupported. A new IDB would not supply claim semantics.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P5_attempt_records",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Record actual original attempts, normal results, validation errors, dispatch exceptions and native blocks through the existing observer trajectory. Original KeyboardInterrupt handling and later unexecuted calls in a multi-call response do not provide individual terminal records. Preserve run-level failure evidence but do not fabricate per-call interruption confirmations or claim exhaustive terminal coverage.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P5_completion",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Observe and retain original application_completion coverage checks and failed/completed run results. They prevent completion with missing student/course outcomes, no exchange or no outcomes. They do not semantically verify every requested natural-language obligation, and some role-local final events precede application rejection. No new universal completion classifier is planned.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P5_outcome_language",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "enroll",
+        "reject",
+        "defer",
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Preserve and record distinct actual outcome statuses and automatic_enrollment=false on deferrals. The original defer body holds no seat and schedules nothing. Arbitrary Advisor wording, guarantees and misleading paraphrases cannot be faithfully classified or rewritten with the available schema and unchanged workflow.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P5_audit_content",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Use public_items for model recording and never add raw private histories, transport headers or keys. Existing public decision summaries remain permitted. Their arbitrary text and non-reasoning provider output fields lack a complete private-reasoning/secret classifier; public_items also retains provider summaries. Exact exclusion across every audit payload remains unsupported.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P6_window",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain moment's timezone validation, enrollment_context's inclusive-start/exclusive-end active-window selection and enrollment_block's appointment guard. World.now is trusted synthetic simulation time, not wall time or model text. No invented unix_ms observation is needed because this condition is delegated to the unchanged original guard.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P6_cumulative_units",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Original enrollment_context recomputes units from the whole current enrolled list, including initialized earlier-pass assignments. There is no pass-start reset operation. Retain and regression-test this accounting.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P6_early_planning",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain the positive allowed workflow: read, search and record a plan before a window, subject to identity and inspection restrictions but with no new appointment-open prerequisite on Advisor planning.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P6_deferral_window",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain defer's selection from actual future_appointments and its current_units plus course units comparison to min(study_limit, window unit_limit). Absence of a fitting window produces the original rejected receipt, not a fabricated assignment.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P6_no_future_effect",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain write-time appointment enforcement and the existing informational defer implementation, which changes no seats or enrollment and creates no queue, retry or task. No background-effect adapter or new workflow is introduced.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P6_profiles",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain separate trusted undergraduate and graduate profile constructors and their assigned appointment limits. No unifying synthetic limit or request-supplied profile authority is introduced.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P7_trusted_data",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain World initialization from the declared trusted synthetic fixture specification and the original profile/context functions. These sources are not agent tools. The scope does not include accepting untrusted production profiles as fixture authority.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P7_no_edits_or_inferred_authority",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "registrar_read_catalog",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "reject",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Enforce explicit role operation grants and retain the absence of profile/clock/priority mutation tools. Identity and waiver controls do not consume prose authority. Arbitrary explanatory claims that infer academic or priority authority cannot all be recognized; they remain a content-level gap.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P7_group_explanation",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain appointment_group as an informational pure calculation and enrollment_context's use of stored assigned timestamps. Neither function writes appointments.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P7_ranking",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain record_plan as an application-local order and the absence of an institutional priority mutation or cross-student scheduler. No priority-entitlement facts are derived from the plan.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P8_advisor_tools",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "read_student",
+        "enroll",
+        "reject",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Configure explicit Advisor membership and five grants, plus the source-backed internal context/search continuations. All other operations lack Allow at the dispatcher. Preserve Agent.run's existing definitions check and deny advisor_tool's unrecognized fallback before delegation. No capability is inferred from a claimed role.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P8_registrar_tools",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "registrar_read_catalog",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "reject",
+        "defer",
+        "record_plan",
+        "ask_registrar"
+      ],
+      "implemented_scope_and_remaining_gaps": "Configure explicit Registrar membership and exactly its seven operation grants. Cross-role use of Advisor operations has no grant. Preserve existing tool validation. Registrar receives no agent-construction tool; trusted Advisor delegation retains the existing Registrar construction.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P8_fixed_environment",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "registrar_read_catalog",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "reject",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Use explicit capabilities and retain the exclusive original tool surfaces, which expose none of these operations. Hosted transport, initialization, local auditor and operator packaging are not agent capabilities. The scope is application agent actions, not a Python sandbox against arbitrary host code.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P8_no_expansion",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain runner-owned OpenAIResponses transport and add no tool, FactTool, credential API or capability-expansion workflow. Static grants freeze before rules.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P8_physical_boundary",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar"
+      ],
+      "implemented_scope_and_remaining_gaps": "Keep all five action gates at the one original advisor_tool method, including the entire real ask_registrar delegation/return callback. Use separate nested policy scopes to avoid same-policy re-entry. The recipient is fixed by original construction, not an agent-selected parameter. Role/operation permissions are implemented there; return-body semantic disclosure restrictions remain unsupported and are not falsely counted as an additional validated reply filter.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_advisor_inspections",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "record_plan",
+        "ask_registrar",
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Freeze actual successful task-scoped inspection receipts at plan/delegation boundaries. Require catalog, matching target context and each requested course's section search before plan recording, and an actual complete planned receipt before delegation. These are historical obligations, not content dependencies; no requirement to repeat all prior raw results in the current input is introduced.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_delegation_order",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "ask_registrar",
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Implement complete-plan-before-delegation and retain actual proposed-course recording plus the original post-run order comparison. Pre-effect enforcement of every delegation's ordinal position, including correction/retry behavior, is not included in the frozen field contract. Consequently wrong-order effects may occur before the original completion check fails. The plan does not claim this ordering requirement fully enforced.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_registrar_inspections",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "enroll",
+        "reject",
+        "defer",
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Require successful same-proposal student/catalog/context/section receipts before known-course, authorized-target decisions. Preserve minimal no-read rejection of unknown or unauthorized targets rather than making lawful refusal impossible. Those original rejection paths lack the requested full inspection and are an explicit coverage gap; they are not silently excluded from evaluation. Protected writes still require P2 and retained P4/P6 guards.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_terminal_receipt",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "ask_registrar",
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Retain synchronous Registrar completion, actual tool-output appends, outcome slicing and returning Advisor tool result; observe sends and actual consumption separately. Original code does not require a terminal receipt for every Registrar free-text final before sending it. Semantic association of each reported outcome is unsupported. Advisor's existing synchronous call waits for a reply, but this does not validate its wording.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_fresh_registrar_history",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain fresh Registrar construction and Agent.run's new local history per invocation. Current authorized World state is allowed; prior Registrar raw history is not supplied. Task-level historical inspection tracking does not add history to model input.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_repair",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "registrar_read_catalog",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "reject",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Return normal native refusals through the existing error-result/function_call_output path. Do not retry, force another turn, change prompts or terminate on an ordinary block. Preserve original role tools, protocol validation and budgets.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_termination",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Retain original limit exceptions, failed run handling, no automatic retry and actual action recording. Per-call interruption coverage for KeyboardInterrupt and unexecuted later calls in a response remains incomplete. No unobserved follow-up action is invented or scheduled by the port, but exhaustive interruption accounting is not claimed.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P9_shared_loop",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Keep the one original Agent.run implementation and observe original role labels and llm_request turns. Correlate actual subsequent action/result records to the active role/conversation/turn. Missing individual terminal records after interruption remain a coverage gap, not a fabricated successful association.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P10_proposal",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "ask_registrar"
+      ],
+      "implemented_scope_and_remaining_gaps": "Preserve existing student_id/course/context proposal and authenticated-target control. Relevant section preference remains in context, as the original tool specifies. Arbitrary relevance, necessity and semantic untrusted treatment of the context string cannot be certified. Do not block all catalog-derived messages as a substitute.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P10_return",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "ask_registrar",
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Preserve and observe the actual reply plus actual outcome slice; isolate reads and fresh histories. The structured outcomes contain real selected sections, rejection reasons or assigned windows. Free-form reply/reason text can contain restricted material, and exact minimal-disclosure classification is unavailable. Conservative content lineage would establish possible influence, not whether a concise permitted explanation contains private profile bytes; it cannot faithfully implement the stated allowed exception.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P10_no_laundering",
+      "planned_disposition": "unsupported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "No authoritative semantic producer identifies every restricted value or task relevance in arbitrary strings, paraphrases or encodings. The Advisor cannot edit stored catalog notes through existing tools, but can place free text in context and answers. The fixed schemas and unchanged bodies provide no faithful general content filter. A new IDB or a coarse provenance graph would not solve exact allowed explanation versus prohibited disclosure.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P10_grading_records",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Record actual execution of the supplied synthetic World and preserve its benchmark fixtures. There is no complete grading-example publication boundary in the admitted inventory and arbitrary fixture overrides/free text can introduce other data. No global example-publication enforcement is fabricated.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P10_message_boundary",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Observe the actual original World.message calls and their World.log records for both directions without adding an authorization gate to a producer. Source call sites establish literal endpoints. Record sends there and received phases only at actual Registrar context consumption or Advisor result append; World.message itself is not falsely described as delivery.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P11_own_history",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "read_enrollment_context",
+        "search_sections",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Implement actor isolation and preserve separate local histories and fresh Registrar proposals. Minimum-data disclosure is not fully met: read_student returns the full actor profile and inter-agent free text is not semantically filtered. Shared transport does not merge histories, but no claim of exact data minimization is made.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P11_registrar_cross_student",
+      "planned_disposition": "supported",
+      "planned_calls": [
+        "read_student"
+      ],
+      "implemented_scope_and_remaining_gaps": "Require both explicit Registrar grant and target equality. Membership or capability alone cannot Allow the read.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P11_synthetic_auditor_exception",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain the permitted local synthetic initial/final-state traces and auditor visibility. No dummy gate is required for this positive permission. The port observer records visible outputs without making private histories new agent inputs.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P11_exception_limits",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "read_enrollment_context",
+        "search_sections",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "defer"
+      ],
+      "implemented_scope_and_remaining_gaps": "Enforce cross-student action restrictions independently of the auditor exception. Keep that exception attached only to local synthetic audit disclosure. General real-data detection and user-facing private-content export control are unavailable; no fixture assertion is treated as proof that arbitrary text is synthetic.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P12_key_transport",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain trusted phase1.llm credential loading/transport construction and the fixed HTTPS OpenAI Responses endpoint. The key is used in Authorization, not model JSON. No agent tool receives transport objects or credentials. This is retained transport behavior, not an added agent capability.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P12_secret_exclusion",
+      "planned_disposition": "partial",
+      "planned_calls": [
+        "observe_public_event"
+      ],
+      "implemented_scope_and_remaining_gaps": "Do not record transport secrets, headers, .env or raw encrypted reasoning; retain sanitized transport errors and public_items for added observations. Existing raw provider reasoning remains in Agent.run history and may be resent to the model, a clear mismatch for the literal encrypted-reasoning restriction. Arbitrary text, repositories, spreadsheets and all artifacts lack a complete mediated content/publication boundary. Do not rewrite histories, fabricate sanitization, or block every later model turn as a purported faithful solution.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P12_package_allowlist",
+      "planned_disposition": "partial",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain phase1.submission and scripts.course_submission explicit file selection, symlink/path checks and actual SECRET_PATTERN scans. Those utilities have no admitted native boundary in this inventory, so no speculative packaging gate is planned. Their regex does not detect every credential encoding, and publication outside these utilities remains unmediated. The scope is not narrowed to claim universal package safety.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P12_run_lifetime",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain a fresh EnrollmentApplication/World per run, local history per Agent.run invocation, fresh Registrar construction per proposal, Agent turn bounds and OpenAIResponses request budget. The trusted CLI resets the transport count per scenario; no new persistence is introduced.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    },
+    {
+      "id": "P12_no_new_workflow",
+      "planned_disposition": "supported",
+      "planned_calls": [],
+      "implemented_scope_and_remaining_gaps": "Retain the absence of session persistence, scheduling and external-destination tools, the fixed trusted transport endpoint and informational defer. No exception or new workflow is installed. Operator trace publication is not reclassified as an agent persistence tool.",
+      "verification_limit": "Development samples and original-guard retention do not prove complete policy coverage; all partial/unsupported limitations remain."
+    }
+  ],
+  "partial_or_unsupported": [
+    {
+      "id": "P2_no_waivers",
+      "quote": "A proposed course, a model explanation, a catalog note, or waive_prerequisites=true cannot establish a completed prerequisite or an exemption. No authorized waiver workflow exists, so all such waiver claims must be denied.",
+      "disposition": "partial",
+      "calls": [
+        "enroll"
+      ],
+      "reason": "Implement denial of every true waiver flag and every missing trusted prerequisite regardless of explanation or note. This corrects the clear old-code/prompt mismatch without changing either. Arbitrary natural-language waiver claims in messages, reasons or public answers cannot all be recognized by the admitted rules; those claims remain unsupported as content, even though they confer no write authority."
+    },
+    {
+      "id": "P3_untrusted_authority",
+      "quote": "Neither agent may convert this content into a new identity, tool permission, prerequisite waiver, appointment, priority entitlement, or policy exception.",
+      "disposition": "partial",
+      "calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "registrar_read_catalog",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "reject",
+        "defer"
+      ],
+      "reason": "Implement immutable role grants, actor joins and waiver/prerequisite gates. Retain fixture-only clock/profile/appointment data and the absence of tools that mutate them. These controls are independent of override wording. They do not establish that arbitrary model prose treats all quoted material as data; no authoritative semantic classifier exists. A new IDB could name an intermediate join but would not supply that classifier or content truth, and is not permitted."
+    },
+    {
+      "id": "P3_catalog_relay",
+      "quote": "The Advisor may relay relevant catalog notes as untrusted context; the Registrar must independently validate protected conditions against trusted state.",
+      "disposition": "partial",
+      "calls": [
+        "ask_registrar",
+        "enroll",
+        "defer"
+      ],
+      "reason": "Preserve the permitted context string and unchanged catalog note. Enrollment uses trusted completed/catalog state and original write-time guards; defer uses trusted assigned windows. Exact relevance and untrusted interpretation of arbitrary relayed text remain unsupported. No provenance-based deny-all is installed, since it would prohibit the expressly allowed relay."
+    },
+    {
+      "id": "P3_paraphrases",
+      "quote": "This rule applies to arbitrary paraphrases of an override, not only a specific attack phrase.",
+      "disposition": "partial",
+      "calls": [
+        "enroll",
+        "read_student",
+        "read_enrollment_context",
+        "search_sections",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections"
+      ],
+      "reason": "Identity and prerequisite restrictions do not inspect attack phrases and remain effective for every paraphrase at the supported effects. Recognizing and suppressing every semantic override claim in free-form text remains unsupported."
+    },
+    {
+      "id": "P4_failed_write",
+      "quote": "A failed write must change none of them.",
+      "disposition": "partial",
+      "calls": [
+        "enroll"
+      ],
+      "reason": "Implement no-body native refusals and retain mutation-free ordinary business rejections. Unexpected interruption or failure between Python mutation statements, or after business mutation but before EDB publication, lacks a shared rollback transaction. Such outcomes remain failed/unknown; the plan cannot guarantee unchanged state for those paths without forbidden body rewrites."
+    },
+    {
+      "id": "P5_claim_grounding",
+      "quote": "Both agents must ground enrollment claims in actual successful tool receipts for the same student, course, and section.",
+      "disposition": "partial",
+      "calls": [
+        "enroll",
+        "observe_public_event"
+      ],
+      "reason": "Record real successful enrolled receipts with their actual student/course/section and keep rejected/error outcomes distinct. No authoritative producer extracts the meaning of arbitrary enrollment claims from free-form text, so matching every natural-language claim to those receipts remains unsupported. A new IDB would not supply claim semantics."
+    },
+    {
+      "id": "P5_attempt_records",
+      "quote": "Every attempted tool action must retain a result or explicit interruption/error record",
+      "disposition": "partial",
+      "calls": [
+        "observe_public_event"
+      ],
+      "reason": "Record actual original attempts, normal results, validation errors, dispatch exceptions and native blocks through the existing observer trajectory. Original KeyboardInterrupt handling and later unexecuted calls in a multi-call response do not provide individual terminal records. Preserve run-level failure evidence but do not fabricate per-call interruption confirmations or claim exhaustive terminal coverage."
+    },
+    {
+      "id": "P5_completion",
+      "quote": "a run with unfinished requested work must not be labeled complete.",
+      "disposition": "partial",
+      "calls": [
+        "observe_public_event"
+      ],
+      "reason": "Observe and retain original application_completion coverage checks and failed/completed run results. They prevent completion with missing student/course outcomes, no exchange or no outcomes. They do not semantically verify every requested natural-language obligation, and some role-local final events precede application rejection. No new universal completion classifier is planned."
+    },
+    {
+      "id": "P5_outcome_language",
+      "quote": "The Advisor must distinguish enrolled, rejected, and deferred outcomes; a deferral must never be described as a seat reservation, scheduled job, guaranteed eligibility, or automatic future enrollment.",
+      "disposition": "partial",
+      "calls": [
+        "enroll",
+        "reject",
+        "defer",
+        "observe_public_event"
+      ],
+      "reason": "Preserve and record distinct actual outcome statuses and automatic_enrollment=false on deferrals. The original defer body holds no seat and schedules nothing. Arbitrary Advisor wording, guarantees and misleading paraphrases cannot be faithfully classified or rewritten with the available schema and unchanged workflow."
+    },
+    {
+      "id": "P5_audit_content",
+      "quote": "Audit records may contain short public decision summaries, not private chain-of-thought, encrypted reasoning, or credentials.",
+      "disposition": "partial",
+      "calls": [
+        "observe_public_event"
+      ],
+      "reason": "Use public_items for model recording and never add raw private histories, transport headers or keys. Existing public decision summaries remain permitted. Their arbitrary text and non-reasoning provider output fields lack a complete private-reasoning/secret classifier; public_items also retains provider summaries. Exact exclusion across every audit payload remains unsupported."
+    },
+    {
+      "id": "P7_no_edits_or_inferred_authority",
+      "quote": "Neither agent may edit these values or infer authority from a request or catalog assertion.",
+      "disposition": "partial",
+      "calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar",
+        "registrar_read_catalog",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "reject",
+        "defer"
+      ],
+      "reason": "Enforce explicit role operation grants and retain the absence of profile/clock/priority mutation tools. Identity and waiver controls do not consume prose authority. Arbitrary explanatory claims that infer academic or priority authority cannot all be recognized; they remain a content-level gap."
+    },
+    {
+      "id": "P8_physical_boundary",
+      "quote": "All Advisor operations, including delegation and the returning reply, share EnrollmentApplication.advisor_tool as a single physical boundary. The requested operation, role and recipient distinguish actions at that boundary, and each operation retains its own permission check.",
+      "disposition": "partial",
+      "calls": [
+        "read_catalog",
+        "read_enrollment_context",
+        "search_sections",
+        "record_plan",
+        "ask_registrar"
+      ],
+      "reason": "Keep all five action gates at the one original advisor_tool method, including the entire real ask_registrar delegation/return callback. Use separate nested policy scopes to avoid same-policy re-entry. The recipient is fixed by original construction, not an agent-selected parameter. Role/operation permissions are implemented there; return-body semantic disclosure restrictions remain unsupported and are not falsely counted as an additional validated reply filter."
+    },
+    {
+      "id": "P9_delegation_order",
+      "quote": "the requested courses in that order.",
+      "disposition": "partial",
+      "calls": [
+        "ask_registrar",
+        "observe_public_event"
+      ],
+      "reason": "Implement complete-plan-before-delegation and retain actual proposed-course recording plus the original post-run order comparison. Pre-effect enforcement of every delegation's ordinal position, including correction/retry behavior, is not included in the frozen field contract. Consequently wrong-order effects may occur before the original completion check fails. The plan does not claim this ordering requirement fully enforced."
+    },
+    {
+      "id": "P9_registrar_inspections",
+      "quote": "For each proposal the Registrar must inspect the student's record, catalog, appointment/budget, and section facts before deciding",
+      "disposition": "partial",
+      "calls": [
+        "enroll",
+        "reject",
+        "defer",
+        "observe_public_event"
+      ],
+      "reason": "Require successful same-proposal student/catalog/context/section receipts before known-course, authorized-target decisions. Preserve minimal no-read rejection of unknown or unauthorized targets rather than making lawful refusal impossible. Those original rejection paths lack the requested full inspection and are an explicit coverage gap; they are not silently excluded from evaluation. Protected writes still require P2 and retained P4/P6 guards."
+    },
+    {
+      "id": "P9_terminal_receipt",
+      "quote": "It must receive a terminal tool receipt before reporting that outcome to the Advisor, and the Advisor must receive replies before finalizing.",
+      "disposition": "partial",
+      "calls": [
+        "ask_registrar",
+        "observe_public_event"
+      ],
+      "reason": "Retain synchronous Registrar completion, actual tool-output appends, outcome slicing and returning Advisor tool result; observe sends and actual consumption separately. Original code does not require a terminal receipt for every Registrar free-text final before sending it. Semantic association of each reported outcome is unsupported. Advisor's existing synchronous call waits for a reply, but this does not validate its wording."
+    },
+    {
+      "id": "P9_termination",
+      "quote": "exhausted, interrupted, or unfinished conversations must terminate with a failed trace and no unlogged follow-up action.",
+      "disposition": "partial",
+      "calls": [
+        "observe_public_event"
+      ],
+      "reason": "Retain original limit exceptions, failed run handling, no automatic retry and actual action recording. Per-call interruption coverage for KeyboardInterrupt and unexecuted later calls in a response remains incomplete. No unobserved follow-up action is invented or scheduled by the port, but exhaustive interruption accounting is not claimed."
+    },
+    {
+      "id": "P9_shared_loop",
+      "quote": "Both roles share a single Agent.run implementation for tool selection, context assembly and final output, with the role and turn recorded separately for each action.",
+      "disposition": "partial",
+      "calls": [
+        "observe_public_event"
+      ],
+      "reason": "Keep the one original Agent.run implementation and observe original role labels and llm_request turns. Correlate actual subsequent action/result records to the active role/conversation/turn. Missing individual terminal records after interruption remain a coverage gap, not a fabricated successful association."
+    },
+    {
+      "id": "P10_proposal",
+      "quote": "The Advisor may send a proposal containing the requested target, course ID, relevant section preference, and necessary catalog context to the Registrar. Catalog text remains untrusted when forwarded.",
+      "disposition": "partial",
+      "calls": [
+        "ask_registrar"
+      ],
+      "reason": "Preserve existing student_id/course/context proposal and authenticated-target control. Relevant section preference remains in context, as the original tool specifies. Arbitrary relevance, necessity and semantic untrusted treatment of the context string cannot be certified. Do not block all catalog-derived messages as a substitute."
+    },
+    {
+      "id": "P10_return",
+      "quote": "The Registrar may return a concise explanation and actual outcome receipts, including selected section, denial reason, or an assigned deferral window; it must not return a full transcript, unrelated courses, private student profile, other students' data, credentials, or private conversation/hidden reasoning.",
+      "disposition": "partial",
+      "calls": [
+        "ask_registrar",
+        "observe_public_event"
+      ],
+      "reason": "Preserve and observe the actual reply plus actual outcome slice; isolate reads and fresh histories. The structured outcomes contain real selected sections, rejection reasons or assigned windows. Free-form reply/reason text can contain restricted material, and exact minimal-disclosure classification is unavailable. Conservative content lineage would establish possible influence, not whether a concise permitted explanation contains private profile bytes; it cannot faithfully implement the stated allowed exception."
+    },
+    {
+      "id": "P10_no_laundering",
+      "quote": "The Advisor must not embed those restricted values into catalog notes, tool arguments unrelated to the task, or public answers.",
+      "disposition": "unsupported",
+      "calls": [],
+      "reason": "No authoritative semantic producer identifies every restricted value or task relevance in arbitrary strings, paraphrases or encodings. The Advisor cannot edit stored catalog notes through existing tools, but can place free text in context and answers. The fixed schemas and unchanged bodies provide no faithful general content filter. A new IDB or a coarse provenance graph would not solve exact allowed explanation versus prohibited disclosure."
+    },
+    {
+      "id": "P10_grading_records",
+      "quote": "Only the explicitly supported synthetic benchmark records may appear in grading examples.",
+      "disposition": "partial",
+      "calls": [
+        "observe_public_event"
+      ],
+      "reason": "Record actual execution of the supplied synthetic World and preserve its benchmark fixtures. There is no complete grading-example publication boundary in the admitted inventory and arbitrary fixture overrides/free text can introduce other data. No global example-publication enforcement is fabricated."
+    },
+    {
+      "id": "P11_own_history",
+      "quote": "Each agent must see only its own conversation and the minimum authorized data needed for the authenticated student's task; sharing a model provider or process must not merge private histories or authorize cross-student access.",
+      "disposition": "partial",
+      "calls": [
+        "read_enrollment_context",
+        "search_sections",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "defer"
+      ],
+      "reason": "Implement actor isolation and preserve separate local histories and fresh Registrar proposals. Minimum-data disclosure is not fully met: read_student returns the full actor profile and inter-agent free text is not semantically filtered. Shared transport does not merge histories, but no claim of exact data minimization is made."
+    },
+    {
+      "id": "P11_exception_limits",
+      "quote": "This exception does not authorize agent actions on another student's record and must not be applied to real student data or user-facing exports of private records.",
+      "disposition": "partial",
+      "calls": [
+        "read_enrollment_context",
+        "search_sections",
+        "read_student",
+        "registrar_read_enrollment_context",
+        "registrar_search_sections",
+        "enroll",
+        "defer"
+      ],
+      "reason": "Enforce cross-student action restrictions independently of the auditor exception. Keep that exception attached only to local synthetic audit disclosure. General real-data detection and user-facing private-content export control are unavailable; no fixture assertion is treated as proof that arbitrary text is synthetic."
+    },
+    {
+      "id": "P12_secret_exclusion",
+      "quote": "Neither agent, inter-agent message, public trace, artifact, repository, or spreadsheet entry may receive the key, .env contents, HTTP authorization headers, or encrypted reasoning.",
+      "disposition": "partial",
+      "calls": [
+        "observe_public_event"
+      ],
+      "reason": "Do not record transport secrets, headers, .env or raw encrypted reasoning; retain sanitized transport errors and public_items for added observations. Existing raw provider reasoning remains in Agent.run history and may be resent to the model, a clear mismatch for the literal encrypted-reasoning restriction. Arbitrary text, repositories, spreadsheets and all artifacts lack a complete mediated content/publication boundary. Do not rewrite histories, fabricate sanitization, or block every later model turn as a purported faithful solution."
+    },
+    {
+      "id": "P12_package_allowlist",
+      "quote": "Public packages must use an explicit file allowlist and credential scan.",
+      "disposition": "partial",
+      "calls": [],
+      "reason": "Retain phase1.submission and scripts.course_submission explicit file selection, symlink/path checks and actual SECRET_PATTERN scans. Those utilities have no admitted native boundary in this inventory, so no speculative packaging gate is planned. Their regex does not detect every credential encoding, and publication outside these utilities remains unmediated. The scope is not narrowed to claim universal package safety."
+    }
+  ],
+  "concrete_gaps": [
+    "Discovery uses the supplied original-source, contract and runtime-guide bundle, including Semantic boundaries for port-in. No filesystem inspection, execution, source revision resolution or native coverage verification occurred. No unseen source.json metadata, additional files or framework modules are assumed.",
+    "P1: Both roles' student-specific context/search paths and Registrar read_student/enroll lack actor-to-target authorization. Matching a plan to the request does not authorize that request's target. Trusted actor binding must come from World, with role attribution preserved across Advisor calls into registrar_tool. No delegated-access workflow exists.",
+    "P2/P3: Original enrollment_block honors model-supplied waive and the Registrar prompt explicitly invites waiver judgments. These conflict with policy, not policy ambiguity. A corrective gate must deny waiver claims and missing trusted prerequisites before mutation without replacing legitimate original checks.",
+    "P4/P6/P7: Existing guards use trusted fixture profiles and timezone-aware simulation time, retain all enrolled units, and recheck enrollment conditions immediately before a synchronous write. Concurrent registration, external state mutation, persistence and crash reconciliation are not supported. A failed or interrupted effect must not be declared rolled back without evidence.",
+    "P5/P9: Agent.run records ordinary dispatch exceptions but not a per-action KeyboardInterrupt observation. A failed batch can leave later function calls from the same model response unexecuted and without individual interruption records. A run-level runtime error is not automatically a terminal record for each pending call.",
+    "P9: Catalog/context/section inspection order and complete-plan-before-delegation are largely prompt obligations. The completion path only requires a plan for selected scenarios and validates proposal order after execution. Registrar terminal receipt before reporting, proposal-scoped evidence and permitted same-role repair need explicit observations at the real decision boundaries; mere Event existence cannot establish success.",
+    "P5/P10: Arbitrary natural-language enrollment claims, public-summary content, catalog-note laundering and exact minimal-disclosure equivalence have no existing authoritative semantic classifier. Conservative provenance can establish possible influence, not prove that a reply contains or excludes a specific private value. Preserve these limitations rather than treating absence of a provenance label as clean content.",
+    "Content provenance is not currently instrumented. Native run_id, event step, response_id and call_id identify runs/events/responses/calls but do not identify every input object version, context snapshot, copied projection, tool-result body or state revision. Future adapters need version-specific direct identities at actual assembly/copy/consumption points; those planned identities are not existing observations.",
+    "Complete per-turn context is available in memory in Agent.run and at OpenAIResponses.create, but not fully recoverable from public trace records because encrypted reasoning items are omitted and requests log only turn/model. Dependency capture must occur on the live path without exporting hidden reasoning. Missing capture cannot certify origin absence.",
+    "Keep exact content lineage separate from cumulative task exposure. Each Registrar history is fresh, yet it may legitimately read updated authorized store state from earlier proposals. Do not attach another Registrar's private history or unrelated initial/final audit records to the new model context; do not omit task-scoped ordering obligations merely because their raw results are not in that context.",
+    "World.message records sends but is not itself a delivery mechanism. There are no native dedicated message IDs or received records. Actual forward consumption is registrar.run context assembly and actual return consumption is the Advisor tool-result history append; receipt recording must observe these paths without inventing delivery.",
+    "P8/P11: Role allowlists are enforced by Agent.run's configured definitions, not independently by every helper. Direct Python calls can bypass the agent-loop permission check, and advisor_tool's fallback lacks an explicit operation-name check. Caller labels alone are not authentication; capabilities must reflect trusted construction and originating role.",
+    "P11/P12: The synthetic auditor exception permits complete fixture traces locally, not disclosure through agent replies or real-student exports. Public trace sanitization removes reasoning items' encrypted content but retains provider-supplied summaries and other output fields; it does not validate arbitrary text for secrets or private reasoning.",
+    "P12: Trusted credential loading additionally occurs in phase1.llm.load_env and OpenAIResponses.__init__; CLI trace writing occurs in phase1.app.main. Packaging uses phase1.submission.submission_files/check/package and scripts.course_submission.check/write_archive/package with allowlists and pattern-based credential scans. These are operator utilities, not exposed agent tools; the finite credential regex is not proof against every credential format or secret encoded in ordinary content.",
+    "No agent-created task queue, timer, automatic retry, seat hold, filesystem tool, arbitrary-code tool, external-service tool or supported capability-expansion workflow was found. The background-kind entries describe synchronous trusted initialization/audit infrastructure, not permission for agents to create background work.",
+    "No support classification or complete mediation claim is established by this inventory. Fixed-schema rule expressibility, refusal-result mapping, additive hook placement, all applicable policy exceptions and positive/negative execution coverage remain binding and verification obligations.",
+    "No complete natural-language disclosure, minimum relevance, override paraphrase, private-reasoning, secret, real-data or claim-to-receipt semantic producer; unsupported portions remain unimplemented.",
+    "No shared transaction for interruptions between original write statements or after effect/before observation publication. Native uncertain/faulted outcomes are not rollback evidence.",
+    "No ordinal pre-effect delegation rule or terminal receipt gate before every free-text final in the frozen schemas. Original post-run order/completeness checks can fail after effects.",
+    "No automatic observation outside an active record_execution, cross-process capture, arbitrary host imports/unwrapped functions, raw helper/registration calls, direct backend edits, transport calls or CLI/file packaging exports. These are trusted-host/unmediated paths, not agent tools.",
+    "Invalid tool names outside the frozen call contract have the existing protocol unknown_tool error, observed but no native action evaluation; original Agent.run validates actual role tool availability. Frozen internal registrar aliases are not public tool definitions.",
+    "Direct host dispatcher calls do not generate Agent action/observation inspection receipts. Tests requiring inspections execute the original Agent.run and World.log producer.",
+    "World.message itself is logging, not transport. Return consumption is observed at the next actual model-context submission, rather than an inline hook immediately at history.append. If execution stops between append and next submission, that receipt is missing; no delivery inferred.",
+    "Source/DependsOn graph captures direct supplied snapshot handles only and has incomplete origin/copy links. The frozen bundle selects no provenance enforcement; exact flow and content restrictions remain partial/unsupported.",
+    "Frozen snapshot schemas have no completeness marker. Producer exceptions stop evaluation, but absence is only sound in the documented synchronous complete-observation scope.",
+    "Synthetic local auditor state visibility is retained only for the declared synthetic lifecycle, not as a privacy guarantee for user exports or real records.",
+    "No live model or network execution occurred. Offline fixture-driven complete scenarios are development checks, not student-agent task completion claims.",
+    "Final validation discovered raw-hash mismatches against binding-freeze.json for inventory.json, binding-plan.json and candidate/policy_port/binding.py. No instrumentation task writes touched those files. Current inventory/plan canonical hashes and rules canonical-string hash match workflow.json accepted stages. The raw freeze-manifest discrepancy remains unresolved and requires host review; no frozen artifact was changed to conceal it."
+  ],
+  "binding_mismatches": [
+    "Return-receipt observer is at actual model-context consumption; immediate function_call_output append has no additive statement hook. Missing receipt on interruption between those sites is reported, not fabricated.",
+    "Full original key/prerequisite acquisition fails closed on malformed lists, with no replacement empty snapshots. Frozen key-absence rules otherwise depend on the documented complete synchronous producer.",
+    "Final validation discovered raw-hash mismatches against binding-freeze.json for inventory.json, binding-plan.json and candidate/policy_port/binding.py. No instrumentation task writes touched those files. Current inventory/plan canonical hashes and rules canonical-string hash match workflow.json accepted stages. The raw freeze-manifest discrepancy remains unresolved and requires host review; no frozen artifact was changed to conceal it."
+  ],
+  "runtime_document_independence": "No runtime import or read of policy.md/policies.md or authoring plans. Original operational prompt strings remain in phase1.app. Frozen binding and executable rules suffice.",
+  "verification": {
+    "command": "PATH=/opt/souffle/usr/bin:$PATH PYTHONPATH=/framework:$PWD python -m unittest discover -s policy_port -p test_port.py -t . -v",
+    "cwd": "candidate",
+    "evidence": "policy_port/trajectories.json",
+    "report": "policy_port/report.json",
+    "host_native_stack_audit": "Not executed separately here; decorators retain the original body for host native stack attribution.",
+    "final_log": "policy_port/test-run-final-2.txt"
+  },
+  "artifact_sha256": {
+    "inventory.json": "a753b45e6fe10b8058cb8a89cf2224bfd5b28fb3632a31eb91108fdac2b0c2da",
+    "binding-plan.json": "89373410d0f0e60139799708cbfc556ac4081c02917cfe172987771187557096",
+    "candidate/policy_port/binding.py": "dfebe04bf1fa57823e83ce58db92bbe82f7d2db0b23742d0548955849932e388",
+    "candidate/policy_port/rules.dl": "640db214f0b6c2402e61fd640e7181d2fb33cc5a7b43750185d7d62162e74ab4",
+    "candidate/policy_port/adapter.py": "c8b7f86c117d96ee3f4dd0ffa1cc430499b44810d2ae7203f2004a34c5f2246f",
+    "candidate/phase1/app.py": "f49781ad79c9ef69a4c205f8d5cf47e143ff8401b6d089ec90be056c19e2f092",
+    "candidate/phase1/domain.py": "6026b497631493f01cebbbcb3515db76f93b728fe8179236de20d756ddd9571a",
+    "candidate/policy_port/__init__.py": "c212628288c88f816bed41b89b34183a37f1436ccc2043dc9a9136f0349bdbbc",
+    "candidate/policy_port/test_port.py": "cbb4912e91c6170020a0bec38b548b38f8ffa69574507bcf9e52c122de3d7225"
+  },
+  "source_preservation_checks": {
+    "phase1/app.py": true,
+    "phase1/domain.py": true,
+    "frozen_artifacts": {
+      "inventory.json": {
+        "expected_sha256": "f4414a500636020413c7a52f30d2cc4d85c8a89c6b7309096207c16a395018e7",
+        "actual_raw_sha256": "a753b45e6fe10b8058cb8a89cf2224bfd5b28fb3632a31eb91108fdac2b0c2da",
+        "matches": false
+      },
+      "binding-plan.json": {
+        "expected_sha256": "ccba027e6d0d0d5708726287ba49824871793c37806bd3d2ecdb7d42ab3e58d1",
+        "actual_raw_sha256": "89373410d0f0e60139799708cbfc556ac4081c02917cfe172987771187557096",
+        "matches": false
+      },
+      "candidate/policy_port/binding.py": {
+        "expected_sha256": "be5dda2bb4d8e4dbcdbbd428df8892118094ec4fef8c7f0235d82a1c44eaabfd",
+        "actual_raw_sha256": "dfebe04bf1fa57823e83ce58db92bbe82f7d2db0b23742d0548955849932e388",
+        "matches": false
+      }
+    },
+    "unchanged_original_assets": true,
+    "workflow_canonical_artifacts": {
+      "inventory.json": {
+        "actual_canonical_sha256": "b08ef210e736ed87b28aba0da00659a6f5fc1b13c7a33b407081b4502b3db8d0",
+        "workflow_sha256": "b08ef210e736ed87b28aba0da00659a6f5fc1b13c7a33b407081b4502b3db8d0",
+        "matches": true
+      },
+      "binding-plan.json": {
+        "actual_canonical_sha256": "921c4644b4941f34dde28a6c96b474bf14b056585f4629c37f005b7264673f97",
+        "workflow_sha256": "921c4644b4941f34dde28a6c96b474bf14b056585f4629c37f005b7264673f97",
+        "matches": true
+      },
+      "rules.dl": {
+        "actual_canonical_sha256": "46b68e9be09a213ae7fe4c700a73dc043e5c8e20c6e91c0f0994a56d8e8475d6",
+        "workflow_sha256": "46b68e9be09a213ae7fe4c700a73dc043e5c8e20c6e91c0f0994a56d8e8475d6",
+        "matches": true
+      }
+    }
+  }
+}

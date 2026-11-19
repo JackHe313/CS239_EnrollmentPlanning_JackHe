@@ -121,4 +121,19 @@ first instrumentation attempt, with 731 engine evaluations. The clean publicatio
 copy passed the same tests with the same evaluation count. Both checks ran on the
 Linux course PC. [Native verification and artifact hashes](translation-verification.json)
 
-The paired benchmark, graded trajectories, student review and final report are pending.
+The [generated app](../ported-app/), [independent description](../ported-app/back-translation/description.md)
+and [generated harness](../translated_harness.py) are available. The publication
+manifest covers 15 implementation files and three reading assets. The original
+and generated harnesses use identical scoring, deferral, schedule and per-sample
+execution functions. A separate live S01 ported smoke sample matched its expected
+outcome and exported both timeline formats and four gate recordings in 29 seconds.
+
+To enter sentence ratings, run this command from the project root and open the
+printed local URL.
+
+```sh
+policyweave view-translation --back-translation ported-app/back-translation --policy policy.md
+```
+
+Save each judgment in the review panel. Its default output is
+`ported-app/review.json`. The paired benchmark and final report are in progress.

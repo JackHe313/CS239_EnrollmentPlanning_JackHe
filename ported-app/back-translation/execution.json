@@ -1,0 +1,1588 @@
+{
+  "version": 1,
+  "procedures": [
+    {
+      "id": "permission_read_catalog",
+      "title": "Read the advisor catalog",
+      "summary": "Records: Before read_catalog at the advisor boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule1",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give advisor permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"advisor\", \"AdvisorRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"AdvisorRole\", \"enrollment\", \"read_catalog\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"read_catalog\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"read_catalog\"),\n    Can(P, \"enrollment\", \"read_catalog\")."
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "@dispatch(\"registrar\")"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "@dispatch(\"advisor\")"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "result = policy(name=action, arguments=args)(body)(app, name, args)"
+        },
+        {
+          "file": "framework/policyweave/enforcement/runtime.py",
+          "quote": "current, versions = self._refresh(context)"
+        },
+        {
+          "file": "framework/policyweave/enforcement/runtime.py",
+          "quote": "if not decision[\"allowed\"]:\n                    return {\"allowed\": False, \"decision\": decision}, current"
+        },
+        {
+          "file": "framework/policyweave/core/policy.py",
+          "quote": "allowed = not reasons and any(f[\"predicate\"] == gate[\"allow\"] for f in evidence)"
+        },
+        {
+          "file": "framework/policyweave/core/policy.py",
+          "quote": "\"reasons\": reasons or ([] if allowed else [\"no_explicit_allow\"]),"
+        },
+        {
+          "file": "source/policy_port/binding.py",
+          "quote": "MECHANISMS = ('capability', 'observations')\nINVARIANTS = ()"
+        },
+        {
+          "file": "framework/policyweave/enforcement/api.py",
+          "quote": "rows = list(facts(_context(context), self.data))\n            return Snapshot(fingerprint(rows), True, rows)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "completed=lambda result: not (isinstance(result, dict) and result.get('status') == 'error'))"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "student[\"enrolled\"].append(course)\n                student[\"enrolled_sections\"][course] = section[\"id\"]\n                section[\"seats\"] -= 1\n                entry[\"seats\"] -= 1"
+        },
+        {
+          "file": "framework/policyweave/enforcement/runtime.py",
+          "quote": "if effect_started or persist_started:\n                self._failed = True"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "if self.plan and list(dict.fromkeys(self.proposed_courses)) != self.plan[\"ordered_courses\"]:\n            raise LLMError(\"Advisor delegation order differs from its recorded plan; run is incomplete.\")"
+        },
+        {
+          "file": "source/phase1/domain.py",
+          "quote": "self.events.append({\"step\": len(self.events) + 1, \"agent\": agent,\n                            \"kind\": kind, \"payload\": copy.deepcopy(payload)})"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_registrar_read_catalog",
+      "title": "Read the registrar catalog",
+      "summary": "Records: Before read_catalog at the registrar boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule2",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give registrar permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"registrar\", \"RegistrarRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"RegistrarRole\", \"enrollment\", \"registrar_read_catalog\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"registrar_read_catalog\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if boundary == 'registrar' and name in {'read_catalog', 'read_enrollment_context', 'search_sections'}:\n                action = 'registrar_' + name"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"registrar_read_catalog\"),\n    Can(P, \"enrollment\", \"registrar_read_catalog\")."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_read_enrollment_context",
+      "title": "Read advisor enrollment context",
+      "summary": "Records: Before read_enrollment_context at the advisor boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule3",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give advisor permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "The separate student-target check still applies."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"advisor\", \"AdvisorRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"AdvisorRole\", \"enrollment\", \"read_enrollment_context\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"read_enrollment_context\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"read_enrollment_context\"),\n    Can(P, \"enrollment\", \"read_enrollment_context\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_search_sections",
+      "title": "Search advisor sections",
+      "summary": "Records: Before search_sections at the advisor boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule4",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give advisor permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "A course parameter and the separate student-target check are required."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"advisor\", \"AdvisorRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"AdvisorRole\", \"enrollment\", \"search_sections\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"search_sections\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"search_sections\"),\n    Can(P, \"enrollment\", \"search_sections\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_record_plan",
+      "title": "Record a plan",
+      "summary": "Records: Before record_plan at the advisor boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule5",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give advisor permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "The separate target and inspection checks apply. The added Allow requires ordered_courses to be present; the original app validates its full course list before storing the plan."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"advisor\", \"AdvisorRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"AdvisorRole\", \"enrollment\", \"record_plan\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"record_plan\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"record_plan\"),\n    Can(P, \"enrollment\", \"record_plan\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"ordered_courses\", Order),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_ask_registrar",
+      "title": "Delegate a course",
+      "summary": "Records: Before ask_registrar at the advisor boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule6",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give advisor permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "The separate target, requested-course and inspection checks apply. A context parameter must be present; the plan-evidence check describes its unchecked content."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"advisor\", \"AdvisorRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"AdvisorRole\", \"enrollment\", \"ask_registrar\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"ask_registrar\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),\n    Parameter(Q, \"context\", Context),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"plan_receipt\", PlanReceipt)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_read_student",
+      "title": "Read a student record",
+      "summary": "Records: Before read_student at the registrar boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule7",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give registrar permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "The separate student-target check applies. The original tool returns the full saved student profile; this permission does not restrict which profile fields reach the model."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"registrar\", \"RegistrarRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"RegistrarRole\", \"enrollment\", \"read_student\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"read_student\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"read_student\"),\n    Can(P, \"enrollment\", \"read_student\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_registrar_read_enrollment_context",
+      "title": "Read registrar enrollment context",
+      "summary": "Records: Before read_enrollment_context at the registrar boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule8",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give advisor or registrar permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "The separate student-target check applies. Advisor forwarding keeps its advisor role and task scope through this additional registrar gate."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"advisor\", \"AdvisorRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"AdvisorRole\", \"enrollment\", \"registrar_read_enrollment_context\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"registrar\", \"RegistrarRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"RegistrarRole\", \"enrollment\", \"registrar_read_enrollment_context\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"registrar_read_enrollment_context\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if boundary == 'registrar' and name in {'read_catalog', 'read_enrollment_context', 'search_sections'}:\n                action = 'registrar_' + name"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"registrar_read_enrollment_context\"),\n    Can(P, \"enrollment\", \"registrar_read_enrollment_context\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_registrar_search_sections",
+      "title": "Search registrar sections",
+      "summary": "Records: Before search_sections at the registrar boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule9",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give advisor or registrar permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "A course parameter and the separate student-target check are required. Advisor forwarding keeps its advisor role and task scope through this additional registrar gate."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"advisor\", \"AdvisorRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"AdvisorRole\", \"enrollment\", \"registrar_search_sections\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"registrar\", \"RegistrarRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"RegistrarRole\", \"enrollment\", \"registrar_search_sections\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"registrar_search_sections\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if boundary == 'registrar' and name in {'read_catalog', 'read_enrollment_context', 'search_sections'}:\n                action = 'registrar_' + name"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"registrar_search_sections\"),\n    Can(P, \"enrollment\", \"registrar_search_sections\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_enroll",
+      "title": "Attempt enrollment",
+      "summary": "Records: Before enroll at the registrar boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule10",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give registrar permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "Separate target, existence, waiver, prerequisite and inspection checks apply. The added Allow does not require section_id; the original app defaults direct calls to auto and checks seats, schedule, appointment windows and cumulative limits."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"registrar\", \"RegistrarRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"RegistrarRole\", \"enrollment\", \"enroll\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"enroll\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"waive_prerequisites\", \"false\"),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"student_key\", S),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"student_receipt\", S),\n    Field(Q, \"section_receipt\", C)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_defer",
+      "title": "Defer enrollment",
+      "summary": "Records: Before defer at the registrar boundary, reads the host-selected role and scope and the installed group and capability grants.",
+      "ruleIds": [
+        "rule11",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static group membership and inherited capability grants give registrar permission for this call. If Can cannot be derived, explicitly deny unknown_tool before the tool body. Any Deny overrides all alternative Allows; separate action checks and required parameters still apply."
+        },
+        {
+          "indent": 0,
+          "text": "A reason parameter and the separate target, existence and inspection checks apply. The original app chooses an assigned later window with unit capacity and records automatic_enrollment=False; this permission adds no scheduling service."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"registrar\", \"RegistrarRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"RegistrarRole\", \"enrollment\", \"defer\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"defer\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"student_key\", S),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"student_receipt\", S),\n    Field(Q, \"section_receipt\", C)."
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "permission_reject",
+      "title": "Record a rejection",
+      "summary": "Records: Before reject, reads the host-selected role and scope, static group and capability grants, student_id, course and reason, plus the actor and current student/course keys.",
+      "ruleIds": [
+        "rule12",
+        "rule13",
+        "rule14",
+        "rule15",
+        "rule16"
+      ],
+      "reads": [
+        {
+          "text": "The dispatcher selects role and scope from internal ContextVars for this world or its fixed boundary default, then supplies that role with caller_context. Static PrincipalGroup and Capability facts are loaded by the frozen policy factory.",
+          "sources": [
+            "runtime identity",
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Static membership and inherited grants give registrar rejection permission. Missing Can explicitly denies unknown_tool. With permission and student_id, course and reason present, any alternative Allow may pass only if no Deny exists."
+        },
+        {
+          "indent": 0,
+          "text": "A different student target, an actor-target student missing from saved students, or an existing actor-target student with an unknown course each permits the original no-read rejection without inspection evidence. These paths append rejected outcomes; they are not policy refusals."
+        },
+        {
+          "indent": 0,
+          "text": "For a known actor-target student and course, the ordinary branch requires the separate inspection checks. Missing required parameters prevents its Allow; rejection permission alone does not satisfy this branch."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "PrincipalGroup(\"registrar\", \"RegistrarRole\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"RegistrarRole\", \"enrollment\", \"reject\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Can(P, \"enrollment\", \"reject\")"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_tool\") :-\n    Request(Q, P, A),\n    not Can(P, \"enrollment\", A)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "role, scope = origin if origin is not None else scope_for(app.world, boundary)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "with caller_context(role):"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Field(Q, \"authenticated_actor\", Actor),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    S != Actor."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"student_key\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    not Field(Q, \"course_key\", C)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"student_receipt\", S),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"section_receipt\", C)."
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "if name == \"reject\":\n            result = {\"student_id\": student_id, \"course\": args[\"course\"],\n                      \"status\": \"rejected\", \"reason\": args[\"reason\"]}\n            self.outcomes.append(copy.deepcopy(result))\n            return result"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "actor_target",
+      "title": "Match the student target",
+      "summary": "Records: Before student-specific calls, reads the supplied student_id and the current local world actor, initialized to student-a independently of the requested student.",
+      "ruleIds": [
+        "rule3",
+        "rule4",
+        "rule5",
+        "rule6",
+        "rule7",
+        "rule8",
+        "rule9",
+        "rule10",
+        "rule11",
+        "rule12",
+        "rule13",
+        "rule14",
+        "rule15",
+        "rule17"
+      ],
+      "reads": [
+        {
+          "text": "student_id comes from the tool call. The current snapshot projects app.world.actor; World initializes it to student-a, separately from spec.request.student_id. This is local runtime identity, not an external authentication service.",
+          "sources": [
+            "tool call",
+            "runtime identity",
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Ordinary student-specific Allows require exact equality with the observed actor. With both values present, any mismatch explicitly denies authorization_error for every action except reject. Missing either value prevents the ordinary matching Allow."
+        },
+        {
+          "indent": 0,
+          "text": "Reject instead has a separate permitted no-read path for a different target. The mismatch Deny also covers other actions carrying student_id if they reach evaluation; the call contract normally rejects extra catalog arguments first."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"authorization_error\") :-\n    Request(Q, P, A),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", Actor),\n    S != Actor,\n    A != \"reject\"."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Field(Q, \"authenticated_actor\", Actor),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    S != Actor."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "fields = [('authenticated_actor', app.world.actor)]"
+        },
+        {
+          "file": "source/phase1/domain.py",
+          "quote": "self.actor = \"student-a\""
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "return default, 'task' if default == 'advisor' else 'direct-registrar'"
+        },
+        {
+          "file": "framework/policyweave/enforcement/caller.py",
+          "quote": "token = _caller.set(name)"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "student_exists",
+      "title": "Require a saved student",
+      "summary": "Records: Before enroll, reject or defer, reads student_id and all current saved-student keys.",
+      "ruleIds": [
+        "rule10",
+        "rule11",
+        "rule13",
+        "rule18",
+        "rule20"
+      ],
+      "reads": [
+        {
+          "text": "For enroll/reject/defer the current request snapshot enumerates all keys of world.students. Absence is evaluated only after capability and actor equality.",
+          "sources": [
+            "application state",
+            "tool call"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: After permission and actor matching, enroll and defer require an equal saved-student key. Absence explicitly denies unknown_student before the original tool. Reject instead uses its separate unknown-student no-read Allow."
+        },
+        {
+          "indent": 0,
+          "text": "Read tools have no added student-existence Deny and leave unknown-student handling to the original app. Failure to acquire student keys propagates as an error rather than supplying an empty set."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_student\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"student_key\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_student\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"student_key\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"student_key\", S)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if action in {'enroll', 'reject', 'defer'}:\n        fields.extend(('student_key', k) for k in list(app.world.students.keys()))\n        fields.extend(('course_key', k) for k in list(app.world.catalog.keys()))"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "if student_id not in self.world.students:\n            return {\"status\": \"error\", \"reason\": \"unknown_student\"}"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "course_exists",
+      "title": "Require a catalog course",
+      "summary": "Records: Before enroll, reject or defer, reads the supplied course and all current catalog-course keys.",
+      "ruleIds": [
+        "rule10",
+        "rule11",
+        "rule14",
+        "rule19",
+        "rule21"
+      ],
+      "reads": [
+        {
+          "text": "course is a tool-call parameter; the current snapshot enumerates all world.catalog keys on decision calls.",
+          "sources": [
+            "tool call",
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: After permission, actor matching and student existence, enroll and defer require an exactly matching catalog key. Absence explicitly denies unknown_course. Reject instead uses its separate unknown-course no-read Allow."
+        },
+        {
+          "indent": 0,
+          "text": "Search calls require course but leave unknown-course handling to the original app after target matching. Existing course keys do not restrict registrar decisions to the proposed course or requested list."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_course\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    not Field(Q, \"course_key\", C)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"unknown_course\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    not Field(Q, \"course_key\", C)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Parameter(Q, \"course\", C),\n    Parameter(Q, \"reason\", Reason),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    not Field(Q, \"course_key\", C)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "fields.extend(('course_key', k) for k in list(app.world.catalog.keys()))"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "if course not in self.world.catalog:\n            return {\"status\": \"error\", \"reason\": \"unknown_course\"}"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "waiver_disabled",
+      "title": "Disable prerequisite waivers",
+      "summary": "Records: Before enroll, reads waive_prerequisites from the request, with booleans normalized to true or false.",
+      "ruleIds": [
+        "rule10",
+        "rule22"
+      ],
+      "reads": [
+        {
+          "text": "waive_prerequisites is supplied in the enroll call; the API serializes booleans as true/false symbols. No catalog prose or proposal context supplies waiver authority.",
+          "sources": [
+            "tool call"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: The enroll Allow requires exactly false. For a permitted actor-target known student and course, true explicitly denies waiver_not_authorized even when prerequisites are complete; the public refusal is policy_refusal. An absent flag prevents Allow."
+        },
+        {
+          "indent": 0,
+          "text": "Malformed boolean values fail call validation. The independent prerequisite check still applies; this flag restriction does not validate approval or classify waiver claims in catalog prose or proposal context."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"waiver_not_authorized\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    Parameter(Q, \"waive_prerequisites\", \"true\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Parameter(Q, \"waive_prerequisites\", \"false\"),"
+        },
+        {
+          "file": "framework/policyweave/enforcement/api.py",
+          "quote": "(\"true\" if value else \"false\")"
+        },
+        {
+          "file": "framework/policyweave/core/policy.py",
+          "quote": "if kind == \"boolean\" and value not in (\"true\", \"false\"):\n                raise ValueError(\"Frozen boolean parameters require true or false.\")"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "all_prerequisites",
+      "title": "Require all prerequisites",
+      "summary": "Records: Before each enroll decision for a known actor-target student and course, reads the current catalog prerequisite list and saved completed-course list. Both must contain only exact strings.",
+      "ruleIds": [
+        "rule10",
+        "rule23"
+      ],
+      "reads": [
+        {
+          "text": "On each enroll gate, only for target==world.actor and known student/course, required_prerequisite rows come from catalog[course].requires and completed_course rows from students[target].completed. Each list must be a list of exact str values. The producer runs again after successful effect, but the refusal is decided from the pre-effect lists.",
+          "sources": [
+            "application state",
+            "tool call"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: With permission and the separate target and existence checks satisfied, any required course lacking an exactly equal completed course explicitly denies missing_prerequisites before enrollment, regardless of waiver value or inspection evidence."
+        },
+        {
+          "indent": 0,
+          "text": "Duplicates add no obligation; an empty prerequisite list causes no Deny. Passing this check leaves the other enrollment checks in force. Local saved lists supply the evidence; acquisition or type failures stop evaluation."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"missing_prerequisites\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    Field(Q, \"required_prerequisite\", Required),\n    not Field(Q, \"completed_course\", Required)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if target == app.world.actor and target in app.world.students and course in app.world.catalog:\n            fields.extend(('completed_course', c) for c in symbol_list(app.world.students[target]['completed']))\n            fields.extend(('required_prerequisite', c) for c in symbol_list(app.world.catalog[course]['requires']))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if not isinstance(value, list) or any(type(v) is not str for v in value):\n        raise ValueError('Original observed list must contain strings.')"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "catalog_inspection",
+      "title": "Inspect the catalog before acting",
+      "summary": "Records: After a logged native read_catalog call receives its matching same-role/scope/call-ID observation, records catalog evidence only for a non-error dictionary containing courses and external_note. Reads this evidence before record_plan, ask_registrar and substantive enroll/reject/defer.",
+      "ruleIds": [
+        "rule5",
+        "rule6",
+        "rule10",
+        "rule11",
+        "rule15"
+      ],
+      "reads": [
+        {
+          "text": "The snapshot imports receipts from world._port_observations[receipts][(effective role, scope)]. observe_log first calls the original World.log, records action payloads by (role, scope, call_id), and consumes a matching observation once. It parses that action arguments_json and checks the returned dict shape/status. Advisor scope is task; each registrar Agent.run gets a fresh UUID; direct registrar dispatch uses direct-registrar. Receipts accumulate without expiry/revocation within that world/role/scope and are imported at each subsequent gate.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "The logged action must be named read_catalog. A matching observation must return a dict with status other than error, and contain courses and external_note. The receipt is an opaque scope/ledger-step/call-id string, not a content hash. Both advisor and registrar native read_catalog names qualify, with separate role scopes.",
+          "sources": [
+            "tool call",
+            "tool result"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: These actions require some catalog evidence in their current role and scope. Missing evidence prevents ordinary Allow, yielding no_explicit_allow unless an explicit Deny applies. The separate rejection exceptions bypass this requirement."
+        },
+        {
+          "indent": 0,
+          "text": "Advisor evidence belongs to its task; each registrar run has a fresh scope, while direct registrar calls share direct-registrar. Direct reads outside the action/observation log create no evidence. Historical evidence suffices without a current catalog match."
+        },
+        {
+          "indent": 0,
+          "text": "The requirement does not bind catalog content to model context, delegation messages or final text, or prove model use. Those contents remain unchecked by this inspection gate."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(Q, \"catalog_receipt\", CatalogReceipt),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if name == 'read_catalog' and 'courses' in value and 'external_note' in value:\n                    additions.append(('catalog_receipt', f'{scope}:ledger-{world.events[-1][\"step\"]}:{payload[\"call_id\"]}'))"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "return copy.deepcopy({\"courses\": self.world.catalog, \"external_note\": self.spec[\"catalog_note\"]})"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "fields.extend(state(app.world)['receipts'].get((role, scope), []))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "key = (role, scope, payload.get('call_id'))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if kind == 'observation' and key in data['actions']:\n            action = data['actions'].pop(key)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if isinstance(value, dict) and value.get('status') != 'error':"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "data['receipts'].setdefault((role, scope), []).extend(additions)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "scope = 'task' if agent.name == 'advisor' else uuid.uuid4().hex"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "context_inspection",
+      "title": "Inspect the same student context",
+      "summary": "Records: After logged native read_enrollment_context targets the actor, records student evidence only when its matched non-error dictionary returns that student_id and contains active_appointment, even if None. Reads scoped evidence before planning, delegation and substantive decisions.",
+      "ruleIds": [
+        "rule5",
+        "rule6",
+        "rule10",
+        "rule11",
+        "rule15",
+        "rule24",
+        "rule26",
+        "rule30",
+        "rule33",
+        "rule36"
+      ],
+      "reads": [
+        {
+          "text": "The snapshot imports receipts from world._port_observations[receipts][(effective role, scope)]. observe_log first calls the original World.log, records action payloads by (role, scope, call_id), and consumes a matching observation once. It parses that action arguments_json and checks the returned dict shape/status. Advisor scope is task; each registrar Agent.run gets a fresh UUID; direct registrar dispatch uses direct-registrar. Receipts accumulate without expiry/revocation within that world/role/scope and are imported at each subsequent gate.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "The logged native action must be read_enrollment_context, its student_id argument must equal the current world.actor, and the non-error dict must return that same student_id and contain active_appointment. The receipt value is the student ID, even if active_appointment is None.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "runtime identity"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: With the separate permission and target checks, record_plan and requested-course ask_registrar require context evidence exactly matching student_id. Known-student/course enroll/reject/defer require the same match. Missing evidence explicitly denies context_inspection_required and prevents ordinary Allow."
+        },
+        {
+          "indent": 0,
+          "text": "The separate rejection exceptions bypass this check. Evidence uses the same logged-call and role/scope requirements as catalog inspection. A closed-window context satisfies inspection; the original app still decides appointment and unit capacity. Prior evidence remains sufficient after plan, clock or enrollment changes."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"record_plan\"),\n    Can(P, \"enrollment\", \"record_plan\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    not Field(Q, \"context_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),\n    not Field(Q, \"context_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"context_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"context_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"context_inspection_required\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"context_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if target == world.actor:"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if name == 'read_enrollment_context' and value.get('student_id') == target and 'active_appointment' in value:\n                        additions.append(('context_receipt', target))"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "return enrollment_context(self.world.students, self.world.catalog, self.world.now, student_id)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "fields.extend(state(app.world)['receipts'].get((role, scope), []))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "key = (role, scope, payload.get('call_id'))"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "all_requested_sections",
+      "title": "Inspect every requested course",
+      "summary": "Records: Before record_plan or ask_registrar, reads the current requested-course list. After logged native search_sections targets the actor, records scoped course evidence only when its matched non-error result returns the exact requested search course and availability_is_snapshot=True.",
+      "ruleIds": [
+        "rule5",
+        "rule6",
+        "rule25",
+        "rule27"
+      ],
+      "reads": [
+        {
+          "text": "The snapshot imports receipts from world._port_observations[receipts][(effective role, scope)]. observe_log first calls the original World.log, records action payloads by (role, scope, call_id), and consumes a matching observation once. It parses that action arguments_json and checks the returned dict shape/status. Advisor scope is task; each registrar Agent.run gets a fresh UUID; direct registrar dispatch uses direct-registrar. Receipts accumulate without expiry/revocation within that world/role/scope and are imported at each subsequent gate.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "The requested_course set is freshly projected from app.spec.request.courses on record_plan/ask_registrar, not from the order or context text. A section_receipt is recorded for a native search_sections action targeting world.actor when its non-error result course equals the action course and availability_is_snapshot is exactly True.",
+          "sources": [
+            "application state",
+            "tool call",
+            "tool result"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: For permitted actor-target record_plan, and ask_registrar proposing a requested course, any requested course without exactly matching search evidence explicitly denies section_inspection_required before storage or delegation. All requested courses must be covered. An empty requested list causes no such Deny."
+        },
+        {
+          "indent": 0,
+          "text": "The catalog-inspection role/scope and logged-call requirements apply. Search evidence need not show seats, a conflict-free section, an active appointment or eligibility, and need not match section_id. Advisor evidence cannot satisfy a registrar run."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"record_plan\"),\n    Can(P, \"enrollment\", \"record_plan\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"requested_course\", Required),\n    not Field(Q, \"section_receipt\", Required)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),\n    Field(Q, \"requested_course\", Required),\n    not Field(Q, \"section_receipt\", Required)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if action in {'record_plan', 'ask_registrar'}:\n        fields.extend(('requested_course', c) for c in symbol_list(app.spec['request']['courses']))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if name == 'search_sections' and value.get('course') == args.get('course') and value.get('availability_is_snapshot') is True:\n                        additions.append(('section_receipt', args['course']))"
+        },
+        {
+          "file": "source/phase1/registration.py",
+          "quote": "\"availability_is_snapshot\": True, \"waitlist_supported\": False}"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "fields.extend(state(app.world)['receipts'].get((role, scope), []))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "key = (role, scope, payload.get('call_id'))"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "requested_proposal",
+      "title": "Delegate only a requested course",
+      "summary": "Records: Before ask_registrar, reads its course parameter and the current course strings in the application request, independently of plan order or context text.",
+      "ruleIds": [
+        "rule6",
+        "rule28"
+      ],
+      "reads": [
+        {
+          "text": "The tool supplies course; snapshot projects the strings in app.spec.request.courses as requested_course. Exact symbol equality is used; a section ID has no special interpretation.",
+          "sources": [
+            "tool call",
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: With permission and actor matching, the proposed course must exactly equal at least one requested course. Missing membership explicitly denies requested_course_required and prevents delegation Allow before messages, exchanges or registrar execution. A section ID receives no special interpretation."
+        },
+        {
+          "indent": 0,
+          "text": "When this is the sole refusal reason, the advisor returns requested-course guidance and the requested list. Registrar enroll/reject/defer have no equivalent requested/proposal-course restriction. The original app checks delegation order only after advisor completion."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"requested_course_required\") :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    not Field(Q, \"requested_course\", C)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if tool_name == 'ask_registrar' and role == 'advisor' and codes == {'requested_course_required'}:"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "result['requested_courses'] = deepcopy(app.spec['request']['courses'])"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "self.exchanges += 1\n        self.proposed_courses.append(args[\"course\"])"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "plan_inspection",
+      "title": "Record a plan before delegation",
+      "summary": "Records: After logged record_plan targets the actor, records scoped plan evidence only when its matched non-error result has status planned and the same student_id. The original app returns planned after validating the requested student and full course list and storing the plan. Reads evidence before ask_registrar.",
+      "ruleIds": [
+        "rule6"
+      ],
+      "reads": [
+        {
+          "text": "The snapshot imports receipts from world._port_observations[receipts][(effective role, scope)]. observe_log first calls the original World.log, records action payloads by (role, scope, call_id), and consumes a matching observation once. It parses that action arguments_json and checks the returned dict shape/status. Advisor scope is task; each registrar Agent.run gets a fresh UUID; direct registrar dispatch uses direct-registrar. Receipts accumulate without expiry/revocation within that world/role/scope and are imported at each subsequent gate.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "A logged record_plan for world.actor produces a plan_receipt only when its non-error result has status planned and student_id equal to the action target. The original record_plan returns planned only after its requested-student/full-course-list validation and storing self.plan.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: ask_registrar requires some successful plan evidence in its current role and scope. Missing evidence prevents Allow and yields no_explicit_allow unless an explicit Deny applies. The separate actor and other delegation checks remain required; the catalog-inspection logged-call and scope requirements apply."
+        },
+        {
+          "indent": 0,
+          "text": "Any such prior plan suffices without binding this course, ordered list or current plan revision. The required context parameter may contain arbitrary text; no rule binds it to the catalog, plan or registrar reply. The original full-list validation supplies the plan-content check."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :-\n    Request(Q, P, \"ask_registrar\"),\n    Can(P, \"enrollment\", \"ask_registrar\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"requested_course\", C),\n    Parameter(Q, \"context\", Context),\n    Field(Q, \"catalog_receipt\", CatalogReceipt),\n    Field(Q, \"context_receipt\", S),\n    Field(Q, \"plan_receipt\", PlanReceipt)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if name == 'record_plan' and value.get('status') == 'planned' and value.get('student_id') == target:\n                        additions.append(('plan_receipt', f'{scope}:ledger-{world.events[-1][\"step\"]}:{payload[\"call_id\"]}'))"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "if args[\"student_id\"] != self.spec[\"request\"][\"student_id\"] or (\n                    sorted(order) != sorted(self.spec[\"request\"][\"courses\"])):\n                return {\"status\": \"error\", \"reason\": \"plan_must_cover_the_requested_student_and_each_course_once\"}"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "self.plan = copy.deepcopy({\"student_id\": args[\"student_id\"], \"ordered_courses\": order})\n            return {\"status\": \"planned\", **self.plan}"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "fields.extend(state(app.world)['receipts'].get((role, scope), []))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "key = (role, scope, payload.get('call_id'))"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "student_inspection",
+      "title": "Inspect the decision student",
+      "summary": "Records: After logged read_student targets the actor, records scoped evidence for that student only when its matched non-error dictionary contains completed and enrolled. Reads this evidence before substantive enroll, reject or defer.",
+      "ruleIds": [
+        "rule10",
+        "rule11",
+        "rule15",
+        "rule29",
+        "rule32",
+        "rule35"
+      ],
+      "reads": [
+        {
+          "text": "The snapshot imports receipts from world._port_observations[receipts][(effective role, scope)]. observe_log first calls the original World.log, records action payloads by (role, scope, call_id), and consumes a matching observation once. It parses that action arguments_json and checks the returned dict shape/status. Advisor scope is task; each registrar Agent.run gets a fresh UUID; direct registrar dispatch uses direct-registrar. Receipts accumulate without expiry/revocation within that world/role/scope and are imported at each subsequent gate.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "A logged read_student action must target world.actor; its matching non-error dict must contain completed and enrolled. The receipt value is the target student ID. The original read_student returns a deepcopy of the full saved student object.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: With permission, actor matching and known student/course, enroll/reject/defer require student evidence exactly equal to their student_id. Missing evidence explicitly denies student_inspection_required and prevents ordinary Allow. The separate rejection exceptions bypass inspection."
+        },
+        {
+          "indent": 0,
+          "text": "The catalog-inspection logged-call and role/scope requirements apply. The original read returns the full saved profile, so fields disclosed to the model remain unrestricted. Historical inspection does not establish current prerequisite eligibility; the separate prerequisite check reads current state."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"student_inspection_required\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"student_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"student_inspection_required\") :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"student_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"student_inspection_required\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"student_receipt\", S)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if name == 'read_student' and 'completed' in value and 'enrolled' in value:\n                        additions.append(('student_receipt', target))"
+        },
+        {
+          "file": "source/phase1/app.py",
+          "quote": "return copy.deepcopy(self.world.students[student_id])"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "fields.extend(state(app.world)['receipts'].get((role, scope), []))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "key = (role, scope, payload.get('call_id'))"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "decision_section_inspection",
+      "title": "Inspect the decision course",
+      "summary": "Records: After logged native search_sections targets the actor, records scoped course evidence only when its matched non-error result returns the exact search course and availability_is_snapshot=True. Reads this evidence before substantive enroll, reject or defer.",
+      "ruleIds": [
+        "rule10",
+        "rule11",
+        "rule15",
+        "rule31",
+        "rule34",
+        "rule37"
+      ],
+      "reads": [
+        {
+          "text": "The snapshot imports receipts from world._port_observations[receipts][(effective role, scope)]. observe_log first calls the original World.log, records action payloads by (role, scope, call_id), and consumes a matching observation once. It parses that action arguments_json and checks the returned dict shape/status. Advisor scope is task; each registrar Agent.run gets a fresh UUID; direct registrar dispatch uses direct-registrar. Receipts accumulate without expiry/revocation within that world/role/scope and are imported at each subsequent gate.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "application state",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "The section-receipt producer is the successful search_sections action/result match described in all_requested_sections. A registrar receives its own per-run scope, so advisor searches and earlier registrar runs do not contribute.",
+          "sources": [
+            "tool call",
+            "tool result",
+            "runtime identity"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: With permission, actor matching and known student/course, enroll/reject/defer require evidence exactly matching their course. Missing evidence explicitly denies section_inspection_required and prevents ordinary Allow. Separate rejection exceptions bypass inspection. Catalog-inspection logging and scope requirements apply."
+        },
+        {
+          "indent": 0,
+          "text": "Advisor searches and earlier registrar runs cannot supply this run's evidence. A zero-seat or conflicting result still qualifies without matching section_id or the current catalog. The original app decides seats, scheduling and deferral; this gate reserves no seats and adds no automatic enrollment."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"enroll\"),\n    Can(P, \"enrollment\", \"enroll\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"section_receipt\", C)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"reject\"),\n    Can(P, \"enrollment\", \"reject\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"section_receipt\", C)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"section_inspection_required\") :-\n    Request(Q, P, \"defer\"),\n    Can(P, \"enrollment\", \"defer\"),\n    Parameter(Q, \"student_id\", S),\n    Field(Q, \"authenticated_actor\", S),\n    Field(Q, \"student_key\", S),\n    Parameter(Q, \"course\", C),\n    Field(Q, \"course_key\", C),\n    not Field(Q, \"section_receipt\", C)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if name == 'search_sections' and value.get('course') == args.get('course') and value.get('availability_is_snapshot') is True:\n                        additions.append(('section_receipt', args['course']))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "scope = 'task' if agent.name == 'advisor' else uuid.uuid4().hex"
+        }
+      ],
+      "examples": []
+    }
+  ],
+  "limitations": [
+    "Installed scope and composition: the only new business gates are the decorated advisor_tool and registrar_tool dispatchers. The adapter wraps the original body with policy(name=action, arguments=args)(body)(app, name, args), and runtime.execute refreshes the source before decide and returns immediately on a disallowed decision. Positive Allow rules are alternatives; all body atoms of a branch must join on the current request Q, and any Deny reason defeats every Allow. No matching Allow produces no_explicit_allow. All rule1-rule37 IDs are represented in the checks. Parameter-presence atoms and the fixed call contract remain with their consuming checks rather than forming a separate workflow requirement.",
+    "Frozen binding: source/policy_port/binding.py contains exactly \"MECHANISMS = ('capability', 'observations')\" and \"INVARIANTS = ()\". No global application invariant, FSM, provenance or content-lineage condition is installed, so no global invariant conflicts with the listed positive branches. Static role grants are read from rules.dl even though the top-level predicates/configuration/decision metadata objects are empty. Capability foundation rules derive membership and inherited Can grants; no ResourceGroup or nested membership facts are supplied in this installation.",
+    "Input plumbing: arguments are deep-copied, booleans normalized, lists canonicalized as JSON strings, and Request/Parameter facts are produced by the runtime API. record_plan checks only the presence of ordered_courses at the added Allow join, not the JSON list contents; those are delegated to the original body. ask_registrar requires a context parameter but gives its text no authority. Search rules require a course symbol. reject/defer ordinary branches require reason. The enroll Allow does not mention section_id; the original body defaults it to auto for direct calls. The agent protocol requires the declared arguments and nonempty strings before dispatch, while the frozen call contract rejects unknown actions/extra fields and validates supplied values without universally requiring every declared key. Malformed direct calls may therefore reach original KeyError paths, and contract/type failures propagate as errors rather than policy refusal results.",
+    "Source authority and replacement: the adapter is a trusted in-process producer relative to agent tools, not an independently authenticated or externally verified state source. API.observe calls facts(...) and returns Snapshot(fingerprint(rows), True, rows). Runtime._refresh requires complete is True and a nonempty version, validates inputs, replaces prior Field rows, and propagates failed acquisition. This certifies that the callback completed, not external truth or atomic world-state completeness. Binding fields have observedAt None and no freshness units. Keys/prerequisites are reprojected before each effect; receipt facts are persistent historical assertions with no expiry within scope.",
+    "Inspection evidence is an original action/observation ledger pair, not a proof of model consumption or actual use. World.log appends a deepcopy of the payload before observe_log examines it; the ordinary Agent loop logs action before validation and observation after return, with status=error on validation/runtime failures. Malformed arguments_json becomes {}, so it cannot produce actor-specific receipts. Catalog receipt production still depends on the matching catalog result shape. Host-supplied forged ledger calls are outside the agent interface and would be trusted. Receipts are not stored as generic Event or Provenance facts; observe_public_event is declared in CALLS but has no grant, Allow or concrete dispatch producer that can pass this policy.",
+    "Identity propagation: advisor forwarding of context/search retains the advisor role and task scope through _ORIGIN and gets an additional registrar-prefixed permission gate. The permitted registrar-prefixed context/search grants for advisor make this forwarding possible. ask_registrar clears origin before the new registrar Agent.run, whose internal _AGENT role is registrar and scope is a fresh UUID. The real per-proposal history separation follows this path. A direct registrar call falls back to registrar/direct-registrar; a direct advisor call uses advisor/task. There is no external authentication boundary for a host capable of invoking those methods or mutating ContextVars.",
+    "Refusal projection does not change allow/deny semantics. source/policy_port/adapter.py exposes enroll reasons only if the nonempty full reason set is a subset of {unknown_student, unknown_course, missing_prerequisites}, and defer reasons only for {unknown_student, unknown_course}; sorted first reason becomes the public reason. Other combinations are masked as policy_refusal. Singleton authorization_error and unknown_tool are exposed, and singleton advisor requested_course_required gets the original guidance/list. Full private reason codes are not all exposed. Direct actions outside CALLS return the original-style unknown_tool before policy evaluation; unknown agent tool names are rejected by protocol validation without invoking dispatch.",
+    "Original business logic remains delegated, outside the reconstruction of added checks. source/phase1/registration.py enrollment_block still decides duplicate enrollment, chosen/auto section validity, positive course/section seat capacity, schedule conflicts, timezone-aware assigned appointment windows and cumulative pass/study limits. Those inputs and numeric limits are not projected into added policy rules checks. The inspection gates do not replace them or make early planning illegal. Original defer chooses an actual later assigned window with unit capacity and records an outcome with automatic_enrollment=False; the new policy adds no scheduling service. These are not extra installed policy requirements inferred from comments or prompts.",
+    "No added completion or semantic claim-to-receipt gate exists. observe_completion only records application_reply and final_state; it does not refuse free-text output. The original application run checks exchanges, outcomes, optional plan, plan/delegation order and requested-course coverage only after advisor.run returns, so order and completeness detection can occur after registrar effects. These original post-run errors do not establish pre-effect ordering, exhaustive interrupted-call outcomes, or truthfulness of the final text. Source/agents prompts are not enforcement evidence.",
+    "Effect boundary and failure limits: enrollment mutations remain the four original statements updating enrolled, enrolled_sections, section seats and course seats; reject/defer append original outcomes. The wrapper treats any returned dict with status=error as NotApplied and returns that original result through the API not_applied path; rejected/deferred/planned/read results otherwise count as completed callbacks. There is no shared rollback transaction configured by make_policy. A later failure, oversized result, post-effect source refresh failure or interruption can leave effects already applied; runtime marks that policy session failed/unknown and stops it rather than certifying rollback. Locks and failure state are per cached (boundary, role, scope) policy, not a universal world transaction or stop across all scopes.",
+    "Unmediated paths remain: catalog() itself, registration helpers, direct host state mutation and access to original __wrapped__ bodies are not guarded by these decorators. The normal agent tools route through the decorated dispatchers and do not expose host snapshot/receipt mutation APIs. Initialization can seed enrolled state without these added gates. The after-run audit and telemetry can observe attempted calls and state but do not prevent effects or enforce export, secrets, reasoning classification, relevance/minimum disclosure, arbitrary natural-language claims or real-data exclusion. These absent controls are not reconstructed as application workflows."
+  ],
+  "candidateHash": "a4c0dc08993226b701c4af746d7d34d9fbed884305db1b48e92f8971eced54e9",
+  "validation": "structure-and-source-quotes-only"
+}
