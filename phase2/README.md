@@ -153,5 +153,6 @@ To reproduce the outcome counts without an API key, run
 the official results with the frozen scorer and saved application evidence,
 checks each run's identity and linked files, and verifies that the two timeline
 formats agree. All 100 ported timelines also passed the course Inspector loader.
-The remaining manual work is the student's translation review and reflection
-in the report.
+The [proposed review](proposed-review.json) contains a rating and note for all
+82 entries. The report includes the corresponding category totals and three
+draft responses. These assistant-prepared judgments await the student's review.
