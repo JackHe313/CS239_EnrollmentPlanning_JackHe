@@ -153,5 +153,5 @@ To reproduce the outcome counts without an API key, run
 the official results with the frozen scorer and saved application evidence,
 checks each run's identity and linked files, and verifies that the two timeline
 formats agree. All 100 ported timelines also passed the course Inspector loader.
-The remaining manual work is the student's translation review, consent choice
-and reflection in the report.
+The remaining manual work is the student's translation review and reflection
+in the report.

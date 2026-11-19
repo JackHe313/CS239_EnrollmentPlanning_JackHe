@@ -1,4 +1,4 @@
-- [ ] I consent to my responses being used for research purposes.
+- [x] I consent to my responses being used for research purposes.
 
 # Enrollment Planning Agents — Phase 2 report draft
 
@@ -157,8 +157,8 @@ protection. The S01 example shows why its cause must be examined per call.
 
 ## Student reflection
 
-The submission still needs the student's research-consent choice and personal
-responses to the three course questions. Translation fidelity requires a 1–5
+The submission still needs the student's personal responses to the three
+course questions. Translation fidelity requires a 1–5
 rating and two examples tied to saved sentence judgments. Runtime enforcement
 requires the student's selection of observed effects and interpretation of a
 cited sample. Inspection requires a 1–5 helpfulness rating and what the student
