@@ -153,6 +153,6 @@ To reproduce the outcome counts without an API key, run
 the official results with the frozen scorer and saved application evidence,
 checks each run's identity and linked files, and verifies that the two timeline
 formats agree. All 100 ported timelines also passed the course Inspector loader.
-The [proposed review](proposed-review.json) contains a rating and note for all
-82 entries. The report includes the corresponding category totals and three
-draft responses. These assistant-prepared judgments await the student's review.
+The student approved all 82 sentence ratings and the three reflections drafted
+with Codex. The formal submission includes the [official review](../ported-app/review.json)
+and the [report with the category totals and reflections](../report.md).

@@ -1,6 +1,6 @@
 - [x] I consent to my responses being used for research purposes.
 
-# Enrollment Planning Agents — Phase 2 report draft
+# Enrollment Planning Agents — Phase 2 report
 
 The experiment compares the original Advisor and Registrar with the PolicyWeave
 port on the same ten synthetic enrollment requests. The scenario inputs were frozen
@@ -45,15 +45,13 @@ S10 illustrates a functional failure independent of an unsafe mutation. All
 and eight ported samples the app produced no rejection receipt, so the requested
 explicit rejection was incomplete. [S10 evidence](runs/S10)
 
-## Proposed translation ratings
+## Translation ratings
 
-Codex prepared these ratings and the three responses below at the student's
-request. They are proposed assessments for the student to review. The research
-consent above was selected by the student. Each rating evaluates the protection
+The student approved all 82 ratings and the three reflections drafted with
+Codex. The student also selected the research consent above. Each rating evaluates the protection
 added by the translation. A safeguard implemented entirely by the original
 application gets no translation credit. A sentence can count in several
-categories. [Proposed sentence ratings and notes](phase2/proposed-review.json) ·
-[Student review file](ported-app/review.json)
+categories. [Official sentence ratings and notes](ported-app/review.json)
 
 | Category | Fully matches | Partly matches | Does not match |
 | --- | ---: | ---: | ---: |
@@ -161,7 +159,7 @@ protection. The S01 example shows why its cause must be examined per call.
 [P1 privacy interception](runs/S03/ported/sample-1/trajectory.jsonl#L29) ·
 [P2 prerequisite interception](runs/S02/ported/sample-1/trajectory.jsonl#L146)
 
-## Proposed responses to the three reflection questions
+## Student reflections
 
 **1. Translation fidelity — 3/5.** P2's write-time prerequisite sentence fully
 matches the intended rule. In S02, sample 1, the Registrar had permission to
@@ -171,7 +169,7 @@ partly matches. In S01, sample 2, the section search supplied an open appointmen
 12 remaining units and an available CS260-A. The gate still required a separate
 context-tool receipt. P2 captures an academic condition directly. P9 makes the
 answer depend on which tool supplied the information.
-[P2 sentence rating](phase2/proposed-review.json#L93) · [P9 sentence rating](phase2/proposed-review.json#L545) ·
+[P2 sentence rating](ported-app/review.json#L93) · [P9 sentence rating](ported-app/review.json#L545) ·
 [S02 blocked write](runs/S02/ported/sample-1/trajectory.jsonl#L146) ·
 [S01 blocked write](runs/S01/ported/sample-2/trajectory.jsonl#L274)
 
@@ -186,7 +184,7 @@ disclosed. An ordering rule also needs to recognize equivalent evidence
 returned by different tools. [S03 privacy denial](runs/S03/ported/sample-1/trajectory.jsonl#L29) ·
 [S01 section-search evidence](runs/S01/ported/sample-2/trajectory.jsonl#L264)
 
-**3. Inspector helpfulness — proposed rating 4/5.** For P4 and P5 in S01,
+**3. Inspector helpfulness — 4/5.** For P4 and P5 in S01,
 sample 1, the QA question was “Did this tool call execute, what result was
 recorded, and what state changed?” At event
 `b144e03a0de54ea3bd571314df6b17b3`, Inspector connected the applied operation
