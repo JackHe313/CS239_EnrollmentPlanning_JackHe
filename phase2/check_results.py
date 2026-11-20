@@ -31,12 +31,14 @@ def check_sample(case, side, sample, directory, matched):
     for name in record['trajectories']:
         if Path(name).name != name or not (directory / name).is_file():
             raise ValueError('missing or invalid recorded trajectory path')
+    if side == 'ported':
+        check_trajectory(directory, record)
 
 
-def check_trajectory(directory, case_id):
+def check_trajectory(directory, record):
     with (directory / 'trajectory.json').open() as stream:
         timeline = json.load(stream)
-    if timeline['format'] != 'policyscope-timeline' or timeline['title'] != case_id:
+    if timeline['format'] != 'policyscope-timeline' or timeline['title'] != record['case']:
         raise ValueError('trajectory format or scenario differs')
     events = timeline.pop('events')
     with (directory / 'trajectory.jsonl').open() as stream:
@@ -47,9 +49,16 @@ def check_trajectory(directory, case_id):
                 raise ValueError(f'timeline differs at event {sequence}')
         if stream.readline():
             raise ValueError('extra JSONL events')
-    observations = [event.get('data', {}).get('observation') for event in events]
-    if not observations or observations[0] != 'run_start' or observations[-1] != 'run_end':
+    if not events:
         raise ValueError('missing framework run boundary')
+    start = events[0].get('data', {})
+    end = events[-1].get('data', {})
+    if start.get('observation') != 'run_start' or end.get('observation') != 'run_end':
+        raise ValueError('missing framework run boundary')
+    if any(start.get(key) != record[key] for key in ('case', 'side', 'sample')):
+        raise ValueError('timeline belongs to a different run')
+    if any(end.get(key) != record.get(key) for key in ('executionStatus', 'matchExpectedOutcome', 'errorType')):
+        raise ValueError('timeline outcome differs from the runner record')
 
 
 def summarize(cases, root):
@@ -73,8 +82,6 @@ def summarize(cases, root):
                             or type(result['match_expected_outcome']) is not bool):
                         raise ValueError('invalid result schema')
                     check_sample(case, side, sample, directory, result['match_expected_outcome'])
-                    if side == 'ported':
-                        check_trajectory(directory, case['id'])
                     passed += result['match_expected_outcome']
                 except (OSError, ValueError, KeyError, TypeError) as error:
                     raise ValueError(f'{directory}: {error}') from error

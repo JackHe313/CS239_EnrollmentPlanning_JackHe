@@ -9,6 +9,7 @@ from unittest.mock import patch
 import unittest
 
 import run as harness
+from phase2.check_results import check_trajectory
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -19,6 +20,15 @@ class HarnessTests(unittest.TestCase):
 
     def trace(self, name):
         return json.loads((ROOT/'traces/phase1'/f'{name}.json').read_text())
+
+    def test_timeline_must_match_its_sample_and_recorded_outcome(self):
+        directory = ROOT / 'runs/S01/ported/sample-1'
+        record = json.loads((directory / 'run.json').read_text())
+        for key, value, message in (
+                ('sample', record['sample'] + 1, 'different run'),
+                ('matchExpectedOutcome', not record['matchExpectedOutcome'], 'outcome differs')):
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, message):
+                check_trajectory(directory, {**record, key: value})
 
     def test_ten_distinct_cases_have_the_course_fields_and_frozen_inputs(self):
         self.assertEqual(list(self.cases),[f'S{i:02}' for i in range(1,11)])

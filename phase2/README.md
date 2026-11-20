@@ -34,11 +34,14 @@ provider account's token quota. A sample can use up to 60 model calls and 600 se
 
 ```sh
 python3 -m unittest discover -s phase2_tests -v
-python3 run.py --case S01 --output_dir phase2/work/smoke-01 --sample 1
+mkdir -p phase2/work
+smoke_dir=$(mktemp -d phase2/work/smoke.XXXXXXXX)
+python3 run.py --case S01 --output_dir "$smoke_dir" --sample 1
 ```
 
-The second command requires a fresh output directory for this case and sample.
-It writes `S01/sample-1/result.json` with the Boolean `match_expected_outcome` and,
+When copying a case's frozen `run_command` from `test_cases.json`, use the fresh
+scratch directory for `--output_dir`. The baseline layout places the sample
+directly inside its case directory. It writes `S01/sample-1/result.json` with the Boolean `match_expected_outcome` and,
 if the application returned a trace, `artifacts/application.json`. The checker replays
 the reported enrollment outcomes against the frozen state and compares the resulting
 records and seats with the actual final state. A successful CS299 enrollment in S02
@@ -75,24 +78,35 @@ OpenAI's matching Linux x86-64 musl release, with archive SHA-256
 Running the course controller as an ordinary Linux user also gives the worker
 access to its disposable home. [Official CLI release](https://github.com/openai/codex/releases/tag/rust-v0.164.0)
 
-After the translator publishes the app, put the generated folder at
-`ported-app/` in this checkout. Run the following commands from the repository root
-in the November 19 evaluation environment. If both releases share a Python
-environment, set `PYTHONPATH="$EVALUATION_FRAMEWORK_DIR/src"` for these commands,
-where `EVALUATION_FRAMEWORK_DIR` is the checkout at `cbeaf6f`. The original app's
-`phase1/` package is at the root.
+### Run a fresh paired experiment
+
+The published checkout includes the generated port and harness. To run another
+200 samples, start in the repository root with the application key and the
+November 19 evaluation environment. If both framework releases share a Python
+environment, export `PYTHONPATH="$EVALUATION_FRAMEWORK_DIR/src"`, where
+`EVALUATION_FRAMEWORK_DIR` is the course checkout at `cbeaf6f`.
 
 ```sh
-policyweave translate-harness --input run.py --output translated_harness.py --original-app . --ported-app ported-app --connection "$CONNECTION_FILE"
-python translated_harness.py --side original --output_dir runs --sample 10
-python translated_harness.py --side ported --output_dir runs --sample 10
-python phase2/check_results.py runs
+mkdir -p phase2/work
+paired_dir=$(mktemp -d phase2/work/paired.XXXXXXXX)
+python translated_harness.py --side original --output_dir "$paired_dir" --sample 10
+python translated_harness.py --side ported --output_dir "$paired_dir" --sample 10
+python phase2/check_results.py "$paired_dir"
 ```
 
-Each side contributes ten attempts per scenario. Retain failed attempts and their
-Boolean results. PolicyWeave exports the ported timelines. Inspect a blocked call and
-a checked call, record the sample and event IDs, and use Inspector QA for the report.
-The student supplies the sentence ratings, reflection and research-consent choice.
+Run the ported side even if the original run returns exit status 1. The course
+runner returns 1 for a functional mismatch or an execution failure. Inspect the
+per-sample `run.json` and retain every attempt. To verify the published evidence
+offline, use `python phase2/check_results.py runs`.
+
+To regenerate the harness separately, use a new output path. The course
+translator records the application and fixture paths relative to the new file.
+
+```sh
+mkdir -p phase2/work
+harness_dir=$(mktemp -d phase2/work/harness.XXXXXXXX)
+policyweave translate-harness --input run.py --output "$harness_dir/translated_harness.py" --original-app . --ported-app ported-app --connection "$CONNECTION_FILE"
+```
 
 ## Evidence available
 

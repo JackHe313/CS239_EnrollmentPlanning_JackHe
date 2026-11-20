@@ -186,10 +186,9 @@ In the whole archive, run commands from `src/`; `src/README.md` documents setup.
 Root `tests/README.md` describes test cases; runnable tests remain in `src/tests/`
 and `src/submission_tests/`.
 
-The public repository is [CS239_EnrollmentPlanning_JackHe](https://github.com/JackHe313/CS239_EnrollmentPlanning_JackHe),
-released under the [MIT license](LICENSE). The YouTube recording is a separate
-submission step; follow the script, upload it, and add the real URL to the class
-spreadsheet. Phase 2 source and intercepted traces belong to the later milestone.
+The Phase 1 assignment requested a YouTube recording and a class spreadsheet
+entry. The Phase 2 branch contains the generated application, the paired runs
+and the final report. [Phase 2 submission guide](phase2/README.md) · [MIT license](LICENSE)
 
 Implementation references: official OpenAI [function calling](https://developers.openai.com/api/docs/guides/function-calling)
 and [stateless Responses conversations](https://developers.openai.com/api/docs/guides/migrate-to-responses).
